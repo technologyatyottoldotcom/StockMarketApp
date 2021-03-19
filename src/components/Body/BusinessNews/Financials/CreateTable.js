@@ -61,7 +61,7 @@ numberWithCommas(n) {
       d = d && typeof d === 'object' && d
       return(
           <>
-          <table className="create-table" style={{fontSize:'13px'}}>
+          <table className="create-table" style={{fontSize:'10px'}}>
               <thead>
                   <tr>
                       <th></th>

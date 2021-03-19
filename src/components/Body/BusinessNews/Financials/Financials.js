@@ -12,7 +12,7 @@ class Financials extends React.PureComponent {
         this.state = {
             type: 'annual', // annual , quarterly
             field: 'incomestatement', //incomestatement , balancesheet , cashflows , ratios
-            stockcode: "AARN.NS"
+            stockcode: "AARI.NS"
         }
     }
     render() {

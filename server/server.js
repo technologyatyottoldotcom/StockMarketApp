@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 app.use(cors());
 
 dotenv.config({
-    path : '../config.env'
+    path : './config.env'
 });
 
 
@@ -15,6 +15,18 @@ var conn = mysql.createConnection({
     password : process.env.PASSWORD,
     database : process.env.DATABASE
 });
+
+
+conn.connect((err)=>{
+    if(!err)
+    {
+        console.log('connected');
+    }
+    else
+    {
+        console.log('Not connected ',err);
+    }
+})
 
 const tableTypes = {
     types : ['annual','quarterly'],
@@ -50,7 +62,10 @@ async function getData(type,field,stockCode){
     if(inArray(tableTypes.types,type)!=-1 && inArray(tableTypes.fields,field)!=-1 && stockCode){
         return new Promise( ( resolve, reject ) => {
             conn.query(`SELECT * FROM ${tableTypes.dbTables[type+'_'+field]} WHERE stockCode='${stockCode}'`,(e,r)=>{
-              if(e)reject(e);
+              if(e)
+              {
+                  reject(e);
+              }
               else resolve(r)
             })
         })
@@ -91,9 +106,10 @@ return JSON.stringify({fields:fields,values:values})
 // only quarterly data will work
 app.get('/:type/:field/:stockcode', (req, res) => {
 let p = req.params
+console.log(p);
  getData(p.type,p.field,p.stockcode)
     .then(d=>{
-        console.log(d);
+        // console.log(d);
        res.send(splitKeyVal(d,p.type,p.field))
     })
     .catch(e=>{
