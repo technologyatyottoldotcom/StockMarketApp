@@ -8,22 +8,62 @@ import TopStocks from './TopStocks';
 import { timeParse } from "d3-time-format";
 import MSFTArray from '../../data/MSFT';
 import { BusinessNews } from './BusinessNews/BusinessNews';
+import {readMarketData} from '../../exports/FormatData';
 import 'rsuite/dist/styles/rsuite-default.css';
+
+
 
 class ScripsBody extends React.Component
 {
+
 
     constructor(props)
     {
         super(props);
         this.state = {
-            chartdata : []
+            chartdata : [],
+            stockData : '',
+            endpoint : 'wss://masterswift-beta.mastertrust.co.in/hydrasocket/v2/websocket?access_token=qaoSOB-l4jmwXlxlucY4ZTKWsbecdrBfC7GoHjCRy8E.soJkcdbrMmew-w1C0_KZ2gcQBUPLlPTYNbt9WLJN2g8'
         }
     }
 
     componentDidMount()
     {
         this.loadData();
+        this.checkConnection();
+    }
+
+    checkConnection()
+    {
+        let ws = new WebSocket(this.state.endpoint);
+        ws.onopen = ()=>{
+            console.log('connection done')
+            ws.send(JSON.stringify({"a": "subscribe", "v": [[1, 2885]], "m": "marketdata"}))
+        }
+        ws.onmessage = (response)=>{
+            
+            var reader = new FileReader();
+            
+            reader.readAsArrayBuffer(response.data);
+            let convertedData;
+            reader.onloadend = (event) => {
+                let data = new Uint8Array(reader.result);
+                if(this.state.stockData)
+                {
+                    convertedData = readMarketData(data,this.state.stockData.close_price);
+                }
+                else
+                {
+                    convertedData = readMarketData(data,-1);
+                }
+                // console.log(convertedData);
+                //get price change
+
+                this.setState({
+                    stockData : convertedData
+                })
+            }
+        }
     }
 
     async loadData()
@@ -70,11 +110,39 @@ class ScripsBody extends React.Component
 
     render()
     {
+
+        const dataArray = [
+            {
+                'name' : 'BSE Sensex',
+                'value' : '51,238.15',
+                'changeP' : '0.97%'
+            },
+            {
+                'name' : 'Nifty 50',
+                'value' : '51,238.15',
+                'changeP' : '0.97%'
+            },
+            {
+                'name' : 'NSE FMCG',
+                'value' : '51,238.15',
+                'changeP' : '0.97%'
+            },
+            {
+                'name' : 'Bank Nifty',
+                'value' : '51,238.15',
+                'changeP' : '0.97%'
+            },
+            {
+                'name' : 'NSE Midcap',
+                'value' : '51,238.15',
+                'changeP' : '0.97%'
+            }
+        ]
+
         return <div className="app__body">
 
-            
             <div className="app__body__top">
-                <TopStocks data={this.state.chartdata}/>
+                <TopStocks data={this.state.chartdata} dataArray={dataArray}/>
             </div>
             <div className="app__body__bottom">
                 <div className="business__news__section">
@@ -87,8 +155,8 @@ class ScripsBody extends React.Component
                     </div>
                 </div>
                 <div className="app__body__left">
-                    <ChartContainer data={this.state.chartdata}/>
-                    <KeyStatistics />
+                    <ChartContainer data={this.state.chartdata} stockData={this.state.stockData}/>
+                    <KeyStatistics stockData={this.state.stockData}/>
                 </div>
                 <div className="app__body__right">
                     <CashPosition />

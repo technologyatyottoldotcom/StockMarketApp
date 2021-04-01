@@ -6,8 +6,7 @@ export class ScripsMenu extends React.Component {
             <div className="app__menu">
                 <span>Portfolios</span>
                 <span>Orders</span>
-                <span>Themes</span>
-                <span>Quant Investing</span>
+                <span>smallCase</span>
                 <span>Research</span>
                 <span>Exit</span>
             </div>

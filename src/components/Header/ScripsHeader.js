@@ -13,7 +13,7 @@ class ScripsHeader extends React.Component
                 <img src={BrandLogo} alt="Yottol"/>
             </div>
             <div className="brand__name">
-                <p>Scrips</p>
+                <p>Stocks</p>
             </div>
             <div className="stock__search">
                 <div className="stock__search__icon">

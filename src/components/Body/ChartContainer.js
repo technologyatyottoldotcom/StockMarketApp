@@ -23,6 +23,9 @@ import Renko from '../../assets/icons/renko.svg';
 import Kagi from '../../assets/icons/kagi.svg';
 import Point from '../../assets/icons/point.svg';
 import SearchIcon from '../../assets/icons/searchCompare.svg';
+import SettingIcon from '../../assets/icons/settings.svg';
+import PlusIcon from '../../assets/icons/plus.svg';
+import MinusIcon from '../../assets/icons/minus.svg';
 import LineSegment from '../../assets/icons/linesegment.svg';
 import InfiniteLine from '../../assets/icons/infiniteline.svg';
 import Ray from '../../assets/icons/ray.svg';
@@ -423,6 +426,14 @@ export class ChartContainer extends React.Component {
     render() {
 
         // console.log(this.props.data);
+        let stockData = this.props.stockData;
+
+        let TradePrice = stockData.last_traded_price;
+        let dPrice = (TradePrice+'').split('.')[0];
+        let fPrice = (TradePrice+'').split('.')[1];
+
+        let change_price = stockData.change_price;
+        // console.log(typeof stockData.change_price,change_price);
 
         return (
 
@@ -556,23 +567,38 @@ export class ChartContainer extends React.Component {
                     </div>
                     <div className="stock__info">
                         <div className="stock__details">
-                            <p className="stock__name__code">
+                            {/* <p className="stock__name__code">
                                 <span id="stock__full__name">Reliance Industries Ltd.</span>
                                 <span id="stock__nse__code">NSE : RELIANCE</span>
                                 <span id="stock__bse__code">BSE : 326154</span>
+                            </p> */}
+                            <p className="stock__name__code">
+                                <span id="stock__code">RELIANCE.NS</span>
                             </p>
-                            <div className="stock__type">Oil & Gas</div>
+                            <div className="stock__type">
+                                <img src={SettingIcon} alt="s"/>
+                                <p>Oil & Gas</p>
+                            </div>
                         </div>
-                        <div className="stock__price__details">
-                            <p className="stock__price__performance">
-                                <span>Rs. 2,300<span className="price__decimals">.00</span></span>
-                                <span className="stock__performance">(+3.21%)</span>
-                                <ChartClock />
-                            </p>
+                        <div id="stock__full__name">
+                            <span>Reliance Industries Ltd.</span>
                         </div>
-                        <div className="stock__purchase">
-                            <div className="buy__stock">Buy</div>
-                            <div className="sell__stock">Sell</div>
+                        <div className="stock__price__purchase">
+                            <div className="stock__price__details">
+                                <span className="price__decimals">{dPrice}</span>
+                                <span className="price__fraction">{fPrice}</span>
+                                
+                            </div>
+                            <div className="stock__purchase">
+                                <div className="buy__stock"><img src={PlusIcon} alt=""/></div>
+                                <div className="sell__stock"><img src={MinusIcon} alt=""/></div>
+                            </div>
+                        </div>
+                        <div className="stock__price__change">
+                        
+                            <span className="stock__performance__amount">{stockData.change_price}</span>
+                            <span className="stock__performance__percentage">({stockData.change_percentage})</span>
+                            {/* <ChartClock /> */}
                         </div>
                     </div>
                 </div>

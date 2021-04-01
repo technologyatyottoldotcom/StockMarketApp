@@ -4,9 +4,6 @@ import $ from 'jquery';
 
 function EarningValuation({ title, value, max, min, changeSliderValue}) {
 
-
-   
-
     value = Nu(value); 
     max = Nu(max) || value + 100; 
     min = Nu(min) || 0;

@@ -5,8 +5,15 @@ const dotenv = require('dotenv');
 app.use(cors());
 
 dotenv.config({
-    path : './config.env'
+    path : '../config.env'
 });
+
+// console.log(process.env)
+const {Twitter} = require("./twitter")
+app.use(Twitter)
+
+const {GoogleFeeds} = require("./google_feeds")
+app.use(GoogleFeeds)
 
 
 var conn = mysql.createConnection({

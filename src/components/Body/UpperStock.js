@@ -24,25 +24,25 @@ export class UpperStock extends React.Component {
         let wd = $('.upper__stock__info').width();
         let ht = $('.upper__stock__info').height();
         this.setState({
-            chartWidth : wd,
+            chartWidth : 100,
             chartHeight : ht
         });
     }
 
     render() {
 
-        const {Name,Value,data} = this.props;
+        const {name,value,changeP,data} = this.props;
         return (
             <div className="upper__stock">
                 <div className="upper__stock__info">
-                    <p className="upper__stock__name">{Name}</p>
-                    <p className="upper__stock__value">{Value}</p>
-                    <p className="upper__stock__change">+456.46 <span>(+0.90%)</span></p>
+                    <p className="upper__stock__name">{name}</p>
+                    <p className="upper__stock__value">{value}</p>
+                    <p className="upper__stock__change">{changeP}</p>
                 </div>
                 <div className="upper__stock__chart">
                     <UpperStockChart 
                         data={data} 
-                        width={this.state.chartWidth} 
+                        width={this.state.chartWidth}   
                         height={this.state.chartHeight} 
                     />
                 </div>

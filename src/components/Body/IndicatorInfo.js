@@ -5,7 +5,7 @@ export class IndicatorInfo extends React.Component {
     render() {
 
         const {CloseIndicatorInfo,indicatorInfoType} = this.props;
-        console.log(indicatorInfoType);
+        // console.log(indicatorInfoType);
         let IndicatorName;
         let IndicatorData;
 

@@ -456,7 +456,7 @@ export class StockChart extends React.Component {
         let IndicatorsArray = [];
 
 
-        console.log(height,width);
+        // console.log(height,width);
 
         let margin;
 
@@ -496,7 +496,7 @@ export class StockChart extends React.Component {
             IndicatorsArray.push(this.getIndicatorData(i,initialData));
         });
 
-        console.log(IndicatorsArray);
+        // console.log(IndicatorsArray);
 
         const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => d.date);

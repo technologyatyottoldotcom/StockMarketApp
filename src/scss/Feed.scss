@@ -1,0 +1,66 @@
+.hashTagsUsers{
+    cursor: pointer;
+    color: #0fcefd;
+    font-weight: bolder;
+    &:hover{
+        text-decoration: underline;
+        text-underline-position: below;
+
+    }
+}
+
+div.rs-popover{
+    div.rs-popover-arrow::after{
+        border-style: none;
+    }
+    div.rs-popover-content{
+        max-width: 300px!important;
+        background-color: whitesmoke!important;
+        padding: 0!important;
+    }
+    padding: 0 !important;
+    box-shadow: 1px 1px 5px;
+    border-radius:15px !important;
+}
+
+article.gNews {
+    a {
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
+    }
+}
+
+.customScrollBar{
+    overflow : scroll;    
+    scroll-behavior : smooth;
+    overflow-wrap : break-word;
+    overflow-x: unset;
+    color: black;
+
+    &::-webkit-scrollbar {
+        width: 7px;
+      }
+      
+    &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+    &::-webkit-scrollbar-thumb {
+        background: #dbd9d9;
+        border-radius: 20px;
+      }
+    &::-webkit-scrollbar-thumb:hover {
+        background: #dbd9d9;
+      }
+}
+
+.LoadingDivAnimation{
+    animation: LoadingDivAnimation linear 2s infinite alternate ;
+    
+}
+
+@keyframes LoadingDivAnimation {
+    0% { left: 0;}
+    50%{ left : 120%;}
+    100%{ left: -20%;}
+  }

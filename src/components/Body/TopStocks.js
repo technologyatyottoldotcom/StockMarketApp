@@ -1,18 +1,26 @@
 import React from 'react';
 import UpperStock from './UpperStock';
 
-export class TopStocks extends React.Component {
+class TopStocks extends React.Component {
     render() {
 
-        const {data} = this.props;
+        const {data , dataArray} = this.props;
 
         return (
-            <div className="top__stocks">
-                <UpperStock Name="BSE SENSEX" Value="51,238.15" data={data}/>
-                <UpperStock Name="Nifty 50" Value="15,135.85" data={data}/>
-                <UpperStock Name="USD/INR" Value="72.2600" data={data}/>
-                <UpperStock Name="Dow" Value="31,961.86" data={data}/>
-                
+            <div className="top__stocks container-fluid HomeTopChart__Scrollbar d-flex p-0">
+                {
+						dataArray ?
+							(dataArray || []).map((v, i) => {
+								if (v && typeof v == 'object') {
+									return <UpperStock {...v} 
+										data={data} //This is a temporary basis data 
+									/>
+
+								} else return null
+							})
+							:
+							<UpperStock {...this.props} />
+				}
             </div>
         )
     }
