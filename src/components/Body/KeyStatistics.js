@@ -17,22 +17,27 @@ export class KeyStatistics extends React.Component {
                 <div className="ks__container">
                     <div className="ks__container__half">
                         <div className="ks__slot">
-                            <Statistics name="Previous Close" value={stockData.close_price}/>
-                            <Statistics name="Open" value={stockData.open_price}/>
-                            <Statistics name="Day's Range" value="1,564.20 - 1,597.80"/>
-                            <Statistics name="52-week range" value="738.75 - 1,631.65"/>
+                            {/* <Statistics name="Previous Close" value={stockData.close_price}/>
+                            <Statistics name="Open Price" value={stockData.open_price}/>
+                            <Statistics name="Volume('000)" value={stockData.trade_volume}/> */}
+                            <Statistics name="Previous Close" value="2,108.91"/>
+                            <Statistics name="Open Price" value="2,011.86"/>
+                            <Statistics name="Volume('000)" value="22,38,912"/>
                         </div>
                         <div className="ks__slot">
-                            <Statistics name="Volume" value={stockData.trade_volume}/>
-                            <Statistics name="Avg. volume" value="10,487,012"/>
-                            <Statistics name="Bid" value={stockData.best_bid_price}/>
-                            <Statistics name="Ask" value={stockData.best_ask_price}/>
+                            <Statistics name="Day Range" value="1,564.20 - 1,597.80"/>  
+                            <Statistics name="52-week range" value="738.75 - 1,631.65"/> 
+                            <Statistics name="3m Avg Vol('000)" value="1,236.56"/>
                         </div>
                         <div className="ks__slot">
-                            <Statistics name="Volume" value={stockData.trade_volume}/>
-                            <Statistics name="Avg. volume" value="10,487,012"/>
-                            <Statistics name="Bid" value={stockData.best_bid_price}/>
-                            <Statistics name="Ask" value={stockData.best_ask_price}/>
+                            <Statistics name="Market Cap" value="1,236.56 Cr."/>
+                            <Statistics name="P/E" value="1,236.56"/>
+                            <Statistics name="Beta" value="1,236.56"/>
+                        </div>
+                        <div className="ks__slot">
+                            <Statistics name="ROE(TTM)" value="1,236.56"/>
+                            <Statistics name="ROA(TTM)" value="10,487,012"/>
+                            <Statistics name="ROCE(TTM)" value="1,236.56"/>
                         </div>
                     </div>
                     <div className="ks__container__full">

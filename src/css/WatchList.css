@@ -1,0 +1,144 @@
+* 
+{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+:root 
+{
+  --main-blue : #00A0E3;
+  --main-green : #19E683;
+  --main-red : #E51A4B;
+  --light-grey : #EAEAEA;
+  --medium-grey : #BBBBBB;
+  --light-white : #FEFEFE;
+  --white : #FFFFFF;
+  --font-primary : #404040;
+  --font-secondary : #666666;
+  --shadow-primary : #F2F2F2;
+}
+
+  
+::-webkit-scrollbar {
+    height: 5px;
+  }
+    
+::-webkit-scrollbar-track {
+    background: transparent;
+  }
+::-webkit-scrollbar-thumb {
+    background: #dbd9d9;
+    border-radius: 20px;
+  }
+::-webkit-scrollbar-thumb:hover {
+    background: #dbd9d9;
+  }
+
+.app__body .app__body__left .app__watchlist 
+{
+  height: 13%;
+  width: 100%;
+  border-radius: 3;
+  background-color: var(--white);
+  box-shadow: 3px 3px 10px rgba(0,0,0,.02) , -3px -3px 10px rgba(0,0,0,.02);
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__header
+{
+    padding: 4px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__header .app__watchlist__title
+{
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--font-primary);
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__container
+{
+    padding-top: 2px;
+    display: flex; 
+    justify-content: space-around;
+    /* overflow: scroll; */
+    scroll-behavior: smooth; 
+    overflow-y: unset;
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__container .app__watchlist__stock
+{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 8px;
+    border-radius: 20px;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.05) , -1px -1px 2px rgba(0,0,0,0.05);
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__details
+{
+    flex: 2;
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__details>div
+{
+    display: flex;
+    align-items: center;
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__status
+{
+    width: 5px;
+    height: 5px;
+    border-radius: 100%;
+    margin-right: 2px;
+    background-color: var(--main-blue);
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__name
+{
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--font-primary);
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__fullname
+{
+    font-size: 9px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 8px;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: var(--font-primary);
+    letter-spacing: -0.2px;
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__favourite
+{
+    display: flex;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+    margin-left: 10px;
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__favourite span
+{
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--main-green);
+}
+
+.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__favourite .watchlist__stock__star
+{
+    margin-left: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

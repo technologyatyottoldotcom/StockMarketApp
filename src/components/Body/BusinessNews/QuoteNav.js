@@ -20,7 +20,7 @@ Hover(e){
      for(let k in (this.props?.props || {}))if(!((this.state.navspecialAttr || []).find(ke=>ke===k)))navprop[k]=this.props?.props[k];
 
       return(
-        <ul className="menu__row row" style={{cursor:'pointer',fontWeight:'bold',listStyle:'none',textAlign:'center'}}>
+        <ul className="menu__row row">
           {(this.props.components || [])?.map((e,i)=>
               {
                 if(e?.props){ 
@@ -38,7 +38,6 @@ Hover(e){
                             onMouseEnter={_=>this.Hover(e)}
                             onMouseLeave={_=>this.Hover(null)}
                             onClick={d=>{typeof this.props?.props.onClick==='function'&&this.props?.props.onClick(i,d);this.setState({active:e});this.props.click(e)}} 
-                            style={{cursor:'pointer',textAlign:'center',margin:'0 5px 5px 5px',justifyContent:'center',fontWeight:'700'}} 
                             className={`col-auto ${this.props?.props?.className || ''} ${p.className || ''} ${ActiveElem ? activeClassName : ''}`} 
                             key={i+Math.random()*9999+Date.now()} {...navprop}>{ele}
                           </li>

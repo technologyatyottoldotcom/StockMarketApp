@@ -429,8 +429,11 @@ export class ChartContainer extends React.Component {
         let stockData = this.props.stockData;
 
         let TradePrice = stockData.last_traded_price;
-        let dPrice = (TradePrice+'').split('.')[0];
-        let fPrice = (TradePrice+'').split('.')[1];
+        // let dPrice = (TradePrice+'').split('.')[0];
+        // let fPrice = (TradePrice+'').split('.')[1];
+
+        let dPrice = '2,103'
+        let fPrice = '00'
 
         let change_price = stockData.change_price;
         // console.log(typeof stockData.change_price,change_price);
@@ -596,8 +599,10 @@ export class ChartContainer extends React.Component {
                         </div>
                         <div className="stock__price__change">
                         
-                            <span className="stock__performance__amount">{stockData.change_price}</span>
-                            <span className="stock__performance__percentage">({stockData.change_percentage})</span>
+                            {/* <span className="stock__performance__amount">{stockData.change_price}</span>
+                            <span className="stock__performance__percentage">({stockData.change_percentage})</span> */}
+                            <span className="stock__performance__amount">-3.91</span>
+                            <span className="stock__performance__percentage">(-0.85%)</span>
                             {/* <ChartClock /> */}
                         </div>
                     </div>

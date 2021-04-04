@@ -3,12 +3,14 @@ import $ from 'jquery';
 import Close from '../../assets/icons/close.svg';
 import CashPosition from './CashPosition';
 import ChartContainer from './ChartContainer';
+import WatchList from './WatchList';
 import KeyStatistics from './KeyStatistics';
 import TopStocks from './TopStocks';
 import { timeParse } from "d3-time-format";
 import MSFTArray from '../../data/MSFT';
 import { BusinessNews } from './BusinessNews/BusinessNews';
 import {readMarketData} from '../../exports/FormatData';
+import '../../css/BusinessNews.css';
 import 'rsuite/dist/styles/rsuite-default.css';
 
 
@@ -98,14 +100,12 @@ class ScripsBody extends React.Component
     {
         $('.business__news__section').css('transform','translateY(0%)');
         $('.bn__close').addClass('active');
-        $('.bn__title').removeClass('active');
     }
 
     closeNews()
     {
         $('.business__news__section').css('transform','translateY(100%)');
         $('.bn__close').removeClass('active');
-        $('.bn__title').addClass('active');
     }
 
     render()
@@ -147,8 +147,18 @@ class ScripsBody extends React.Component
             <div className="app__body__bottom">
                 <div className="business__news__section">
                     <div className="business__news__wrapper">
-                        <div className="bn__title active" onClick={this.openNews.bind(this)}><p>Business News</p> <span>&#8673;</span></div>
-                        <div className="bn__close" onClick={this.closeNews.bind(this)}><img src={Close} alt="x"/></div>
+                        <div className="bn__title">
+                            <div>
+                                <p className="bn__stock__name">RELIANCE.NS</p>
+                                <p className="bn__stock__fullname">Reliance Industries Ltd.</p>
+                            </div>
+                            <div>
+                                <p onClick={this.openNews.bind(this)}>Detailed View</p>
+                                <div className="bn__close" onClick={this.closeNews.bind(this)}>
+                                    <img src={Close} alt="x"/>    
+                                </div>
+                            </div>
+                        </div>
                         <div className="business__news__content">
                             <BusinessNews />
                         </div>
@@ -156,6 +166,7 @@ class ScripsBody extends React.Component
                 </div>
                 <div className="app__body__left">
                     <ChartContainer data={this.state.chartdata} stockData={this.state.stockData}/>
+                    <WatchList />
                     <KeyStatistics stockData={this.state.stockData}/>
                 </div>
                 <div className="app__body__right">

@@ -1,0 +1,265 @@
+* 
+{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+ /* font-family: 'Quicksand', sans-serif;
+  */
+}
+
+:root 
+{
+  --main-blue : #00A0E3;
+  --main-green : #19E683;
+  --main-red : #E51A4B;
+  --light-grey : #EAEAEA;
+  --medium-grey : #BBBBBB;
+  --light-white : #FEFEFE;
+  --white : #FFFFFF;
+  --font-primary : #404040;
+  --font-secondary : #666666;
+  --shadow-primary : #F2F2F2;
+}
+
+  
+::-webkit-scrollbar {
+    width: 5px;
+  }
+    
+::-webkit-scrollbar-track {
+    background: transparent;
+  }
+::-webkit-scrollbar-thumb {
+    background: #dbd9d9;
+    border-radius: 20px;
+  }
+::-webkit-scrollbar-thumb:hover {
+    background: #dbd9d9;
+  }
+
+ .cash__position 
+{
+  width: 100%;
+  height: 100%;
+  background-color: var(--white);
+  box-shadow: 3px 3px 10px rgba(0,0,0,.02) , -3px -3px 10px rgba(0,0,0,.02);
+  border-radius: 3px;
+  padding: 5px 10px;
+  overflow-y: hidden;
+  position: relative;
+}
+
+ .cash__position__zoom 
+{
+  padding: 10px 5px 0;
+  border: none;
+}
+
+.cash__position .cp__header
+{
+    display: flex;
+    align-items: center;
+}
+
+ .cash__position .menu__btn img 
+{
+  width: 24px;
+}
+
+ .cash__position .cp__title 
+{
+  padding-left: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  align-self: flex-end;
+  color: var(--font-secondary);
+}
+
+ .cash__position .cp__value 
+{
+  /* padding-left: 20px; */
+  color: var(--font-primary);
+}
+
+ .cash__position .cp__value span 
+{
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cash__position .cp__portfolio__details
+{
+    padding-top: 20px;
+}
+
+.cash__position .cp__portfolio__details .cp__portfolio
+{
+    display: flex;
+}
+
+ .cash__position .cp__portfolio>div
+{
+  display: flex;
+  flex: 1;
+}
+
+.cash__position .cp__portfolio>div>p
+{
+    font-size: 10px;
+    align-self: flex-end;
+    padding-left: 3px;
+    color: var(--font-secondary);
+    font-weight: 600;
+}
+
+.cash__position .cp__portfolio>div img
+{
+    width: 20px;
+}
+
+ .cash__position .cp__portfolio__value #cp__portfolio__name 
+{
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--font-primary);
+}
+
+.cash__position .cp__portfolio__details .cp__portfolio__value
+{
+    display: flex;
+}
+
+.cash__position .cp__portfolio__details .cp__portfolio__value>div
+{
+    flex: 1;
+}
+
+.cash__position .cp__portfolio .cp__income
+{
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--font-primary);
+    display: flex;
+    align-items: flex-end;
+}
+
+.cash__position .cp__portfolio__value .cp__change
+{
+    font-size: 9px;
+    color: var(--main-green);
+    font-weight: 700;
+}
+
+.cash__position .cp__portfolio__value .cp__change span
+{
+    font-size: 12px;
+}
+
+
+ .cash__position .cp__shares__container 
+{
+  padding: 0px 0 5px;
+  margin-top: 10px;
+  position: relative;
+  height: 82%;
+  overflow-y :scroll;
+}
+
+ .cash__position .share__profile 
+{
+    margin-top: 10px;
+}
+
+.cash__position .share__profile .sp__profile
+{
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.cash__position .share__profile .sp__profile>div
+{
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.cash__position .share__profile .sp__status
+{
+    width: 5px;
+    height: 5px;
+    border-radius: 100%;
+    margin-right: 2px;
+    background-color: var(--main-blue);
+}
+
+.cash__position .share__profile .sp__name
+{
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--font-primary);
+}
+
+.cash__position .share__profile .sp__fullname
+{
+    font-size: 10px;
+    width: 100px;
+    font-weight: 600;
+    color: var(--font-secondary);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.cash__position .sp__profile .sp__income
+{
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--font-primary);
+    height: 50%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.cash__position .share__profile .sp__quantity
+{
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--font-primary);
+}
+
+.cash__position .share__profile .sp__quantity img
+{
+    width: 18px;
+    transform: rotateY(180deg);
+}
+
+.cash__position .sp__price
+{
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.cash__position .sp__price>div
+{
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.cash__position .sp__price .cp__change
+{
+    font-size: 9px;
+    color: var(--main-green);
+    font-weight: 700;
+    height: 50%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.cash__position .sp__price .cp__change span
+{
+    font-size: 11px;
+}

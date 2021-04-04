@@ -24,7 +24,7 @@ export class UpperStock extends React.Component {
         let wd = $('.upper__stock__info').width();
         let ht = $('.upper__stock__info').height();
         this.setState({
-            chartWidth : 100,
+            chartWidth : 80,
             chartHeight : ht
         });
     }
