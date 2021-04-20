@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import ChartClock from './ChartClock';
+import AnimatedDigit from './AnimatedDigit';
 import StockChart from './StockChart';
 import StockCompare from './StockCompare';
 import Indicator from './Indicator';
@@ -381,7 +382,7 @@ export class ChartContainer extends React.Component {
             $('.app__body__right').removeClass('app__body__right__zoom');
             $('.app__body__top').removeClass('app__body__top__zoom');
             $('.app__body__bottom').removeClass('app__body__bottom__zoom');
-            $('.chart__options').removeClass('active');
+            $('.chart__container__stock__options').removeClass('active');
             $('.cash__position').removeClass('cash__position__zoom');
             $('.ks__container__full').css('display','none');
             $('.ks__container__half').css('display','flex');
@@ -405,7 +406,7 @@ export class ChartContainer extends React.Component {
             $('.app__body__top').addClass('app__body__top__zoom');
             $('.app__body__bottom').addClass('app__body__bottom__zoom');
             $('.cash__position').addClass('cash__position__zoom');
-            $('.chart__options').addClass('active');
+            $('.chart__container__stock__options').addClass('active');
             $('.ks__container__full').css('display','flex');
             $('.ks__container__half').css('display','none');
 
@@ -429,14 +430,16 @@ export class ChartContainer extends React.Component {
         let stockData = this.props.stockData;
 
         let TradePrice = stockData.last_traded_price;
-        // let dPrice = (TradePrice+'').split('.')[0];
-        // let fPrice = (TradePrice+'').split('.')[1];
+        let dPrice = (TradePrice+'').split('.')[0];
+        let fPrice = (TradePrice+'').split('.')[1];
 
-        let dPrice = '2,103'
-        let fPrice = '00'
+        let change_price = parseFloat(stockData.change_price);
+        let change_percentage = parseFloat(stockData.change_percentage);
 
-        let change_price = stockData.change_price;
-        // console.log(typeof stockData.change_price,change_price);
+        // console.log(change_price,change_percentage)
+
+        let priceClass = change_price >= 0 ? 'positive' : 'negative';
+        
 
         return (
 
@@ -531,11 +534,11 @@ export class ChartContainer extends React.Component {
                 </div> 
             </div>
 
-            <div className="chart__container">
+            <div className="chart__container" >
 
                 <div className="chart__container__stock__options">
                     <div className="chart__options">
-                        <div className="chart__option__block chart__stock__name">
+                        <div className="chart__option__block chart__stock__name" >
                             <span>RELIANCE</span>
                         </div>
                         <div className="chart__option__block">
@@ -568,13 +571,12 @@ export class ChartContainer extends React.Component {
                             <img src={IndicatorIcon} alt="+"/><span>Interactive</span>
                         </div>
                     </div>
+                    
+                </div>
+
+                <div className="stock__info__chart">
                     <div className="stock__info">
                         <div className="stock__details">
-                            {/* <p className="stock__name__code">
-                                <span id="stock__full__name">Reliance Industries Ltd.</span>
-                                <span id="stock__nse__code">NSE : RELIANCE</span>
-                                <span id="stock__bse__code">BSE : 326154</span>
-                            </p> */}
                             <p className="stock__name__code">
                                 <span id="stock__code">RELIANCE.NS</span>
                             </p>
@@ -588,8 +590,18 @@ export class ChartContainer extends React.Component {
                         </div>
                         <div className="stock__price__purchase">
                             <div className="stock__price__details">
-                                <span className="price__decimals">{dPrice}</span>
-                                <span className="price__fraction">{fPrice}</span>
+                                <div className="price__decimals" style={{display : 'flex'}}>
+                                    {dPrice &&
+                                    dPrice.split('').map((n,i) => {
+                                        return <AnimatedDigit digit={n} transform={30} key={i}/>
+                                    })}
+                                </div>
+                                <div className="price__fraction" style={{display : 'flex'}}>
+                                    {fPrice &&
+                                    fPrice.split('').map((n,i) => {
+                                        return <AnimatedDigit digit={n} transform={20} key={i}/>
+                                    })}
+                                </div>
                                 
                             </div>
                             <div className="stock__purchase">
@@ -599,32 +611,42 @@ export class ChartContainer extends React.Component {
                         </div>
                         <div className="stock__price__change">
                         
-                            {/* <span className="stock__performance__amount">{stockData.change_price}</span>
-                            <span className="stock__performance__percentage">({stockData.change_percentage})</span> */}
-                            <span className="stock__performance__amount">-3.91</span>
-                            <span className="stock__performance__percentage">(-0.85%)</span>
+                            <div className={priceClass +' stock__performance__amount'} style={{display : 'flex'}}>
+                                {stockData.change_price &&
+                                    stockData.change_price.split('').map((n,i) => {
+                                        return <AnimatedDigit digit={n} transform={18} key={i}/>
+                                })}
+                            </div>
+                            <div className={priceClass +' stock__performance__percentage'} style={{display : 'flex'}}>
+                                ({stockData.change_percentage &&
+                                    stockData.change_percentage.split('').map((n,i) => {
+                                        return <AnimatedDigit digit={n} transform={18} key={i}/>
+                                })})
+                            </div>
+                            
                             {/* <ChartClock /> */}
                         </div>
                     </div>
+                    <div className="stock__chart">
+                        <StockChart 
+                            key={1} 
+                            data={this.props.data} 
+                            range={this.state.range} 
+                            width={this.state.chartWidth} 
+                            height={this.state.chartHeight} 
+                            zoom={this.state.zoom} 
+                            chartType={this.state.chartType}
+                            IndicatorType={this.state.indicatorType}
+                            TotalCharts={this.state.TotalCharts}
+                            IndicatorChartTypeArray={this.state.IndicatorChartTypeArray}
+                            trendLineType={this.state.trendLineType} 
+                            interactiveType={this.state.interactiveType}
+                        />
+                    </div>
                 </div>
                 
-                <div className="stock__chart">
-                    <StockChart 
-                        key={1} 
-                        data={this.state.chartData} 
-                        range={this.state.range} 
-                        width={this.state.chartWidth} 
-                        height={this.state.chartHeight} 
-                        zoom={this.state.zoom} 
-                        chartType={this.state.chartType}
-                        IndicatorType={this.state.indicatorType}
-                        TotalCharts={this.state.TotalCharts}
-                        IndicatorChartTypeArray={this.state.IndicatorChartTypeArray}
-                        trendLineType={this.state.trendLineType} 
-                        interactiveType={this.state.interactiveType}
-                    />
-                </div>
-                <div className="chart__range">
+                
+                <div className="chart__range" >
                     <div data-range="1D" className="chart__range__value" onClick={this.changeRange.bind(this,'1D')}>1D</div>
                     <div data-range="5D" className="chart__range__value" onClick={this.changeRange.bind(this,'5D')}>5D</div>
                     <div data-range="1M" className="chart__range__value" onClick={this.changeRange.bind(this,'1M')}>1M</div>

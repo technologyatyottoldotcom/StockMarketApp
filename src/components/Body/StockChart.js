@@ -13,6 +13,7 @@ import { last ,toObject } from "react-stockcharts/lib/utils";
 import { timeFormat } from 'd3-time-format';
 import { TrendLine,EquidistantChannel,StandardDeviationChannel ,FibonacciRetracement ,GannFan} from "react-stockcharts/lib/interactive";
 import {saveInteractiveNodes, getInteractiveNodes} from "../../exports/InteractiveUtils";
+import {getXCoordinateProps, getYCoordinateProps, getXAxisProps, getYAxisProps} from '../../exports/ChartProps';
 import { CrossHairCursor, MouseCoordinateX, MouseCoordinateY } from "react-stockcharts/lib/coordinates";
 import {sma20,wma20,ema20,tma20,bb,macdCalculator,rsiCalculator,atrCalculator,slowSTO,fastSTO,fullSTO,fi,fiEMA,elder,elderImpulseCalculator,defaultSar,changeCalculator,compareCalculator} from '../../exports/MathematicalIndicators';
 import {TrendLineAppearance,EquidistantChannelAppearance,StandardDeviationChannelAppearance,FibRetAppearance,GannFanAppearance} from '../../exports/InteractiveAppearance';
@@ -111,7 +112,7 @@ export class StockChart extends React.Component {
 
     onKeyPress(e) {
 		const keyCode = e.which;
-		console.log(keyCode);
+		// console.log(keyCode);
 		switch (keyCode) {
 		case 46: { // DEL
 
@@ -158,7 +159,7 @@ export class StockChart extends React.Component {
 		case 68:   // D - Draw trendline
         case 69: { // E - Enable trendline
 
-            console.log(this.props);
+            // console.log(this.props);
             
             if(this.props.interactiveType === 'line')
             {
@@ -431,15 +432,18 @@ export class StockChart extends React.Component {
 
     getChartHeight(height,zoom,TotalCharts)
     {
+
+        // console.log(height);
         if(zoom)
         {
-            return (height/TotalCharts)-((70+((TotalCharts-1)*10))/(TotalCharts));
+            return (height/TotalCharts)-((20+((TotalCharts-1)*10))/(TotalCharts));
         }
         else
         {
             return height;
         }
     }
+
 
     render() {
 
@@ -462,11 +466,11 @@ export class StockChart extends React.Component {
 
         if(zoom)
         {
-            margin = {left: 0, right: 60, top:50, bottom: 20};
+            margin = {left: 0, right: 60, top:0, bottom: 0};
         }
         else
         {
-            margin = {left: 0, right: 20, top:20, bottom: 20};
+            margin = {left: 0, right: 20, top:0, bottom: 20};
         }
         var gridHeight = height - margin.top - margin.bottom;
         var gridWidth = width - margin.left - margin.right;
@@ -475,16 +479,13 @@ export class StockChart extends React.Component {
 
         const gridProps = {
             tickStrokeDasharray: 'Solid',
-            tickStrokeOpacity: 0.1,
-            tickStrokeWidth: 1 
+            tickStrokeOpacity: 0.05,
+            tickStrokeWidth: 1 ,
+            tickStroke : '#404040',
+            innerTickSize: -1 * gridWidth
         }
 
-		const yGrid = showGrid ? { 
-            innerTickSize: -1 * gridWidth
-        } : {};
-		const xGrid = showGrid ? { 
-            innerTickSize: -1 * gridHeight
-        } : {};
+		
 
         dataVal = initialData;
         // xAccessorVal = d => d.date;
@@ -557,8 +558,6 @@ export class StockChart extends React.Component {
             end = xAccessorVal(dataVal[0]);
         }
 
-
-
         start = xAccessorVal(last(dataVal));
         const xExtents = [start,end];
 
@@ -566,47 +565,41 @@ export class StockChart extends React.Component {
         return (
             <div>
                 <ChartCanvas 
-                ref={this.saveCanvasNode}
-                width={width} 
-                height={height} 
-                ratio={ratio}
-                margin = {margin}
-                seriesName="IBM"
-                postCalculator={compareCalculator}
-                xScale={xScaleVal}
-                xAccessor={xAccessorVal}
-                displayXAccessor={displayxAccessorVal}
-                xExtents={xExtents}
-                data={dataVal}
-                type={type}
-            >   
+                    ref={this.saveCanvasNode}
+                    width={width} 
+                    height={height} 
+                    ratio={ratio}
+                    margin = {margin}
+                    seriesName="IBM"
+                    postCalculator={compareCalculator}
+                    xScale={xScaleVal}
+                    xAccessor={xAccessorVal}
+                    displayXAccessor={displayxAccessorVal}
+                    xExtents={xExtents}
+                    data={dataVal}
+                    type={type}
+                >   
 
-                <Chart id={1} yExtents={[0,40]} height={this.getChartHeight(height,zoom,TotalCharts)}>
-
-                    {/* <LineSeries yAccessor={d => d.compare}/>
-					<LineSeries yAccessor={d => d.compare.close} stroke="#ff7f0e" />
-					<LineSeries yAccessor={d => d.compare.IBMClose} stroke="#2ca02c"/>
-                    <YAxis axisAt="right" orient="right" ticks={4} tickStroke='#888888' stroke='#c8c8c8' fontWeight={600} fontFamily="Open Sans, sans-serif" fontSize={10} tickFormat={format(".2f")}/>
-                    <XAxis axisAt="bottom" orient="bottom" ticks={5} tickStroke='#888888' stroke='#c8c8c8' fontWeight={600} fontFamily="Open Sans, sans-serif" fontSize={10} showTicks={false} outerTickSize={0}/> */}
+                <Chart id={1} yExtents={d=> [d.high+(d.high/200),d.low-(d.low/200)]} height={this.getChartHeight(height,zoom,TotalCharts)}>
                     
                     {zoom && <>
                         {TotalCharts === 1 ? 
                             <>
-                                <XAxis axisAt="bottom" orient="bottom" ticks={5} tickStroke='#888888' stroke='#c8c8c8' fontWeight={600} fontFamily="Open Sans, sans-serif" fontSize={10}/>
-                                <MouseCoordinateX at="bottom" orient="bottom" displayFormat={timeFormat("%d %b '%y")} fontFamily="Open Sans, sans-serif" fontSize={12}/>
+                                <XAxis {...getXAxisProps()} {...gridProps}/>
+                                <MouseCoordinateX {...getXCoordinateProps()}/>
                             </> :
                             <>
-                                <XAxis axisAt="bottom" orient="bottom" ticks={5} tickStroke='#888888' stroke='#c8c8c8' fontWeight={600} fontFamily="Open Sans, sans-serif" fontSize={10} showTicks={false} outerTickSize={0}/>
+                                <XAxis {...getXAxisProps()} {...gridProps}/>
                             </>
                         }
                         
-                        <YAxis axisAt="right" orient="right" ticks={4} tickStroke='#888888' stroke='#c8c8c8' fontWeight={600} fontFamily="Open Sans, sans-serif" fontSize={10} tickFormat={format(".2f")}/>
-                        <MouseCoordinateY at="right" orient="right" displayFormat={format(".2f")} arrowWidth={0} fontFamily="Open Sans, sans-serif" fontSize={12}/>
+                        <YAxis {...getYAxisProps()} {...gridProps}/>
+                        <MouseCoordinateY {...getYCoordinateProps()}/>
                         
                     </>}
                     {chartSeries}
 
-                    <TrendLine
+                    {/* <TrendLine
 						    ref={this.saveInteractiveNodes("Trendline", 1)}
 						    enabled={this.state.enableTrendLine}
 						    type={trendLineType}
@@ -674,7 +667,7 @@ export class StockChart extends React.Component {
                             currentPositionStrokeWidth={4}
                             currentPositionRadius={5}
                             appearance= {GannFanAppearance}
-                        />
+                        /> */}
 
                 </Chart>
 

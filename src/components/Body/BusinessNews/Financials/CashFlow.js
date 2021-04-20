@@ -1,20 +1,17 @@
 import React from 'react';
-import {CreateTable} from './CreateTable';
+import { CreateTable } from './CreateTable';
+import { RightNav } from "./RightNav"
 
-class CashFlow extends React.PureComponent{
-    render(){
-        return(
+class CashFlow extends React.PureComponent {
+    render() {
+        return (
             <>
-               <div className="container-fluid" style={{background:'',paddingLeft:'35px'}}>
-                   <div>
-                       <b>CashFlow </b> Detailed
-                   </div>
-                    <CreateTable type={this.props.type} field={this.props.field} stockcode={this.props.stockcode} />
-               </div>
+                <RightNav childrens={['CashFlow', 'Detailed']} active={1} />
+                <CreateTable type={this.props.type} field={this.props.field} stockcode={this.props.stockcode} />
             </>
         )
     }
 
 }
 
-export {CashFlow};
+export { CashFlow };

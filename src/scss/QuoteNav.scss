@@ -64,3 +64,22 @@
       color: whitesmoke;
     }
 }
+
+
+.chart-nav-fields{
+  margin: 0;
+  padding: 0;
+  button{
+    font-size: 13px;
+    margin: 0 2px;
+    width: auto;
+    padding: 3px 5px;
+    color: black;
+    background-color: transparent;
+  }
+}
+.chart-nav-fields-active{
+    button{
+      color: var(--QuoteNav-row-color);
+    }
+}

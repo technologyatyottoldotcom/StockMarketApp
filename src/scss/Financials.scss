@@ -1,0 +1,91 @@
+* 
+{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+:root 
+{
+  --main-blue : #00A0E3;
+  --main-green : #19E683;
+  --main-red : #E51A4B;
+  --light-grey : #EAEAEA;
+  --medium-grey : #BBBBBB;
+  --light-white : #FEFEFE;
+  --white : #FFFFFF;
+  --font-primary : #404040;
+  --font-secondary : #666666;
+  --shadow-primary : #F2F2F2;
+}
+
+.bn__stock__financials
+{
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+
+    .financials__left
+    {
+        width: 64%;
+    }
+
+    .financials__right
+    {
+        width: 34%;
+    }
+
+}
+
+.financials__left
+{
+    .financials__left__nav
+    {
+        height: 5%;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.menu__row
+{
+    // width: 100%;
+    padding: 0px 0px 0px 10px;
+    margin: 0;
+    color: var(--font-primary);
+    font-weight: 700;
+    font-size: 11px;
+}
+
+.financials__table
+{
+    width: 100%;
+    height: 90%;
+    padding: 0 0 0 20px;
+
+    .financials__table__data
+    {
+        padding: 5px 0px 5px 0;
+        box-shadow: 1px 1px 20px rgba(0,0,0,0.03);
+    }
+}
+
+.financials__right
+{
+
+
+    .credit__ratings
+    {
+        width: 100%;
+        height: 40%;
+        box-shadow: 1px 1px 20px rgba(0,0,0,0.03);
+        padding: 5px 10px;
+    }
+    .credit__charts
+    {
+        width: 100%;
+        height: 40%;
+        box-shadow: 1px 1px 20px rgba(0,0,0,0.03);
+    }
+}

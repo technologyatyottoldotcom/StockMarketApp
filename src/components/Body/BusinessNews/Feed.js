@@ -65,7 +65,7 @@ const SVGLOGOS = {
     if (link) {
       let sub = "Share tweet", enc = encodeURIComponent(title + '\n' + link)
       return (
-       <div style={{left : -20}}>
+       <div style={{left : -20 , marginTop : -10 }}>
           <Dropdown title={
             <span onMouseEnter={_ => set(true)} onMouseLeave={_ => set(false)} title='Share'>
               <svg viewBox="0 0 24 24" height={20} style={{ cursor: 'pointer', fill: (hover ? '#1da1f2' : 'rgba(0,0,0,.6)') }}><g><path d="M17.53 7.47l-5-5c-.293-.293-.768-.293-1.06 0l-5 5c-.294.293-.294.768 0 1.06s.767.294 1.06 0l3.72-3.72V15c0 .414.336.75.75.75s.75-.336.75-.75V4.81l3.72 3.72c.146.147.338.22.53.22s.384-.072.53-.22c.293-.293.293-.767 0-1.06z"></path><path d="M19.708 21.944H4.292C3.028 21.944 2 20.916 2 19.652V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 .437.355.792.792.792h15.416c.437 0 .792-.355.792-.792V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 1.264-1.028 2.292-2.292 2.292z"></path></g></svg>
@@ -156,7 +156,7 @@ function LoadingDiv({ total = 5 , background= '#e8dddd4a' , loadingColor = '#ece
 function CreateBox(props) {
     return (
         <>
-            <div className="border rounded mt-3 p-2 customScrollBar" style={{ boxShadow: '0 0 2px' , height : 500 , overflowX:'hidden' }}>
+            <div className="rounded mt-3 p-2 GlobalScrollBar" style={{fontSize : 12, height : 500 , overflowX:'hidden' }}>
                 {props.data}
             </div>
         </>
@@ -423,7 +423,7 @@ DescThumbnail(arr,text){
         let m = arr.entities.media;
         if(Array.isArray(m) && m.length){
               m = m[0]
-              var pu = t=><a href={ (url || statusURL)} target="_blank" rel="noopener noreferrer" ><span>{m.display_url}</span> {t} </a>
+              var pu = t=><a href={ (url || statusURL)} target="_blank" rel="noopener noreferrer" ><div>{m.display_url}</div> {t} </a>
               let url = (m.media_url_https || m.media_url), 
               t = String(m.type).toLowerCase();
             if(typeof m==='object' && !Array.isArray(m)){
@@ -477,7 +477,7 @@ render(){
 
                             </div>
 
-                            <div className="col m-0 p-0 pb-2" >
+                            <div className="col m-0 p-0 pb-2" style={{fontWeight:'normal'}} >
                                 {text}
                             </div>
 
@@ -515,11 +515,12 @@ render(){
 }
 
 
+
 function RenderMedia({ data }){
   const Get = (t,i=0)=>Array.isArray(t) ? t[i] : t;
   let link = Get(data.link), dTime = createTime(Get(data.pubDate)), source = Get(data.source), sU = Get(source.$.url)
+  
   const [get, set] = React.useState({img:null,desc:null})
-
   if(!get.img){
     Axios(`http://localhost:3001/getmetadata?url=${link}&types=og:image,og:description`).then(({data})=>{
        let d = data.data
@@ -537,18 +538,23 @@ function RenderMedia({ data }){
      })
     }
 
-
+  const head = Get(data.title) , Source = Get(data.source)._
   return (
     <>
       <div className="col-9">
         <article className="gNews">
-          <div dangerouslySetInnerHTML={{ __html: Get(data.description) }}></div>
-
-          <div style={{ color: '#00000087', cursor: 'pointer' }} {...(sU ? { onClick: _ => window.open(sU, "_blank") } : {})}>
-            <time dateTime={dTime.fullDate}>&middot;&nbsp;{(/^[0-9?]/).test((dTime.time).trim()) ? parseInt(dTime.time) + ' days ago' : dTime.time}</time>
+          <div style={{color:'black',fontSize:12}}>
+            {/* dangerouslySetInnerHTML={{ __html: Get(data.description) }} */}
+              <div style={{fontWeight:'bold',cursor:'pointer'}} onClick={_=>window.open(Get(data.link),"_blank")}>{
+                head.slice(0,head.lastIndexOf(" - "+Source))
+              }</div>
           </div>
-          <div style={{ paddingTop : 5}}>
+          <div style={{ paddingTop : 5 , fontWeight : 'normal'}}>
             { get.desc }
+          </div>
+          <div style={{ color: '#00000087', cursor: 'pointer' , marginTop : (get.desc ? 15 : 0) }} {...(sU ? { onClick: _ => window.open(sU, "_blank") } : {})}>
+            <time dateTime={dTime.fullDate}>&middot;&nbsp;{(/^[0-9?]/).test((dTime.time).trim()) ? parseInt(dTime.time) + ' days ago' : dTime.time}</time>
+            <span>&nbsp;&nbsp;{Source}</span>
           </div>
         </article>
       </div>
@@ -561,9 +567,7 @@ function RenderMedia({ data }){
             </>
           ) : (
             <>
-              <div style={{ width: '100%', height: '100%', background: '#f2f2f5' }}>
-
-              </div>
+              <div style={{ width: '100%', height: '100%', background: '#f2f2f5' }}></div>
             </>
           )
         }
@@ -593,7 +597,7 @@ class GoogleFeeds extends React.PureComponent{
   render(){
     return(
       <>
-        <div className="container-fluid p-0 m-0" style={{color : '#202124'}}>
+        <div className="container-fluid p-0 m-0 pb-4" style={{color : '#202124'}}>
           {
             !this.state.loading ?
             (this.state.data || []).map((v, i) => {
@@ -612,92 +616,6 @@ class GoogleFeeds extends React.PureComponent{
       </>
     )
   }
-
-}
-
-
-const TEMPDATA = _ =>{
-  return (
-    <>
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus et unde sed laudantium. Temporibus enim, sapiente quaerat quis, modi tenetur id, inventore fugit maiores excepturi voluptatem aspernatur aliquid blanditiis.
-    </>
-  )
 }
 
 class Feed extends React.PureComponent {
@@ -708,27 +626,28 @@ class Feed extends React.PureComponent {
       }
   }
     render() {
+      const Heading = {
+        style : {
+          fontSize : 13,
+          marginLeft : 15,
+          fontWeight : 'bold'
+        }
+      }
         return (
           <>
             <div className="container" style={{ color: 'black' }}>
-              <div className="row">
-                <div className="col" >
-                  <h6>Twitter Feed </h6>
+              <div className="row p-0">
+                <div className="col-6 p-0 m-0" >
+                  <div {...Heading}>Twitter Feed </div>
                   <CreateBox data={<TwitterFeeds symbol={this.state.symbol} />} />
-                  {/* <CreateBox data={<TEMPDATA />} /> */}
                   
                 </div>
 
-                <div className="col">
-                  <h6>News </h6>
-                  {/* Note: - For better loading experiance set the render data limit at a time  */}
+                <div className="col-6 p-0 m-0">
+                  <div {...Heading}>News </div>
                   <CreateBox data={<GoogleFeeds symbol={this.state.symbol} />} />
-                  {/* <CreateBox data={<TEMPDATA />} /> */}
-
-
                 </div>
               </div>
-
             </div>
           </>
         )

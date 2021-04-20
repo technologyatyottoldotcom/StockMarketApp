@@ -1,0 +1,122 @@
+* 
+{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+:root 
+{
+  --main-blue : #00A0E3;
+  --main-green : #19E683;
+  --main-red : #E51A4B;
+  --light-grey : #EAEAEA;
+  --medium-grey : #BBBBBB;
+  --light-white : #FEFEFE;
+  --white : #FFFFFF;
+  --font-primary : #404040;
+  --font-secondary : #666666;
+  --shadow-primary : #F2F2F2;
+}
+
+.bn__stock__technicals
+{
+    display: flex;
+
+    .bn__stock__views{
+        width: 50%;
+    }
+
+    .bn__stock__target{
+        width: 50%;
+    }
+
+}
+
+.bn__stock__views
+{
+
+    .stock__view
+    {
+        box-shadow: 1px 1px 20px rgba(0,0,0,0.03);
+        margin-bottom: 10px;
+        padding: 5px 10px;
+    }
+    .view__name
+    {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--font-primary);
+    }
+
+    .stock__view__slider
+    {
+        margin-top: 15px;
+        width: 70%;
+    }
+}
+
+/*rsuite update*/
+
+.bn__stock__views .rs-slider-bar
+{
+    background-color: var(--medium-grey)!important;
+    height: 1px!important;
+}
+
+.bn__stock__views .rs-slider-progress-bar
+{
+    height: 1px!important;
+}
+
+.bn__stock__views .rs-slider-graduator > ul > li.rs-slider-pass::before {
+    border: none!important;
+    background-color: var(--main-blue)!important;
+}
+
+.bn__stock__views .rs-slider-handle
+{
+    margin-top: -2px;
+}
+
+.bn__stock__views .rs-slider-handle::before {
+    border: none!important;
+    background-color: var(--main-blue)!important;
+    width: 8px!important;
+    height: 8px!important;
+    margin-left: -3px!important;
+}
+
+.bn__stock__views .rs-slider-graduator > ul > li:last-child::after, .rs-slider-graduator > ul > li::before 
+{
+    background-color: var(--medium-grey)!important;
+    border: none!important;
+    margin-top: -2px!important;
+}
+
+.bn__stock__views .rs-slider-mark
+{
+    left: -15%!important;
+    top : 5px!important;
+}
+
+.bn__stock__views .rs-slider-mark-content
+{
+    margin-left: 0!important;
+}
+
+.bn__stock__views .rs-slider-last-mark
+{
+    left: auto!important;
+}
+
+.bn__stock__views .rs-slider-last-mark .rs-slider-mark-content
+{
+    margin-left: 50%!important;
+}
+
+.bn__stock__views .rs-slider-mark
+{
+    left: auto;
+}

@@ -10,15 +10,57 @@
     text-align: center;
     border-collapse: collapse;
   th {
-    height: 70px;
     width: 150px;
   } 
   tr{      
-      height: 40px;
       width: 80px;
-    }
+   }
  tr td:first-child{
       padding: 15px;
       text-align: left;
   }
+  tbody{
+    tr {
+      height:20px;
+    }
+   td{
+      padding-bottom : 0 !important;
+      padding-top : 3px !important;
+      padding-left : 2px !important;
+      height : 10px;
+      border:none;
+      &:not(:first-child){
+        border : 1px solid #ccc;
+        border-bottom-style:1px solid;
+        border-top-style : none;
+        border-left-style : none;
+        border-right-style : none;
+      }
+    }
+  }
 }
+
+
+.GlobalScrollBar{
+  overflow : scroll;
+  scroll-behavior : smooth;
+  overflow-wrap : break-word;
+  color: black;
+
+  &::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    
+  &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  &::-webkit-scrollbar-thumb {
+      background: #dbd9d9;
+      border-radius: 20px;
+    }
+  &::-webkit-scrollbar-thumb:hover {
+      background: #dbd9d9;
+    }
+}
+

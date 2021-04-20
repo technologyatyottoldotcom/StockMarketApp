@@ -14,6 +14,7 @@ class TopStocks extends React.Component {
 								if (v && typeof v == 'object') {
 									return <UpperStock {...v} 
 										data={data} //This is a temporary basis data 
+										key={i+Math.random()*9999 + Date.now()}
 									/>
 
 								} else return null

@@ -2,7 +2,6 @@ const Twitter = require('express').Router()
 const util = require('util')
 const twit = require("twit")
 
-console.log(process.env);
 
 const TwitterConfig = new twit({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,

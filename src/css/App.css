@@ -57,6 +57,16 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #dbd9d9;
   }
+  
+.positive
+{
+  color: var(--main-green);
+}
+
+.negative
+{
+  color: var(--main-red);
+}
 
 .app 
 {
@@ -109,11 +119,11 @@
 .app__header .stock__search 
 {
   width: 600px;
-  height: 70%;
+  /* height: 70%; */
  /* border: 1px solid #cccccc;
   */
   border-radius: 6px;
-  box-shadow: -2px 2px 2px var(--shadow-primary), 1px 0px 2px var(--shadow-primary);
+  /* box-shadow: -2px 2px 2px var(--shadow-primary), 1px 0px 2px var(--shadow-primary); */
   display: flex;
  /* justify-content: center;
   */
@@ -134,6 +144,17 @@
   height: 20px;
 }
 
+.MuiInput-underline:after
+{
+  border-color: var(--main-blue)!important;
+}
+
+.MuiFormLabel-root.Mui-focused
+{
+  color: var(--main-blue)!important;
+  font-family: 'Open Sans', sans-serif!important;
+}
+
 .app__header .stock__search input 
 {
   border: none;
@@ -142,8 +163,10 @@
   height: 80%;
   padding-left: 2px;
   color: var(--font-primary);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
+  letter-spacing: 0.4px!important;
+  text-transform: uppercase!important;
 }
 
 .app__header .app__menu 
@@ -673,6 +696,8 @@
   position: relative;
   background-color: var(--white);
   box-shadow: 3px 3px 10px rgba(0,0,0,.02) , -3px -3px 10px rgba(0,0,0,.02) ;
+  display: flex;
+  flex-direction: column;
 }
 
 .app__body .app__body__left .chart__container.chart__container__zoom 
@@ -684,29 +709,29 @@
 
 .app__body .app__body__left .chart__container .chart__container__stock__options 
 {
-  position: absolute;
-  display: flex;
   flex-direction: column;
-  top: 0%;
-  left: 0%;
   width: 100%;
+  height: 8%;
+  display: none;
+  flex : 1;
+}
+
+.app__body .app__body__left .chart__container .chart__container__stock__options.active
+{
+  display: flex;
 }
 
 .app__body .app__body__left .chart__container .chart__container__stock__options .chart__options 
 {
   width: 100%;
+  height: 100%;
   background-color: #ffffff;
   border: 1px solid #eeeeee;
-  height: 40px;
   z-index: 100;
-  display: none;
-}
-
-.app__body .app__body__left .chart__container .chart__container__stock__options .chart__options.active 
-{
   display: flex;
   align-items: center;
 }
+
 
 .app__body .app__body__left .chart__container .chart__container__stock__options .chart__options .chart__option__block 
 {
@@ -803,15 +828,22 @@
   height: 18px;
 }
 
+.app__body .app__body__left .chart__container .stock__info__chart
+{
+  position: relative;
+  flex: 12;
+}
+
 .app__body .app__body__left .chart__container .stock__info 
 {
- /* position: absolute;
+ 
+  position: absolute;
   top: 0%;
   left: 0%;
-  */
   z-index: 10;
   padding-left: 20px;
   padding-top: 20px;
+  display: inline-block;
 }
 
 .app__body .app__body__left .chart__container .stock__info .stock__details 
@@ -826,21 +858,6 @@
   color: var(--font-primary);
 }
 
-/* .app__body .app__body__left .chart__container .stock__info .stock__details p #stock__nse__code 
-{
-  text-transform: uppercase;
-  color: var(--main-blue);
-  margin-right: 7px;
-}
-
-.app__body .app__body__left .chart__container .stock__info .stock__details p #stock__bse__code 
-{
-  text-transform: uppercase;
-  color: var(--medium-grey);
-  margin-right: 7px;
-}
-
-*/
 .app__body .app__body__left .chart__container .stock__info .stock__details .stock__type 
 {
   width: auto;
@@ -885,21 +902,68 @@
   align-items: center;
 }
 
-.app__body .app__body__left .chart__container .stock__info .stock__price__details p span 
+.app__body .app__body__left .chart__container .stock__info .stock__price__details p 
 {
   font-size: 16px;
   font-weight: 700;
   margin-right: 2px;
 }
 
-.app__body .app__body__left .chart__container .stock__info .stock__price__details span.price__decimals 
+.app__body .app__body__left .chart__container .stock__info .stock__price__details .price__decimals 
 {
   color: var(--font-primary);
   font-size: 30px;
   font-weight: 900;
 }
 
-.app__body .app__body__left .chart__container .stock__info .stock__price__details span.price__fraction 
+.price__decimals .price__digit 
+{
+   height: 30px;
+   overflow: hidden;
+}
+
+.price__decimals .price__digit__column
+{
+  display : flex;
+  flex-direction : column;
+  transition : 1s;
+}
+     
+.price__decimals .digit__box
+{
+ height: 30px;
+ font-size: 24px;
+ color: var(--font-primary);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+.price__fraction .price__digit 
+{
+   height: 20px;
+   overflow: hidden;
+}
+
+.price__fraction .price__digit__column
+{
+  display : flex;
+  flex-direction : column;
+  transition : 1s;
+}
+     
+.price__fraction .digit__box
+{
+ height: 20px;
+ font-size: 14px;
+ color: var(--font-primary);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+
+.app__body .app__body__left .chart__container .stock__info .stock__price__details .price__fraction 
 {
   color: var(--font-primary);
   font-size: 14px;
@@ -963,18 +1027,42 @@
   display: flex;
   font-size: 12px;
   font-weight: 700;
-  color: var(--main-red);
+  margin-top: 0;
+  color: var(--font-primary);
 }
 
-.app__body .app__body__left .chart__container .stock__info .stock__price__change span 
+.app__body .app__body__left .chart__container .stock__info .stock__price__change div 
 {
   margin-left: 2px;
 }
 
+.app__body .app__body__left .chart__container .stock__info .stock__price__change div .price__digit 
+{
+   height: 18px;
+   margin: 0 -0.8px;
+   overflow: hidden;
+}
+
+.app__body .app__body__left .chart__container .stock__info .stock__price__change div .price__digit__column
+{
+  display : flex;
+  flex-direction : column;
+  transition : 1s;
+}
+     
+.app__body .app__body__left .chart__container .stock__info .stock__price__change div .digit__box
+{
+ height: 18px;
+ font-size: 12px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
 .app__body .app__body__left .chart__container .stock__chart 
 {
-  height: 93%;
   width: 100%;
+  height: 100%;
 }
 
 .app__body .app__body__left .chart__container .stock__chart g 
@@ -984,8 +1072,8 @@
 
 .app__body .app__body__left .chart__container .chart__range 
 {
+  flex: 1;
   width: 100%;
-  height: 7%;
   display: flex;
   align-items: center;
   padding-left: 20px;
@@ -1251,104 +1339,7 @@
 
 }
 
-.annual__returns 
-{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 10px 10px 4px;
-  border-radius:2px;
-  box-shadow: 0px 2px 5px rgba(0,0,0,.1);
-  font-size: 14px;
-  font-weight: 700;
-}
 
-.annual__returns span 
-{
-  color: #00a0e3;
-  font-size: 20px;
-}
-
-.valuation__slider 
-{
-  -webkit-appearance: none;
-  background-color: #ecf0f1;
-  width: 100%;
-  outline: none;
-  opacity: 1;
-  height: 6px;
-  border-radius: 5px;
-}
-
-.valuation__slider:hover 
-{
-  opacity: 1;
-}
-
-.valuation__slider::-webkit-slider-thumb 
-{
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  border: 2px solid #00a0e3;
-  cursor: pointer;
-  z-index: 100;
-}
-
-.valuation__slider::-moz-range-thumb 
-{
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  border: 2px solid #00a0e3;
-  box-shadow: -80px 0 0 80px #43e5f7;
-  cursor: pointer;
-}
-
-input[type='range']::-webkit-slider-runnable-track 
-{
-  height: 10px;
-  -webkit-appearance: none;
-  color: #00a0e3;
-  margin-top: -1px;
-}
-
-/* input[type='range']::-webkit-slider-thumb 
-{
-  width: 10px;
-  -webkit-appearance: none;
-  height: 10px;
-  background: #434343;
-  box-shadow: -80px 0 0 80px #43e5f7;
-}
-
-*/
-input[type="range"]::-moz-range-progress 
-{
-  background-color: #43e5f7;
-}
-
-input[type="range"]::-moz-range-track 
-{
-  background-color: #9a905d;
-}
-
-/* IE*/
-input[type="range"]::-ms-fill-lower 
-{
-  background-color: #43e5f7;
-}
-
-input[type="range"]::-ms-fill-upper 
-{
-  background-color: #9a905d;
-}
 
 @media only screen and (max-width: 800px) 
 {
@@ -2031,6 +2022,7 @@ input[type="range"]::-ms-fill-upper
       left: 50%;
       transform: translateX(-50%);
  }
+
 
   @keyframes create
   {

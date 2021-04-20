@@ -1,27 +1,16 @@
-const mysql = require("mysql") ,  express = require('express') , cors = require('cors')
+//imports
+const express = require('express') , cors = require('cors')
 const app = express();
-const dotenv = require('dotenv');
+const {conn} = require('./connection');
+const {Twitter} = require("./twitter");
+const {GoogleFeeds} = require("./google_feeds");
+const {AutoComplete} = require('./AutoComplete');
 
+//middlewares
+app.use(Twitter);
+app.use(GoogleFeeds);
 app.use(cors());
 
-dotenv.config({
-    path : '../config.env'
-});
-
-// console.log(process.env)
-const {Twitter} = require("./twitter")
-app.use(Twitter)
-
-const {GoogleFeeds} = require("./google_feeds")
-app.use(GoogleFeeds)
-
-
-var conn = mysql.createConnection({
-    host : process.env.HOST,
-    user : process.env.USER,
-    password : process.env.PASSWORD,
-    database : process.env.DATABASE
-});
 
 
 conn.connect((err)=>{
@@ -33,7 +22,7 @@ conn.connect((err)=>{
     {
         console.log('Not connected ',err);
     }
-})
+});
 
 const tableTypes = {
     types : ['annual','quarterly'],
@@ -45,8 +34,6 @@ const tableTypes = {
         quarterly_incomestatement   : 'fundamental_data_reuters_income_quartely',
         quarterly_balancesheet      : 'fundamental_data_reuters_balancesheet_quartely',
         quarterly_cashflows         : 'fundamental_data_reuters_cashflow_quartely',
-
-       
     }
 }
 
@@ -122,6 +109,18 @@ console.log(p);
     .catch(e=>{
         console.log('err = ',e)
         res.send(e)
+    })
+});
+
+//search filter suggestion
+app.get('/stock/:query',(req,res)=>{
+    let query = req.params.query;
+    AutoComplete(query)
+    .then((response)=>{
+        res.json(response)
+    })
+    .catch((error)=>{
+        console.log(error);
     })
 })
 

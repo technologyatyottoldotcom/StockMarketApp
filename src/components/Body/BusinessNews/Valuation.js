@@ -1,6 +1,8 @@
 import React from 'react';
-import { Row, Col, InputNumber, Slider } from 'rsuite';
+import { Row, Col, Slider , RangeSlider } from 'rsuite';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,LabelList, Legend, ResponsiveContainer } from 'recharts';
 import $ from 'jquery';
+import '../../../scss/Valuation.scss';
 
 function EarningValuation({ title, value, max, min, changeSliderValue}) {
 
@@ -10,40 +12,29 @@ function EarningValuation({ title, value, max, min, changeSliderValue}) {
     const [val, setValue] = React.useState(value);
 
     let stop = ((Math.ceil(val)-min)/(max-min))*100;
-
     let back = `linear-gradient(to right,#00a0e3 0%,#00a0e3 ${stop}%,#ecf0f1 ${stop}%,#ecf0f1 100%)`;
+
 
     return (
         <>
-            <Row style={{ marginTop: 3, marginRight: 0, paddingRight: 0 , paddingLeft : '10px' }}>
-                {title && <p style={{ padding: 6 }}>{title}</p>}
-                <Col md={14} sm={20} xs={13}>
+            <Row style={{ marginTop: 3, marginRight: 0, paddingRight: 0 }} className="slider__wrapper">
+                {title && <p style={{ padding: '4px 0px 0px 6px' , fontSize : '12px' , fontWeight : '600' }}>{title}</p>}
+                <Col md={18} sm={20} xs={13}>
                     <div style={{  }}>
-                        {/* <Slider
-                            progress
-                            min={min}
-                            max={max}
-                            value={val}
-                            // value={value}
-                            onChange={value => { setValue(Nu(value)) }}
-                            // onChange={val => { changeSliderValue(Nu(val)) }}
-                            // onMouseUp={e => {changeSliderValue(Nu(val))}}
-                            // onMouseDown={e => {console.log('down')}}
-                        /> */}
                         <input 
                             className="valuation__slider" 
                             type="range" 
                             min={min} 
                             max={max} 
                             value={val} 
-                            style={{background : back}}
+                            style={{background : back }}
                             onTouchEnd={e => {changeSliderValue(Nu(val))}} 
                             onMouseUp={e => {changeSliderValue(Nu(val))}} 
                             onChange={e=> {setValue(e.target.value)}}/>
                     </div>
                 </Col>
-                <Col md={2} sm={2} xs={7} style={{ width: 100 }}>
-                    <InputNumber
+                <Col md={1} sm={2} xs={7}>
+                    {/* <InputNumber
                         min={min}
                         max={max}
                         value={val}
@@ -56,7 +47,8 @@ function EarningValuation({ title, value, max, min, changeSliderValue}) {
                         }}
                         size="xs"
                         placeholder="xs"
-                    />
+                    /> */}
+                    <input className="slider__value" readOnly value={val} />
                 </Col>
             </Row>
         </>
@@ -68,102 +60,22 @@ function EarningValuation({ title, value, max, min, changeSliderValue}) {
 
 function PriceUpAndLowBounds(props) {
 
-    const Slid = ({ labels,price,startArr,heightArr }) => {
-        return (
-            <>
-                <div className="row pt-2 pb-3">
-                    {
-                        labels.map((e, i) => {
-                            return (
-                                <>
-                                    <div className="col text-center bound__labels" key={i + e + Math.random()}>
-                                        {e}
-                                    </div>
-                                </>
-                            )
-                        })
-                    }
-                </div>
-                <div className="row price__bounds">
-                    {
-                        labels.map((e, i) => {
-
-                            let p = price[i],
-                                t = typeof p
-                            return (
-                                <>
-                                    <div className={`col price__bounds__outer`} key={i + Math.random() * 6} style={{padding : '0px'}}>
-                                        <div style={{fontSize : '14px' , fontWeight : 700 , marginBottom : startArr[i]+20+'px'}} className="price__bounds__inner">
-                                            <span className="bound__label label__up">{t !== 'object' ? p : p[1]}</span>
-                                            <div style={{ height: heightArr[i]}} className="PriceUpAndLowBounds">
-                                                <div className="pul__inner"></div>
-                                            </div>
-                                            <span className="bound__label label__down">{t === 'object' && p[0]}</span>
-                                        </div>
-                                    </div>
-                                </>
-                            )
-                        })
-                    }
-                </div>
-            </>
-        )
-    }
     if (props) {
 
-        // console.log(props);
-        let maxArea = $('.price__bounds').height()-50;
-        let maxValue = 0;
-        let ratioFactor;
-        let startArr = [] , heightArr=[];
-        props.data.map((arr)=>{
-            if(typeof arr === 'number')
-            {
-                maxValue = arr> maxValue ? arr : maxValue;
-            }
-            else if(typeof arr === 'object')
-            {
-                maxValue = Math.max(...arr)> maxValue ? Math.max(...arr) : maxValue;
-            }
-        });
-
-        ratioFactor = maxValue>maxArea ? parseFloat((maxValue/maxArea).toFixed(2)) : 1;
-
-        // console.log(maxArea,maxValue,ratioFactor);
-
-        props.data.map((arr,i)=>{
-            if(typeof arr === 'number')
-            {
-                startArr.push(parseFloat((arr/ratioFactor).toFixed(2)));
-                heightArr.push(10);
-            }
-            else
-            {
-                startArr.push(parseFloat((arr[0]/ratioFactor).toFixed(2)));
-                heightArr.push(parseFloat((Math.abs(arr[1]-arr[0])/ratioFactor).toFixed(2)));
-            }
-        });
-
-        // console.log(startArr,heightArr);
-
-
-
         return (
-            <>
-                <Row>
-                    <Col md={13} lg={16}>
-                        <h6>Price Upper and Lower Bounds</h6>
-                        <div className="container">
-                            <Slid labels={props.labels} price={props.data} startArr={startArr} heightArr={heightArr}/>
-                        </div>
-                    </Col>
-                    <Col md={8} lg={8} >
-                        <h6>Valuation Confidence</h6>
-                        <div className="pt-4" style={{ marginLeft: 70, height: 330 }}>
-                            <CustomSlider ValuationConfidence={props.ValuationConfidence}/>
-                        </div>
-                    </Col>
-                </Row>
+            <> 
+                <div className="stock__price__section">
+                    <p className="card__title">Price Upper and Lower Bounds</p>
+                    <div className="price__bound__chart">
+                        <BoundChart data={props.data}/>
+                    </div>
+                </div>
+                <div className="stock__confidence">
+                    <p className="card__title">Valuation Confidence</p>
+                    <div>
+                        <CustomSlider ValuationConfidence={props.ValuationConfidence}/>
+                    </div>
+                </div>
             </>
         )
     }
@@ -175,22 +87,31 @@ function CustomSlider(props){
         const printText = props.printText || ['Quite High', 'High', 'Inconclusive', 'Low', 'Quite Low'],
         steps = printText.length,
         value = props.ValuationConfidence;
-        // console.log('custom',value);
+        console.log('custom',value);
         // console.log(props);
            
         return (
-            <div className="pt-2">
-                <div style={{ height: 300 }}>
-                    <Slider
+            <div className="confidence__slider">
+                <div style={{ height: 250 , width : 100 }}>
+                    <RangeSlider
+
+                        barClassName='custome-slider'
                         min={0}
-                        max={steps - 1}
-                        value={value}
+                        max={steps-1}
+                        value={[value,4]}
+                        defaultValue={[4,4]}
                         className="custom-slider-Technical"
                         graduated
                         vertical
+                        progress
                         tooltip={false}
                         renderMark={n =>
-                            <span key={n + Math.random() + 5} style={{ fontWeight: n === value ? "bold" : 'normal' , fontSize : '14px' }}>{printText[n]}</span>
+                            <span key={n + Math.random() + 5} style={ n === value ? {
+                                fontWeight: "600" , fontSize : '14px' , color : '#00a0e3'
+                            } : 
+                            {
+                                fontWeight: '500' , fontSize : '14px' , color : '#404040'
+                            }}>{printText[n]}</span>
                         }
                         onChange={v => { console.log(v) }}
                     />
@@ -198,6 +119,78 @@ function CustomSlider(props){
             </div>
         );
 }
+
+function CustomizedAxisTick(props)
+{
+    const { x, y, payload } = props;
+
+    return (
+        <g transform={`translate(${x},${y})`}>
+          <text
+            x={0}
+            y={0}
+            dy={16}
+            fontSize="12px"
+            textAnchor="middle"
+            fill="#666"
+          >
+            {payload.value}
+          </text>
+        </g>
+      );
+}
+
+function CustomizedLabel(props)
+{
+    const { x, y, stroke, value } = props;
+    return (
+        <text x={x} y={y} dy={-10} fill={stroke} fontSize={10} textAnchor="middle">
+          {value}
+        </text>
+      );
+}
+
+function BoundChart(props)
+{
+
+    if(props.data.length > 0)
+    {
+
+        return (
+            <>
+                <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                        data={props.data}
+                        margin={{
+                            top: 50,
+                            right: 20,
+                            left: 30,
+                            bottom: 0
+                    }}>
+                    <XAxis dataKey="name" height={60} tick={<CustomizedAxisTick />} angle={140}/>
+                    <YAxis hide={true}/>
+                    <Tooltip />
+                    <Line type="monotone" dataKey="high" stroke="#00a0e3" strokeWidth={2}>
+                        <LabelList content={<CustomizedLabel />} />
+                    </Line>
+                    <Line type="monotone" dataKey="low" stroke="#e51a4b" strokeWidth={2}>
+                        <LabelList content={<CustomizedLabel />} />
+                    </Line>
+                    
+                    </LineChart>
+                </ResponsiveContainer>
+            </>
+        )
+    }
+    else
+    {
+        return (
+            <></>
+        )
+    }
+    
+}
+
 
 const DefaultFactors = {
     'TTMNP' : 100.0,
@@ -376,7 +369,13 @@ class Valuation extends React.PureComponent{
 
         // console.log('Price Up Low Bounds Start');
         
-        let PULarr = [600];
+        let PULarr = [
+            {
+                name : 'T',
+                high : 600,
+                low : 600
+            }
+        ];
         let ValFactors = this.state.ValuationFactors;
         let PriceBands = this.state.PriceBandEPSFactors;
 
@@ -384,13 +383,16 @@ class Valuation extends React.PureComponent{
         
         for(let i=1;i<=5;i++)
         {
-            let bounds = [];
+            let bounds = {};
             let HighB = Math.round(ValFactors['EMHB']*PriceBands['T'+i]);
             let LowB = Math.round(ValFactors['EMLB']*PriceBands['T'+i]);
-            bounds.push(LowB,HighB);
+            bounds['name'] = 'T+'+i;
+            bounds['high'] = HighB;
+            bounds['low'] = LowB; 
             PULarr.push(bounds);
         }
 
+        // console.log(PULarr)
 
         this.setState({
             PriceUpLowBounds : PULarr
@@ -428,6 +430,7 @@ class Valuation extends React.PureComponent{
         {
             VC = 4;
         }
+        console.log(VC);
         this.setState({
             ValuationConfidence : VC
         });
@@ -441,14 +444,14 @@ class Valuation extends React.PureComponent{
         // console.log('Annual Returns Start');
         
         let PriceBounds = this.state.PriceUpLowBounds;
-        let Base = typeof PriceBounds[0] === 'number' ? PriceBounds[0] : '';
-        // console.log(Base);
+        let Base = parseFloat(PriceBounds[0]['high']);
+        console.log(Base);
         let num1 = 3;
         let num2 = 5;
         if(typeof Base  === 'number')
         {
-            let ThreeY = parseFloat((((PriceBounds[num1][0]+PriceBounds[num1][1])/2)/Base));
-            let FiveY = parseFloat((((PriceBounds[num2][0]+PriceBounds[num2][1])/2)/Base));
+            let ThreeY = parseFloat((((PriceBounds[num1]['high']+PriceBounds[num1]['low'])/2)/Base));
+            let FiveY = parseFloat((((PriceBounds[num2]['high']+PriceBounds[num2]['low'])/2)/Base));
 
 
             let TYAR = parseFloat(((Math.pow((1+ThreeY),(1/3))-1)*100).toFixed(2));
@@ -611,13 +614,13 @@ class Valuation extends React.PureComponent{
         {
             return(
                 <>
-                    <div className="container pl-5 pr-5" style={{color : '#00a0e3'}}>
-                        <Row className="p-5 text-center">
-                            <h4 className="mb-4">Fundamental valuation using standard methodologies is not possible as financials 
-                                of the company do not allow for such a valuation.
-                            </h4>
-                            <h4>Kindly use your own judgement in arriving at a value. </h4>
-                        </Row>
+                    <div className="valuation__empty">
+                        <div className="empty__text">
+                            <p className="mb-4">Fundamental valuation using standard methodologies is not possible as financials 
+                                    of the company do not allow for such a valuation.
+                            </p>
+                            <p>Kindly use your own judgement in arriving at a value. </p>
+                        </div>
                     </div>
                     
                 </>
@@ -627,31 +630,26 @@ class Valuation extends React.PureComponent{
         {
             return(
                 <>
-                    <Row style={{paddingLeft:'35px'}}>
-                        <Col md={10}>
-                            <h5 style={{ fontWeight: 'bold', padding: 10 }}>Earnings Valuation</h5>
-                            {
-                                
-                                data.map((e, i) => {
-                                    if (typeof e == 'object' && !Array.isArray(e)) {
-                                        return <EarningValuation key={i + Math.random()} {...e} />
-                                    } else return null
-                                })
-                            }
-                            {/* <EarningValuation data={this.state.EarningValuation}/> */}
-                            <div style={{ padding: '20px 0 0 0',fontSize:'14px' }}>
-                                The above values have been set according to our estimates.<br />
-                                You may set them as necessary according to your views.
+
+                    <div className="stock__valuation">
+                        <div className="stock__valuation__left">
+                            <div className="stock__earning__valuation">
+                                <p className="card__title">Earnings Valuation</p>
+                                    {
+                                        data.map((e, i) => {
+                                            if (typeof e == 'object' && !Array.isArray(e)) {
+                                                return <EarningValuation key={i + Math.random()} {...e} />
+                                            } else return null
+                                        })
+                                    }
+                                <div className="card__condition">
+                                    <span style={{fontSize : '11px'}}>*</span> The above values have been set according to our estimates.
+                                    You may set them as necessary according to your views.
+                                </div>
                             </div>
-                        </Col>
-                        <Col md={10} lg={14}>
-                            <PriceUpAndLowBounds 
-                                labels={this.state.PriceUpLowLabels} 
-                                data={this.state.PriceUpLowBounds} 
-                                ValuationConfidence={this.state.ValuationConfidence}
-                            />
-                            <div className="mt-2" style={{ width : '70%' }}>
-                                <h6 style={{padding : '6px'}}>Annual Returns</h6>
+
+                            <div className="stock__annual__returns">
+                                <p className="card__title">Annual Returns</p>
                                 <div className="annual__returns">
                                     <p>3 year potential Upside/ Downside</p>
                                     <span>{this.state.ThreeYearReturn}%</span>
@@ -662,16 +660,30 @@ class Valuation extends React.PureComponent{
                                 </div>
                             </div>
                             
-                        </Col>
-                    </Row>
-                    <Row>
-                        <div className="container m-auto mt-5 mb-5 p-3" style={{ border: '1px solid black', borderRadius: 10 , marginLeft : 0 , width : '90%'}}>
-                            <p style={{fontSize : '20px' , fontWeight : 700}}>Valuation Methodology</p>
-                            <div style={{fontSize : '14px' , fontWeight : 500}}>
-                                {(this.state.ValuationMethodology || []).map((e, i) => <div key={i + 9 + Math.random()}>{i + 1}.&nbsp;{e}</div>)}
-                            </div>
                         </div>
-                    </Row>
+                        <div className="stock__valuation__right">
+                            <div className="stock__price__bounds">
+                               {this.state.PriceUpLowBounds && 
+                                <PriceUpAndLowBounds 
+                                   labels={this.state.PriceUpLowLabels} 
+                                   data={this.state.PriceUpLowBounds} 
+                                   ValuationConfidence={this.state.ValuationConfidence}
+                               /> }  
+                            </div>
+                            <div className="stock__methodology">
+                                <p className="card__title">Valuation Methodology</p>
+                                <div>
+                                    {(this.state.ValuationMethodology || []).map((e, i) => <div key={i + 9 + Math.random()}>{i + 1}.&nbsp;{e}</div>)}
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                    
+                    {/* <Row>
+                        <div className="container m-auto mt-5 mb-5 p-3" style={{ border: '1px solid black', borderRadius: 10 , marginLeft : 0 , width : '90%'}}>
+                            
+                        </div>
+                    </Row> */}
                 </>
             )
         }

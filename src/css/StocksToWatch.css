@@ -36,7 +36,7 @@
     background: #dbd9d9;
   }
 
-.app__body .app__body__left .app__watchlist 
+.app__body .app__body__left .app__StocksToWatch 
 {
   height: 13%;
   width: 100%;
@@ -45,7 +45,7 @@
   box-shadow: 3px 3px 10px rgba(0,0,0,.02) , -3px -3px 10px rgba(0,0,0,.02);
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__header
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__header
 {
     padding: 4px 20px;
     display: flex;
@@ -53,14 +53,14 @@
     align-items: center;
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__header .app__watchlist__title
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__header .app__StocksToWatch__title
 {
     font-size: 16px;
     font-weight: 700;
     color: var(--font-primary);
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__container
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__container
 {
     padding-top: 2px;
     display: flex; 
@@ -70,7 +70,7 @@
     overflow-y: unset;
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__container .app__watchlist__stock
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__container .app__StocksToWatch__stock
 {
     display: flex;
     justify-content: space-between;
@@ -79,18 +79,18 @@
     box-shadow: 1px 1px 2px rgba(0,0,0,0.05) , -1px -1px 2px rgba(0,0,0,0.05);
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__details
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__container .StocksToWatch__stock__details
 {
     flex: 2;
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__details>div
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__container .StocksToWatch__stock__details>div
 {
     display: flex;
     align-items: center;
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__status
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__container .StocksToWatch__stock__status
 {
     width: 5px;
     height: 5px;
@@ -99,14 +99,14 @@
     background-color: var(--main-blue);
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__name
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__container .StocksToWatch__stock__name
 {
     font-size: 12px;
     font-weight: 900;
     color: var(--font-primary);
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__fullname
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__container .StocksToWatch__stock__fullname
 {
     font-size: 9px;
     white-space: nowrap;
@@ -119,7 +119,7 @@
     letter-spacing: -0.2px;
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__favourite
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__container .StocksToWatch__stock__favourite
 {
     display: flex;
     align-items: center;
@@ -128,14 +128,14 @@
     margin-left: 10px;
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__favourite span
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__container .StocksToWatch__stock__favourite span
 {
     font-size: 12px;
     font-weight: 700;
     color: var(--main-green);
 }
 
-.app__body .app__body__left .app__watchlist .app__watchlist__container .watchlist__stock__favourite .watchlist__stock__star
+.app__body .app__body__left .app__StocksToWatch .app__StocksToWatch__container .StocksToWatch__stock__favourite .StocksToWatch__stock__star
 {
     margin-left: 6px;
     display: flex;

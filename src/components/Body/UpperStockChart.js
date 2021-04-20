@@ -39,8 +39,8 @@ export class UpperStockChart extends React.Component {
         displayxAccessorVal = displayXAccessor;
 
         start = xAccessorVal(last(dataVal));
-        let weeks = Math.floor((3*30)/4);
-        let days = (3*30) - (weeks*2);
+        let weeks = Math.floor((30)/4);
+        let days = (30) - (weeks*2);
         end = xAccessorVal(dataVal[Math.max(0,dataVal.length - days)]);
         const xExtents = [start,end];
 
@@ -73,8 +73,8 @@ export class UpperStockChart extends React.Component {
 							<stop offset="100%" stopColor="#e74c3c" stopOpacity={0.1} />
 						</linearGradient>
 					</defs>
-					{/* <AreaSeries yAccessor={d => d.open} strokeWidth={2} stroke="#00b894" fill="url(#MyGradient)"/> */}
-                    <AlternatingFillAreaSeries 
+					<AreaSeries yAccessor={d => d.open} strokeWidth={2} stroke="#00b894" fill="url(#MyGradient)"/>
+                    {/* <AlternatingFillAreaSeries 
                         yAccessor={d => d.open} 
                         baseAt={21.9} 
                         fill={{
@@ -82,7 +82,7 @@ export class UpperStockChart extends React.Component {
                             bottom : "#ffffff"
                         }}    
                     />
-                    <StraightLine strokeDasharray="ShortDash" strokeWidth={2} stroke="#E3342F" opacity={1} yValue={21.9}/>
+                    <StraightLine strokeDasharray="ShortDash" strokeWidth={2} stroke="#E3342F" opacity={1} yValue={21.9}/> */}
 
                 </Chart>
 			</ChartCanvas>

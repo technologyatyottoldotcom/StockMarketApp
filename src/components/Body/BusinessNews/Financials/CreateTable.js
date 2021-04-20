@@ -61,7 +61,8 @@ numberWithCommas(n) {
       d = d && typeof d === 'object' && d
       return(
           <>
-          <table className="create-table" style={{fontSize:'10px'}}>
+            <div className="GlobalScrollBar financials__table__data" style={{ maxHeight : '80%', width : '100%' }}>
+            <table className="create-table" style={{fontSize:'10px'}}>
               <thead>
                   <tr>
                       <th></th>
@@ -93,6 +94,8 @@ numberWithCommas(n) {
                   }
               </tbody>
           </table>         
+         
+            </div>
           </>
       )
   }

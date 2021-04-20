@@ -5,7 +5,6 @@ import MinusIcon from '../../../assets/icons/minus.svg';
 import { QuoteNav } from './QuoteNav';
 import { Overview } from './Overview';
 import { Financials } from './Financials/Financials';
-import { FinanceRight } from './Financials/FinanceRight';
 import { Technicals } from "./Technicals";
 import {Valuation} from './Valuation';
 import { Feed } from "./Feed";
@@ -67,19 +66,7 @@ class BusinessNews extends React.PureComponent {
 
                         <div className="business__news__box">
                             {field === 'overview' && <Overview />}
-                            {field === 'financials' && <>
-                                <div className="row">
-                                    <div className="col-sm-7">
-                                        <Financials />
-                                    </div>
-                                    <div className="col-sm-5">
-                                        <div>
-                                            <FinanceRight />
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </>}
+                            {field === 'financials' && <Financials />}
                             {field === 'valuation' && <Valuation />}
                             {field === 'technicals' && <Technicals />}
                             {field === 'feed' && <Feed />}

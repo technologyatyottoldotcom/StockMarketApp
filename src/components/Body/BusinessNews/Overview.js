@@ -1,26 +1,19 @@
 import React from 'react';
+import Website from '../../../assets/icons/website.svg';
 import '../../../scss/Overview.scss';
 
 class AnnualReports extends React.PureComponent{
     render(){
-        const btnStyle={
-            fontSize:'12px',
-            fontWeight:'bold',
-            background:'#2baae0',
-            textAlign:'center',
-            borderRadius:'45px',
-            border:'none',
-            padding:'2px 8px',
-            cursor:'pointer',
-            color : 'whitesmoke'
-        }
         return(
             <>
-              <div className='col-3'><b><small>Annual Reports</small></b></div>
-              <button style={{...btnStyle,width:'60px',marginRight:'3px'}}>2016</button>
-              <button style={{...btnStyle,width:'60px',marginRight:'3px'}}>2015</button>
-              <button style={{...btnStyle,width:'60px',marginRight:'3px'}}>2014</button>
-              <button style={{...btnStyle,width:'60px',marginRight:'3px'}}>2013</button>
+              <p>Annual Reports</p>
+              <div>
+                <button>2016</button>
+                <button>2017</button>
+                <button>2018</button>
+                <button>2019</button>
+                <button>2020</button>
+              </div>
             </>
         )
     }
@@ -30,80 +23,88 @@ class Snapshot extends React.PureComponent{
     render(){
         return(
             <>
-                <div>
-                    <div className="pt-4 pb-4 h5"><b>Snapshot</b></div>
-                    <div>
-                        <div className='row  snap-box'>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>Market Cap</b></div>
-                                <div>335,229 Cr.</div>
+                <div className="bn__stock__navigation">
+                    <img src={Website} alt="w"/>
+                    <a target="_blank" href="http://www.ril.com">
+                        <p>Website</p>
+                    </a>
+                    <a target="_blank" href="https://www.bseindia.com/stock-share-price/reliance-industries-ltd/RELIANCE/500325/">
+                        <p>NSE</p>
+                    </a>
+                    <a target="_blank" href="https://www.nseindia.com/get-quotes/equity?symbol=RELIANCE">
+                        <p>BSE</p>
+                    </a>
+                </div>
+                <div className="bn__stock__snapbox">
+                    <p>Snapshot</p>
+                    <div className="bn__stock__data">
+                        
+                        <div className='snap__box'>
+                            <div className="snap__data">
+                                <div>Market Cap</div>
+                                <div>1,236.56 Cr.</div>
                             </div>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>ROE</b></div>
-                                <div>19.0 %</div>
+                            <div className="snap__data">
+                                <div>Price to Earnings</div>
+                                <div>36.56</div>
                             </div>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>Current ratio</b></div>
-                                <div>1.23</div>
+                            <div className="snap__data">
+                                <div>Price to Book</div>
+                                <div>36.56</div>
                             </div>
+                            <div className="snap__data">
+                                <div>Dividend Yield</div>
+                                <div>6.56 %</div>
+                            </div>
+                            <div className="snap__data">
+                                <div>Face Value</div>
+                                <div>Rs. 10.00</div>
+                            </div>
+                            <div className="snap__data">
+                                <div>EPS</div>
+                                <div>Rs. 36.56</div>
+                            </div>
+                            <div className="snap__data">
+                                <div>Debt to Equity</div>
+                                <div>156.23 %</div>
+                            </div>
+                            <div className="snap__data">
+                                <div>Promoter Holding</div>
+                                <div>75.25 %</div>
+                            </div>
+                           
+                            
                         </div>
-                        <div className='row  snap-box'>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>Price to Earning</b></div>
-                                <div>90.9</div>
+                        <div className='snap__box'>
+                            <div className="snap__data">
+                                <div>ROE (TTM)</div>
+                                <div>36.56 %</div>
                             </div>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>ROE 3Yr</b></div>
-                                <div>12.5 %</div>
+                            <div className="snap__data">
+                                <div>ROE (3 Yr)</div>
+                                <div>36.56 %</div>
                             </div>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>Debt to equity</b></div>
-                                <div>2.95</div>
+                            <div className="snap__data">
+                                <div>ROA (TTM)</div>
+                                <div>36.56 %</div>
                             </div>
-                        </div>
-                        <div className='row  snap-box'>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>Price to book value</b></div>
-                                <div>9.98</div>
+                            <div className="snap__data">
+                                <div>ROA (3Yr)</div>
+                                <div>36.56 %</div>
                             </div>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>ROCE</b></div>
-                                <div>12.2 %</div>
+                            <div className="snap__data">
+                                <div>ROCE (TTM)</div>
+                                <div>36.56 %</div>
                             </div>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>Promoter holding</b></div>
-                                <div>56.3 %</div>
+                            <div className="snap__data">
+                                <div>ROCE (3 Yr)</div>
+                                <div>36.56 %</div>
                             </div>
-                        </div>
-                        <div className='row  snap-box'>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>Dividend Yield</b></div>
-                                <div>0.18 %</div>
+                            <div className="snap__data">
+                                <div>Current Ratio</div>
+                                <div>2.56</div>
                             </div>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>ROCE 3Yr</b></div>
-                                <div>12.5 %</div>
-                            </div>
-                        </div>
-                        <div className='row  snap-box'>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>Face Value</b></div>
-                                <div>Rs. 2.00</div>
-                            </div>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>ROA</b></div>
-                                <div>4.04 %</div>
-                            </div>
-                        </div>
-                        <div className='row  snap-box'>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>EPS</b></div>
-                                <div>Rs. 61.2</div>
-                            </div>
-                            <div className="col-sm-4 snap-data">
-                                <div><b>ROA 3Yr</b></div>
-                                <div>3.92 %</div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -116,8 +117,8 @@ class About extends React.PureComponent{
     render(){
         return(
             <>
-                <div className="h5"><b>About</b></div>
-                <div style={{fontSize:'12px',paddingRight:'50px'}}>
+                <p>About</p>
+                <div>
                     3i Infotech Limited is an information technology (IT)
                     company. The Company provides a set of Internet
                     protocol (IP)-based software solutions with a range of
@@ -148,7 +149,7 @@ class Address extends React.PureComponent{
         return (
             <>
                 <div>
-                    <div className="h5"><b>Address</b></div>
+                    <p>Address</p>
                     <div style={{fontSize:"12px"}}>
                         Tower 5,<br />
                         3Rd To 6Th Floor International<br />
@@ -157,31 +158,31 @@ class Address extends React.PureComponent{
                         400703 India<br />
                     </div>
                 </div>
-                <div className="pt-4">
-                    <div style={{fontSize:'14px'}}><b>EXECUTIVE LEADERSHIP</b></div>
-                    <div className="pt-2" style={{fontSize:"12px"}}>
-                        Mukesh Dhirubhai Ambani
-                        Chairman of the Board,
-                        Managing Director
-                                          </div>
-                    <div className="pt-2" style={{fontSize:"12px"}}>
-                        Alok Agarwal
-                        Chief Financial Officer
-                                          </div>
-                    <div className="pt-2" style={{fontSize:"12px"}}>
-                        Srikanth Venkatachari
-                        Joint Chief Financial Officer
-                                          </div>
-                    <div className="pt-2" style={{fontSize:"12px"}}>
-                        Savithri Parekh
-                        Joint Company Secretary &
-                        Compliance Officer
-                                          </div>
-                    <div className="pt-2" style={{fontSize:"12px"}}>
-                        K. Sethuraman
-                        Group Company Secretary,
-                        Chief Compliance Officer
-                                          </div>
+                <div>
+                    <p>Executive Leadership</p>
+                    <div>
+                        <span>Mukesh Dhirubhai Ambani</span>
+                        <span>Chairman of the Board,
+                        Managing Director</span>
+                    </div>
+                    <div>
+                        <span>Alok Agarwal</span>
+                        <span>Chief Financial Officer</span>
+                    </div>
+                    <div>
+                        <span>Srikanth Venkatachari</span>
+                        <span>Joint Chief Financial Officer</span>
+                    </div>
+                    <div>
+                        <span>Savithri Parekh</span>
+                        <span>Joint Company Secretary &
+                        Compliance Officer</span>
+                    </div>
+                    <div>
+                        <span>K. Sethuraman</span>
+                        <span>Group Company Secretary,
+                        Chief Compliance Officer</span>
+                    </div>
                 </div>
 
             </>
@@ -205,55 +206,26 @@ class Overview extends React.PureComponent {
         }
        return (
            <>
-               <div className="container-fluid" style={{paddingLeft: '50px' }}>
-                   <div className="row">
+               <div className="bn__stock__overview">
                        
-                       <div className='col-sm-5'>
+                       <div className='bn__stock__price'>
                              <Snapshot />
                        </div>
 
-
-
-                      <div className="col-sm-7" >
-                          <div className="row align-items-end"  style={{padding:0,margin:0,fontSize:"14px"}}>
-                                <div className="col-sm-4" style={{padding:0,margin:0}}>
-                                    <button style={{...btnStyle,width:'120px'}}>Oil & Gas</button>
-                                </div>
-                                <div className="col-auto">
-                                <a href="http://www.ril.com" style={{color:'#645df9'}}>
-                                    <span></span>
-                                    ril.com
-                                  </a>
-                                </div>
-                                <div className="col-auto">
-                                <a href="https://www.bseindia.com/stock-share-price/reliance-industries-ltd/RELIANCE/500325/" style={{color:'#645df9'}}>
-                                    <span></span>
-                                    BSE: 500325
-                                </a>
-                                </div>
-                                <div className="col-auto">
-                                    <a href="https://www.nseindia.com/get-quotes/equity?symbol=RELIANCE" style={{color:'#645df9'}}>
-                                        <span></span>
-                                        NSE: RELIANCE
-                                    </a>
-                                </div>
-                            </div>
-                          <div className="row align-items-end justify-content-end pt-3">
+                      <div className="bn__stock__details" >
+                          <div className="bn__stock__report">
                             <AnnualReports />
                           </div>
-                          <div className="row pt-5"> 
-                                <div className="col-sm-8">
+                          <div className="bn__stock__info"> 
+                                <div className="bn__stock__about">
                                    <About />
                                 </div>
-                                <div className="col">
+                                <div className="bn__stock__address">
                                     <Address />
                                 </div>
-
-
                           </div>
                       </div>
 
-                   </div>
 
                </div>
            </>
