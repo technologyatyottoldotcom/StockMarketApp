@@ -1,39 +1,48 @@
 import React from 'react';
 import Axios from 'axios';
 import ScripsMenu from './ScripsMenu';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
 import BrandLogo from '../../assets/icons/yottol.png';
 import Search from '../../assets/icons/search.svg';
-import {
-    fade,
-    ThemeProvider,
-    withStyles,
-    makeStyles,
-    createMuiTheme,
-  } from '@material-ui/core/styles';
 
-  const CssTextField = withStyles({
-    root: {
-      '& label.Mui-focused': {
-        color: 'green',
-      },
-      '& .MuiInput-underline:after': {
-        borderBottomColor: 'green',
-      },
-      '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-          borderColor: 'red',
-        },
-        '&:hover fieldset': {
-          borderColor: 'yellow',
-        },
-        '&.Mui-focused fieldset': {
-          borderColor: 'green',
-        },
-      },
-    },
-  })(TextField);
+class StockSuggestion extends React.Component{
+    constructor(props)
+    {
+        super(props)
+    }
+
+    render()
+    {
+        if(this.props.suggestions.length > 0)
+        {
+            // console.log(this.props.suggestions)
+
+            return (
+                <>
+                    {this.props.suggestions.map((s,index)=>{
+                        return <p 
+                            key={s.code} 
+                            onClick={e => {this.props.selectedStock({
+                                code : s.code,
+                                symbol : s.ric_code,
+                                nse_code : s.nse_code,
+                                bse_code : s.bse_code,
+                                name : s.name
+                            });this.props.handleSelection()}}>
+                                <span>{s.symbol}</span> 
+                                <span>{s.company}</span> 
+                                <span>{s.exchange}</span>
+                        </p>
+                    })}
+                </>
+            )
+        }
+        else
+        {
+            return null
+        }
+    }
+}
+
 
 class ScripsHeader extends React.Component
 {
@@ -42,15 +51,16 @@ class ScripsHeader extends React.Component
     {
         super(props);
         this.state = {
-            search : null,
+            search : '',
             suggestions : []
         }
         this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.handleSelection = this.handleSelection.bind(this);
     }
 
     handleSearchChange(e)
     {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         this.setState({
             search : e.target.value
         },()=>{
@@ -65,7 +75,7 @@ class ScripsHeader extends React.Component
     {
         Axios.get(`http://localhost:3001/stock/${this.state.search}`)
         .then((response) => {
-            console.log(response.data);
+            // console.log(response.data);
             this.setState({
                 suggestions : response.data.suggestions
             })
@@ -75,11 +85,18 @@ class ScripsHeader extends React.Component
         })
     }
 
+    handleSelection()
+    {
+        this.setState({
+            suggestions : [],
+            search : ''
+        })
+    }
+
     
 
     render()
     {
-
         return <div className="app__header">
             <div className="brand__logo">
                 <img src={BrandLogo} alt="Yottol"/>
@@ -88,23 +105,38 @@ class ScripsHeader extends React.Component
                 <p>Stocks</p>
             </div>
             <div className="stock__search">
-                {/* <div className="stock__search__icon">
+                <div className="stock__search__icon">
                     <img src={Search} alt=""/>
-                </div> */}
-                
-                <Autocomplete
+                </div>
+                <input placeholder='search' value={this.state.search} onChange={e => this.handleSearchChange(e)}/>
+
+                <div className="stock__suggestions">
+                    <StockSuggestion suggestions={this.state.suggestions} selectedStock={this.props.selectedStock} handleSelection={this.handleSelection}/>
+                </div>
+                {/* <Autocomplete
                     id="free-solo-demo"
-                    freeSolo
-                    options={this.state.suggestions.map((option) => `${option.company} : ${option.code}`)}
+                    // freeSolo
+                    options={this.state.suggestions}
                     style={{width : '100%'}}
                     onChange={this.props.selectedStock}
+                    getOptionLabel={option => option.company}
+                    renderOption={(option) => {
+                        <>
+                            <span>{option.code}</span>
+                        </>
+                    }}
                     renderInput={(params) => (
                         <>
-                                <TextField {...params} fullWidth label="Search" onChange={e => this.handleSearchChange(e)}/>
+                                <TextField
+                                    {...params} 
+                                    fullWidth 
+                                    label="Search" 
+                                    onChange={e => this.handleSearchChange(e)}    
+                                />
                         </>
                        
                     )}
-                />
+                /> */}
                 
             </div>
             <ScripsMenu setActiveElement={this.props.setActiveElement}/>

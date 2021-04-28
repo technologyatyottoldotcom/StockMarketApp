@@ -13,6 +13,7 @@ import { last ,toObject } from "react-stockcharts/lib/utils";
 import { timeFormat } from 'd3-time-format';
 import { TrendLine,EquidistantChannel,StandardDeviationChannel ,FibonacciRetracement ,GannFan} from "react-stockcharts/lib/interactive";
 import {saveInteractiveNodes, getInteractiveNodes} from "../../exports/InteractiveUtils";
+import { OHLCTooltip } from "react-stockcharts/lib/tooltip";
 import {getXCoordinateProps, getYCoordinateProps, getXAxisProps, getYAxisProps} from '../../exports/ChartProps';
 import { CrossHairCursor, MouseCoordinateX, MouseCoordinateY } from "react-stockcharts/lib/coordinates";
 import {sma20,wma20,ema20,tma20,bb,macdCalculator,rsiCalculator,atrCalculator,slowSTO,fastSTO,fullSTO,fi,fiEMA,elder,elderImpulseCalculator,defaultSar,changeCalculator,compareCalculator} from '../../exports/MathematicalIndicators';
@@ -444,6 +445,11 @@ export class StockChart extends React.Component {
         }
     }
 
+    getYExtents(high,low)
+    {
+        return [high+(high*(1/100)),low-(low*(1/100))];
+    }
+
 
     render() {
 
@@ -555,7 +561,7 @@ export class StockChart extends React.Component {
         }
         else
         {
-            end = xAccessorVal(dataVal[0]);
+            end = xAccessorVal(dataVal[dataVal.length - 30]);
         }
 
         start = xAccessorVal(last(dataVal));
@@ -580,13 +586,19 @@ export class StockChart extends React.Component {
                     type={type}
                 >   
 
-                <Chart id={1} yExtents={d=> [d.high+(d.high/200),d.low-(d.low/200)]} height={this.getChartHeight(height,zoom,TotalCharts)}>
-                    
+
+                <Chart 
+                    id={1} 
+                    padding={30}
+                    yExtents={d=> this.getYExtents(d.high,d.low)} 
+                    height={this.getChartHeight(height,zoom,TotalCharts)}>
+
                     {zoom && <>
                         {TotalCharts === 1 ? 
                             <>
                                 <XAxis {...getXAxisProps()} {...gridProps}/>
                                 <MouseCoordinateX {...getXCoordinateProps()}/>
+                                
                             </> :
                             <>
                                 <XAxis {...getXAxisProps()} {...gridProps}/>

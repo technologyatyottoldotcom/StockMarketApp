@@ -37,6 +37,7 @@ import MSFTArray from '../../data/MSFT';
 import IBMArray from '../../data/IBM';
 import ORCLArray from '../../data/ORCL';
 import CSCOArray from '../../data/CSCO';
+import Spinner from '../Loader/Spinner';
 
 
 
@@ -68,7 +69,7 @@ export class ChartContainer extends React.Component {
             chartWidth : 0,
             chartHeight : 0,
             zoom : false,
-            range : '6M',
+            range : 'D',
             chartTypeIcon : Line,
             interactiveType : 'line',
             trendLineType : 'none',
@@ -377,11 +378,12 @@ export class ChartContainer extends React.Component {
             $('.app__body').removeClass('app__body__zoom');
             $('.app__footer').removeClass('app__footer__zoom');
             $('.key__statistics').removeClass('key__statistics__zoom');
-            $('.chart__container').removeClass('chart__container__zoom');
             $('.app__body__left').removeClass('app__body__left__zoom');
             $('.app__body__right').removeClass('app__body__right__zoom');
             $('.app__body__top').removeClass('app__body__top__zoom');
             $('.app__body__bottom').removeClass('app__body__bottom__zoom');
+            $('.chart__container').removeClass('chart__container__zoom');
+            
             $('.chart__container__stock__options').removeClass('active');
             $('.cash__position').removeClass('cash__position__zoom');
             $('.ks__container__full').css('display','none');
@@ -440,228 +442,237 @@ export class ChartContainer extends React.Component {
 
         let priceClass = change_price >= 0 ? 'positive' : 'negative';
         
+        // console.log(this.props.isLoaded)
+        if(this.props.isLoaded)
+        {
+            return (
 
-        return (
-
-            <>
-            <div className="Indicator__popup">
-                <div className="Indicator__title__name">
-                    <p>Indicators & Strategies</p>
-                    <span id="Indicator__close" onClick={this.CloseIndicatorPopup.bind(this)}>
-                        <img src={CrossIcon} alt="X"/>
-                    </span>
-                    <IndicatorInfo CloseIndicatorInfo={this.CloseIndicatorInfo} indicatorInfoType={this.state.indicatorInfoType}/>
+                <>
+                <div className="Indicator__popup">
+                    <div className="Indicator__title__name">
+                        <p>Indicators & Strategies</p>
+                        <span id="Indicator__close" onClick={this.CloseIndicatorPopup.bind(this)}>
+                            <img src={CrossIcon} alt="X"/>
+                        </span>
+                        <IndicatorInfo CloseIndicatorInfo={this.CloseIndicatorInfo} indicatorInfoType={this.state.indicatorInfoType}/>
+                    </div>
+                    <div className="Indicator__options">
+                        <Indicator IndicatorName="Simple Moving Average (SMA)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="SMA"/>
+                        <Indicator IndicatorName="Weighted Moving Average (WMA) " IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="WMA"/>
+                        <Indicator IndicatorName="Exponential Moving Average (EMA)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="EMA"/>
+                        <Indicator IndicatorName="Triangular Moving Average (TMA)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="TMA"/>
+                        <Indicator IndicatorName="Bollinger Bands (BBands)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="BB"/>
+                        <Indicator IndicatorName="Moving Average Convergence/Divergence (MACD)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="MACD"/>
+                        <Indicator IndicatorName="Relative Strength Index (RSI)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="RSI"/>
+                        <Indicator IndicatorName="Average True Range (ATR)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="ATR"/>
+                        <Indicator IndicatorName="Stochastic Oscillator (Slow)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="SOSlow"/>
+                        <Indicator IndicatorName="Stochastic Oscillator (Fast)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="SOFast"/>
+                        <Indicator IndicatorName="Stochastic Oscillator (Full)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="SOFull"/>
+                        <Indicator IndicatorName="Force Index (FI)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="FI"/>
+                        <Indicator IndicatorName="Elder Ray Indicator (ERI)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="ERI"/>
+                        <Indicator IndicatorName="Elder Ray Indicator Bull Power (ERI)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="ERIBull"/>
+                        <Indicator IndicatorName="Elder Ray Indicator Bear Power (ERI)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="ERIBear"/>
+                        <Indicator IndicatorName="Elder Ray Impulse (ERIMP)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="ERIMP"/>
+                        <Indicator IndicatorName="Parabolic SAR (PSAR)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="PSAR"/>
+    
+                    </div> 
                 </div>
-                <div className="Indicator__options">
-                    <Indicator IndicatorName="Simple Moving Average (SMA)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="SMA"/>
-                    <Indicator IndicatorName="Weighted Moving Average (WMA) " IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="WMA"/>
-                    <Indicator IndicatorName="Exponential Moving Average (EMA)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="EMA"/>
-                    <Indicator IndicatorName="Triangular Moving Average (TMA)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="TMA"/>
-                    <Indicator IndicatorName="Bollinger Bands (BBands)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="BB"/>
-                    <Indicator IndicatorName="Moving Average Convergence/Divergence (MACD)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="MACD"/>
-                    <Indicator IndicatorName="Relative Strength Index (RSI)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="RSI"/>
-                    <Indicator IndicatorName="Average True Range (ATR)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="ATR"/>
-                    <Indicator IndicatorName="Stochastic Oscillator (Slow)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="SOSlow"/>
-                    <Indicator IndicatorName="Stochastic Oscillator (Fast)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="SOFast"/>
-                    <Indicator IndicatorName="Stochastic Oscillator (Full)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="SOFull"/>
-                    <Indicator IndicatorName="Force Index (FI)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="FI"/>
-                    <Indicator IndicatorName="Elder Ray Indicator (ERI)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="ERI"/>
-                    <Indicator IndicatorName="Elder Ray Indicator Bull Power (ERI)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="ERIBull"/>
-                    <Indicator IndicatorName="Elder Ray Indicator Bear Power (ERI)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="ERIBear"/>
-                    <Indicator IndicatorName="Elder Ray Impulse (ERIMP)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="ERIMP"/>
-                    <Indicator IndicatorName="Parabolic SAR (PSAR)" IndicatorInfo={this.OpenIndicatorInfo} IndicatorType={this.changeIndicatorType} InfoType="PSAR"/>
-
-                </div> 
-            </div>
-
-            <div className="Compare__popup">
-                <div className="Compare__title__name">
-                    <p>Compare Symbol</p>
-                    <span id="Compare__close" onClick={this.CloseComparePopup.bind(this)}>
-                        <img src={CrossIcon} alt="X"/>
-                    </span>
-                </div>
-                <div className="Compare__stock__search">
-                    <div className="Compare__stock__search__icon">
-                        <img src={SearchIcon} alt=""/>
+    
+                <div className="Compare__popup">
+                    <div className="Compare__title__name">
+                        <p>Compare Symbol</p>
+                        <span id="Compare__close" onClick={this.CloseComparePopup.bind(this)}>
+                            <img src={CrossIcon} alt="X"/>
+                        </span>
                     </div>
-                    <div className="Compare__stock__search__input">
-                        <input placeholder="Search"/>
+                    <div className="Compare__stock__search">
+                        <div className="Compare__stock__search__icon">
+                            <img src={SearchIcon} alt=""/>
+                        </div>
+                        <div className="Compare__stock__search__input">
+                            <input placeholder="Search"/>
+                        </div>
+                    </div>
+                    <div className="Compare__options">
+                        <StockCompare Name="ORCL" AddStock={this.addStockData}/>
+                        <StockCompare Name="IBM" AddStock={this.addStockData}/>
+                        <StockCompare Name="CSCO" AddStock={this.addStockData}/>
                     </div>
                 </div>
-                <div className="Compare__options">
-                    <StockCompare Name="ORCL" AddStock={this.addStockData}/>
-                    <StockCompare Name="IBM" AddStock={this.addStockData}/>
-                    <StockCompare Name="CSCO" AddStock={this.addStockData}/>
-                </div>
-            </div>
-
-            <div className="Interactive__popup">
-                <div className="Interactive__title__name">
-                    <p>Interactive</p>
-                    <span id="Interactive__close" onClick={this.CloseInteractivePopup.bind(this)}>
-                        <img src={CrossIcon} alt="X"/>
-                    </span>
-                </div>
-                <div className="Interactive__options">
-                    <div className="Interactive__option__block">
-                        <p>Line and Ray</p>
-                        <div>
-                            <Interactive IImage={LineSegment} Name="Line Segment" Itype="line" Stype="LINE" changeInteractive={this.changeInteractiveType.bind(this)}/>
-                            <Interactive IImage={InfiniteLine} Name="Infinite Line" Itype="line" Stype="XLINE" changeInteractive={this.changeInteractiveType.bind(this)}/>
-                            <Interactive IImage={Ray} Name="Ray" Itype="line" Stype="RAY" changeInteractive={this.changeInteractiveType.bind(this)}/>
-                        </div>
+    
+                <div className="Interactive__popup">
+                    <div className="Interactive__title__name">
+                        <p>Interactive</p>
+                        <span id="Interactive__close" onClick={this.CloseInteractivePopup.bind(this)}>
+                            <img src={CrossIcon} alt="X"/>
+                        </span>
                     </div>
-                    <div className="Interactive__option__block">
-                        <p>Channel</p>
-                        <div>
-                            <Interactive IImage={LineSegment} Name="Trend Channel" Itype="channel" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
-                            <Interactive IImage={LineSegment} Name="Standard Deviation Channel" Itype="SDchannel" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
-                        </div>
-                    </div>
-                    <div className="Interactive__option__block">
-                        <p>Retracement</p>
-                        <div>
-                            <Interactive IImage={FibRet} Name="Fibonacci Retracement" Itype="FibRet" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
-                        </div>
-                    </div>
-                    <div className="Interactive__option__block">
-                        <p>Fan</p>
-                        <div>
-                            <Interactive IImage={GannFan} Name="Gann Fan" Itype="GannFan" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
-                        </div>
-                    </div>
-                </div> 
-            </div>
-
-            <div className="chart__container" >
-
-                <div className="chart__container__stock__options">
-                    <div className="chart__options">
-                        <div className="chart__option__block chart__stock__name" >
-                            <span>RELIANCE</span>
-                        </div>
-                        <div className="chart__option__block">
-                            <span>D</span>
-                        </div>
-                        <div className="chart__option__block chart__stock__type__change" onClick={this.ToggleChartType.bind(this)}>
-                            <span><img src={this.state.chartTypeIcon} alt="C" id="chart__type__icon"/></span>
-                            <div className="stock__chart__types">
-                                <div data-chart="area" onClick={this.changeChart.bind(this,'area')}><img src={Area} alt="+"/><span>Area</span></div>
-                                <div data-chart="candlestick" onClick={this.changeChart.bind(this,'candlestick')}><img src={Candles} alt="+"/><span>Candlestick</span></div>
-                                <div data-chart="column" onClick={this.changeChart.bind(this,'column')}><img src={Column} alt="+"/><span>Column</span></div>
-                                <div data-chart="jumpLine" onClick={this.changeChart.bind(this,'jumpLine')}><img src={JumpLine} alt="+"/><span>Jump Line</span></div>
-                                <div data-chart="line" className="active" onClick={this.changeChart.bind(this,'line')}><img src={Line} alt="+"/><span>Line</span></div>
-                                <div data-chart="rangeArea" onClick={this.changeChart.bind(this,'rangeArea')}><img src={Range} alt="+"/><span>Range Area</span></div>
-                                <div data-chart="ohlc" onClick={this.changeChart.bind(this,'ohlc')}><img src={OHLC} alt="+"/><span>OHLC</span></div>
-                                <div data-chart="marker" onClick={this.changeChart.bind(this,'marker')}><img src={Marker} alt="+"/><span>Marker</span></div>
-                                <div data-chart="stick" onClick={this.changeChart.bind(this,'stick')}><img src={Stick} alt="+"/><span>Stick</span></div>
-                                <div data-chart="renko" onClick={this.changeChart.bind(this,'renko')}><img src={Renko} alt="+"/><span>Renko</span></div>
-                                <div data-chart="kagi" onClick={this.changeChart.bind(this,'kagi')}><img src={Kagi} alt="+"/><span>Kagi</span></div>
-                                <div data-chart="point" onClick={this.changeChart.bind(this,'point')}><img src={Point} alt="+"/><span>Point & Figure</span></div>
+                    <div className="Interactive__options">
+                        <div className="Interactive__option__block">
+                            <p>Line and Ray</p>
+                            <div>
+                                <Interactive IImage={LineSegment} Name="Line Segment" Itype="line" Stype="LINE" changeInteractive={this.changeInteractiveType.bind(this)}/>
+                                <Interactive IImage={InfiniteLine} Name="Infinite Line" Itype="line" Stype="XLINE" changeInteractive={this.changeInteractiveType.bind(this)}/>
+                                <Interactive IImage={Ray} Name="Ray" Itype="line" Stype="RAY" changeInteractive={this.changeInteractiveType.bind(this)}/>
                             </div>
                         </div>
-                        <div className="chart__option__block" onClick={this.OpenComparePopup.bind(this)}>
-                            <img src={Compare} alt="+"/><span>Compare</span>
+                        <div className="Interactive__option__block">
+                            <p>Channel</p>
+                            <div>
+                                <Interactive IImage={LineSegment} Name="Trend Channel" Itype="channel" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
+                                <Interactive IImage={LineSegment} Name="Standard Deviation Channel" Itype="SDchannel" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
+                            </div>
                         </div>
-                        <div className="chart__option__block" onClick={this.OpenIndicatorPopup.bind(this)}>
-                            <img src={IndicatorIcon} alt="+"/><span>Indicator</span>
+                        <div className="Interactive__option__block">
+                            <p>Retracement</p>
+                            <div>
+                                <Interactive IImage={FibRet} Name="Fibonacci Retracement" Itype="FibRet" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
+                            </div>
                         </div>
-                        <div className="chart__option__block" onClick={this.OpenInteractivePopup.bind(this)}>
-                            <img src={IndicatorIcon} alt="+"/><span>Interactive</span>
+                        <div className="Interactive__option__block">
+                            <p>Fan</p>
+                            <div>
+                                <Interactive IImage={GannFan} Name="Gann Fan" Itype="GannFan" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+    
+                <div className="chart__container" >
+    
+                    <div className="chart__container__stock__options">
+                        <div className="chart__options">
+                            <div className="chart__option__block chart__stock__name" >
+                                <span>RELIANCE</span>
+                            </div>
+                            <div className="chart__option__block">
+                                <span>D</span>
+                            </div>
+                            <div className="chart__option__block chart__stock__type__change" onClick={this.ToggleChartType.bind(this)}>
+                                <span><img src={this.state.chartTypeIcon} alt="C" id="chart__type__icon"/></span>
+                                <div className="stock__chart__types">
+                                    <div data-chart="area" onClick={this.changeChart.bind(this,'area')}><img src={Area} alt="+"/><span>Area</span></div>
+                                    <div data-chart="candlestick" onClick={this.changeChart.bind(this,'candlestick')}><img src={Candles} alt="+"/><span>Candlestick</span></div>
+                                    <div data-chart="column" onClick={this.changeChart.bind(this,'column')}><img src={Column} alt="+"/><span>Column</span></div>
+                                    <div data-chart="jumpLine" onClick={this.changeChart.bind(this,'jumpLine')}><img src={JumpLine} alt="+"/><span>Jump Line</span></div>
+                                    <div data-chart="line" className="active" onClick={this.changeChart.bind(this,'line')}><img src={Line} alt="+"/><span>Line</span></div>
+                                    <div data-chart="rangeArea" onClick={this.changeChart.bind(this,'rangeArea')}><img src={Range} alt="+"/><span>Range Area</span></div>
+                                    <div data-chart="ohlc" onClick={this.changeChart.bind(this,'ohlc')}><img src={OHLC} alt="+"/><span>OHLC</span></div>
+                                    <div data-chart="marker" onClick={this.changeChart.bind(this,'marker')}><img src={Marker} alt="+"/><span>Marker</span></div>
+                                    <div data-chart="stick" onClick={this.changeChart.bind(this,'stick')}><img src={Stick} alt="+"/><span>Stick</span></div>
+                                    <div data-chart="renko" onClick={this.changeChart.bind(this,'renko')}><img src={Renko} alt="+"/><span>Renko</span></div>
+                                    <div data-chart="kagi" onClick={this.changeChart.bind(this,'kagi')}><img src={Kagi} alt="+"/><span>Kagi</span></div>
+                                    <div data-chart="point" onClick={this.changeChart.bind(this,'point')}><img src={Point} alt="+"/><span>Point & Figure</span></div>
+                                </div>
+                            </div>
+                            <div className="chart__option__block" onClick={this.OpenComparePopup.bind(this)}>
+                                <img src={Compare} alt="+"/><span>Compare</span>
+                            </div>
+                            <div className="chart__option__block" onClick={this.OpenIndicatorPopup.bind(this)}>
+                                <img src={IndicatorIcon} alt="+"/><span>Indicator</span>
+                            </div>
+                            <div className="chart__option__block" onClick={this.OpenInteractivePopup.bind(this)}>
+                                <img src={IndicatorIcon} alt="+"/><span>Interactive</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+    
+                    <div className="stock__info__chart">
+                        <div className="stock__info">
+                            <div className="stock__details">
+                                <p className="stock__name__code">
+                                    <span id="stock__code">{this.props.stockSymbol}</span>
+                                </p>
+                                <div className="stock__type">
+                                    <img src={SettingIcon} alt="s"/>
+                                    <p>Oil & Gas</p>
+                                </div>
+                            </div>
+                            <div id="stock__full__name">
+                                <span>{this.props.stockName}</span>
+                            </div>
+                            <div className="stock__price__purchase">
+                                <div className="stock__price__details">
+                                    <div className="price__decimals" style={{display : 'flex'}}>
+                                        {dPrice &&
+                                        dPrice.split('').map((n,i) => {
+                                            return <AnimatedDigit digit={n} transform={30} key={i}/>
+                                        })}
+                                    </div>
+                                    <div className="price__fraction" style={{display : 'flex'}}>
+                                        {fPrice &&
+                                        fPrice.split('').map((n,i) => {
+                                            return <AnimatedDigit digit={n} transform={20} key={i}/>
+                                        })}
+                                    </div>
+                                    
+                                </div>
+                                <div className="stock__purchase">
+                                    <div className="buy__stock"><img src={PlusIcon} alt=""/></div>
+                                    <div className="sell__stock"><img src={MinusIcon} alt=""/></div>
+                                </div>
+                            </div>
+                            <div className="stock__price__change">
+                            
+                                <div className={priceClass +' stock__performance__amount'} style={{display : 'flex'}}>
+                                    {stockData.change_price &&
+                                        stockData.change_price.split('').map((n,i) => {
+                                            return <AnimatedDigit digit={n} transform={18} key={i}/>
+                                    })}
+                                </div>
+                                <div className={priceClass +' stock__performance__percentage'} style={{display : 'flex'}}>
+                                    ({stockData.change_percentage &&
+                                        stockData.change_percentage.split('').map((n,i) => {
+                                            return <AnimatedDigit digit={n} transform={18} key={i}/>
+                                    })})
+                                </div>
+                                
+                                {/* <ChartClock /> */}
+                            </div>
+                        </div>
+                        <div className="stock__chart">
+                            <StockChart 
+                                key={1} 
+                                data={this.props.data} 
+                                range={this.state.range} 
+                                width={this.state.chartWidth} 
+                                height={this.state.chartHeight} 
+                                zoom={this.state.zoom} 
+                                chartType={this.state.chartType}
+                                IndicatorType={this.state.indicatorType}
+                                TotalCharts={this.state.TotalCharts}
+                                IndicatorChartTypeArray={this.state.IndicatorChartTypeArray}
+                                trendLineType={this.state.trendLineType} 
+                                interactiveType={this.state.interactiveType}
+                            />
                         </div>
                     </div>
                     
-                </div>
-
-                <div className="stock__info__chart">
-                    <div className="stock__info">
-                        <div className="stock__details">
-                            <p className="stock__name__code">
-                                <span id="stock__code">RELIANCE.NS</span>
-                            </p>
-                            <div className="stock__type">
-                                <img src={SettingIcon} alt="s"/>
-                                <p>Oil & Gas</p>
-                            </div>
-                        </div>
-                        <div id="stock__full__name">
-                            <span>Reliance Industries Ltd.</span>
-                        </div>
-                        <div className="stock__price__purchase">
-                            <div className="stock__price__details">
-                                <div className="price__decimals" style={{display : 'flex'}}>
-                                    {dPrice &&
-                                    dPrice.split('').map((n,i) => {
-                                        return <AnimatedDigit digit={n} transform={30} key={i}/>
-                                    })}
-                                </div>
-                                <div className="price__fraction" style={{display : 'flex'}}>
-                                    {fPrice &&
-                                    fPrice.split('').map((n,i) => {
-                                        return <AnimatedDigit digit={n} transform={20} key={i}/>
-                                    })}
-                                </div>
-                                
-                            </div>
-                            <div className="stock__purchase">
-                                <div className="buy__stock"><img src={PlusIcon} alt=""/></div>
-                                <div className="sell__stock"><img src={MinusIcon} alt=""/></div>
-                            </div>
-                        </div>
-                        <div className="stock__price__change">
-                        
-                            <div className={priceClass +' stock__performance__amount'} style={{display : 'flex'}}>
-                                {stockData.change_price &&
-                                    stockData.change_price.split('').map((n,i) => {
-                                        return <AnimatedDigit digit={n} transform={18} key={i}/>
-                                })}
-                            </div>
-                            <div className={priceClass +' stock__performance__percentage'} style={{display : 'flex'}}>
-                                ({stockData.change_percentage &&
-                                    stockData.change_percentage.split('').map((n,i) => {
-                                        return <AnimatedDigit digit={n} transform={18} key={i}/>
-                                })})
-                            </div>
-                            
-                            {/* <ChartClock /> */}
-                        </div>
+                    
+                    <div className="chart__range" >
+                        <div data-range="1D" className="chart__range__value" onClick={this.changeRange.bind(this,'1D')}>1D</div>
+                        <div data-range="5D" className="chart__range__value" onClick={this.changeRange.bind(this,'5D')}>5D</div>
+                        <div data-range="1M" className="chart__range__value" onClick={this.changeRange.bind(this,'1M')}>1M</div>
+                        <div data-range="6M" className="chart__range__value active__range" onClick={this.changeRange.bind(this,'6M')}>6M</div>
+                        <div data-range="YTD" className="chart__range__value" onClick={this.changeRange.bind(this,'YTD')}>YTD</div>
+                        <div data-range="1Y" className="chart__range__value" onClick={this.changeRange.bind(this,'1Y')}>1Y</div>
+                        <div data-range="5Y" className="chart__range__value" onClick={this.changeRange.bind(this,'5Y')}>5Y</div>
+                        <div data-range="Max" className="chart__range__value" onClick={this.changeRange.bind(this,'Max')}>Max</div>
                     </div>
-                    <div className="stock__chart">
-                        <StockChart 
-                            key={1} 
-                            data={this.props.data} 
-                            range={this.state.range} 
-                            width={this.state.chartWidth} 
-                            height={this.state.chartHeight} 
-                            zoom={this.state.zoom} 
-                            chartType={this.state.chartType}
-                            IndicatorType={this.state.indicatorType}
-                            TotalCharts={this.state.TotalCharts}
-                            IndicatorChartTypeArray={this.state.IndicatorChartTypeArray}
-                            trendLineType={this.state.trendLineType} 
-                            interactiveType={this.state.interactiveType}
-                        />
+                    <div className="chart__zoom" onClick={this.OpenZoomMode.bind(this)}>
+                        <img src={Zoom} alt="zoom"/> 
                     </div>
                 </div>
-                
-                
-                <div className="chart__range" >
-                    <div data-range="1D" className="chart__range__value" onClick={this.changeRange.bind(this,'1D')}>1D</div>
-                    <div data-range="5D" className="chart__range__value" onClick={this.changeRange.bind(this,'5D')}>5D</div>
-                    <div data-range="1M" className="chart__range__value" onClick={this.changeRange.bind(this,'1M')}>1M</div>
-                    <div data-range="6M" className="chart__range__value active__range" onClick={this.changeRange.bind(this,'6M')}>6M</div>
-                    <div data-range="YTD" className="chart__range__value" onClick={this.changeRange.bind(this,'YTD')}>YTD</div>
-                    <div data-range="1Y" className="chart__range__value" onClick={this.changeRange.bind(this,'1Y')}>1Y</div>
-                    <div data-range="5Y" className="chart__range__value" onClick={this.changeRange.bind(this,'5Y')}>5Y</div>
-                    <div data-range="Max" className="chart__range__value" onClick={this.changeRange.bind(this,'Max')}>Max</div>
-                </div>
-                <div className="chart__zoom" onClick={this.OpenZoomMode.bind(this)}>
-                    <img src={Zoom} alt="zoom"/> 
-                </div>
+                </>
+            )
+        }
+        else
+        {
+            return <div className="chart__container">
+                <Spinner size={40}/>
             </div>
-            </>
-        )
+        }
     }
 }
 

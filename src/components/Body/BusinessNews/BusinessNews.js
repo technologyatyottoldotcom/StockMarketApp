@@ -1,4 +1,5 @@
 import React from 'react';
+import AnimatedDigit from '../AnimatedDigit';
 import SettingIcon from '../../../assets/icons/settings.svg';
 import PlusIcon from '../../../assets/icons/plus.svg';
 import MinusIcon from '../../../assets/icons/minus.svg';
@@ -19,7 +20,23 @@ class BusinessNews extends React.PureComponent {
 
     render() {
         var field = this.state.field
-        console.log('type = ', field)
+        // console.log('type = ', field);
+
+        let stockData = this.props.stockData;
+
+        let TradePrice = stockData.last_traded_price;
+        let dPrice = (TradePrice+'').split('.')[0];
+        let fPrice = (TradePrice+'').split('.')[1];
+
+        let change_price = parseFloat(stockData.change_price);
+        let change_percentage = parseFloat(stockData.change_percentage);
+
+        // console.log(change_price,change_percentage)
+
+        let priceClass = change_price >= 0 ? 'positive' : 'negative';
+        
+        // console.log(this.props.isLoaded)
+        
         return (
             <>
                 <div className="business__container">
@@ -28,7 +45,7 @@ class BusinessNews extends React.PureComponent {
                             <div className="stock__info">
                                 <div className="stock__details">
                                     <p className="stock__name__code">
-                                        <span id="stock__code">RELIANCE.NS</span>
+                                        <span id="stock__code">{this.props.stockDetails.stockSymbol}</span>
                                     </p>
                                     <div className="stock__type">
                                         <img src={SettingIcon} alt="s"/>
@@ -36,12 +53,20 @@ class BusinessNews extends React.PureComponent {
                                     </div>
                                 </div>
                                 <div id="stock__full__name">
-                                    <span>Reliance Industries Ltd.</span>
+                                    <span>{this.props.stockDetails.stockName}</span>
                                 </div>
                                 <div className="stock__price__purchase">
-                                    <div className="stock__price__details">
-                                        <span className="price__decimals">2,103</span>
-                                        <span className="price__fraction">00</span>
+                                    <div className="price__decimals" style={{display : 'flex'}}>
+                                        {dPrice &&
+                                        dPrice.split('').map((n,i) => {
+                                            return <AnimatedDigit digit={n} transform={30} key={i}/>
+                                        })}
+                                    </div>
+                                    <div className="price__fraction" style={{display : 'flex'}}>
+                                        {fPrice &&
+                                        fPrice.split('').map((n,i) => {
+                                            return <AnimatedDigit digit={n} transform={20} key={i}/>
+                                        })}
                                     </div>
                                     <div className="stock__purchase">
                                         <div className="buy__stock"><img src={PlusIcon} alt=""/></div>
@@ -49,8 +74,18 @@ class BusinessNews extends React.PureComponent {
                                     </div>
                                 </div>
                                 <div className="stock__price__change">
-                                    <span className="stock__performance__amount">-3.91</span>
-                                    <span className="stock__performance__percentage">(-0.85%)</span>
+                                    <div className={priceClass +' stock__performance__amount'} style={{display : 'flex'}}>
+                                        {stockData.change_price &&
+                                            stockData.change_price.split('').map((n,i) => {
+                                                return <AnimatedDigit digit={n} transform={18} key={i}/>
+                                        })}
+                                    </div>
+                                    <div className={priceClass +' stock__performance__percentage'} style={{display : 'flex'}}>
+                                        ({stockData.change_percentage &&
+                                            stockData.change_percentage.split('').map((n,i) => {
+                                                return <AnimatedDigit digit={n} transform={18} key={i}/>
+                                        })})
+                                    </div>
                                 </div>
                             </div>
                             <div className="business__news__menu">
@@ -65,7 +100,10 @@ class BusinessNews extends React.PureComponent {
                         </div>
 
                         <div className="business__news__box">
-                            {field === 'overview' && <Overview />}
+                            {field === 'overview' && <Overview 
+                                stockDetails={this.props.stockDetails}
+                                snapdata={this.props.snapdata}
+                            />}
                             {field === 'financials' && <Financials />}
                             {field === 'valuation' && <Valuation />}
                             {field === 'technicals' && <Technicals />}

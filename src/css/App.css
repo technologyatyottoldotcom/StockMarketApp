@@ -75,6 +75,7 @@
   font-weight: 500;
   background-color: var(--light-white);
   overflow: hidden;
+  position: relative;
 }
 
 .app p 
@@ -119,15 +120,16 @@
 .app__header .stock__search 
 {
   width: 600px;
-  /* height: 70%; */
+  height: 70%;
  /* border: 1px solid #cccccc;
   */
   border-radius: 6px;
-  /* box-shadow: -2px 2px 2px var(--shadow-primary), 1px 0px 2px var(--shadow-primary); */
+  box-shadow: -2px 2px 2px var(--shadow-primary), 1px 0px 2px var(--shadow-primary);
   display: flex;
  /* justify-content: center;
   */
   align-items: center;
+  position: relative;
 }
 
 .app__header .stock__search .stock__search__icon 
@@ -142,9 +144,10 @@
 {
   width: 20px;
   height: 20px;
+  margin-right: 10px;
 }
 
-.MuiInput-underline:after
+/* .MuiInput-underline:after
 {
   border-color: var(--main-blue)!important;
 }
@@ -153,20 +156,62 @@
 {
   color: var(--main-blue)!important;
   font-family: 'Open Sans', sans-serif!important;
-}
+} */
 
 .app__header .stock__search input 
 {
   border: none;
   outline: none;
   width: 80%;
-  height: 80%;
+  height: 90%;
   padding-left: 2px;
   color: var(--font-primary);
   font-weight: 500;
   font-size: 14px;
   letter-spacing: 0.4px!important;
   text-transform: uppercase!important;
+}
+
+.app__header .stock__search .stock__suggestions
+{
+  position: absolute;
+  width: 100%;
+  background-color: #ffffff;
+  top: 100%;
+  left: 0%;
+  margin-top: 3px;
+  z-index: 100;
+  border-radius: 5px;
+  max-height: 300px;
+  overflow-y : scroll;
+  box-shadow: rgb(0 0 0 / 20%) 0px 3px 1px -2px, rgb(0 0 0 / 14%) 0px 2px 2px 0px, rgb(0 0 0 / 12%) 0px 1px 5px 0px;
+}
+
+.app__header .stock__search .stock__suggestions p
+{
+  padding: 8px 10px 8px 30px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+}
+
+.app__header .stock__search .stock__suggestions p span:nth-child(1)
+{
+  flex : 2;
+}
+.app__header .stock__search .stock__suggestions p span:nth-child(2)
+{
+  flex : 7;
+}
+.app__header .stock__search .stock__suggestions p span:nth-child(3)
+{
+  flex : 1;
+}
+
+.app__header .stock__search .stock__suggestions p:hover
+{
+  background-color: var(--light-grey);
 }
 
 .app__header .app__menu 
@@ -831,7 +876,7 @@
 .app__body .app__body__left .chart__container .stock__info__chart
 {
   position: relative;
-  flex: 12;
+  height: 93%;
 }
 
 .app__body .app__body__left .chart__container .stock__info 
@@ -1072,7 +1117,7 @@
 
 .app__body .app__body__left .chart__container .chart__range 
 {
-  flex: 1;
+  height: 7%;
   width: 100%;
   display: flex;
   align-items: center;
@@ -1183,7 +1228,45 @@
   font-size: 11px;
   color: var(--font-secondary);
   font-weight: 500;
+  display: flex;
+  align-items: center;
 }
+
+.app__body .app__body__left .key__statistics .ks__container .ks__container__half .ks__slot .statistics .ks__value .range__line
+{
+  position: relative;
+  width: 30px;
+  height: 2px;
+  background-color: var(--main-blue);
+  margin: 0 8px;
+}
+
+.ks__value .range__line::before
+{
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%,-50%);
+  background-color: var(--main-blue);
+  border-radius: 50%;
+}
+
+.ks__value .range__line::after
+{
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0%;
+  width: 8px;
+  height: 8px;
+  transform: translate(50%,-50%);
+  background-color: var(--main-blue);
+  border-radius: 50%;
+}
+
 
 .app__body .app__body__left .key__statistics .ks__container .ks__container__full .ks__slot .statistics .ks__name 
 {
@@ -1380,6 +1463,7 @@
   {
       width: 400px;
       height: 75%;
+      /* box-shadow: ; */
  }
 
   .app__header .stock__search .stock__search__icon img 

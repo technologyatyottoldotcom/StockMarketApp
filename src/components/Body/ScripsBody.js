@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import Axios from 'axios';
 import $ from 'jquery';
 import Close from '../../assets/icons/close.svg';
 import CashPosition from './CashPosition';
@@ -7,6 +7,7 @@ import ChartContainer from './ChartContainer';
 import KeyStatistics from './KeyStatistics';
 import StocksToWatch from './StocksToWatch';
 import TopStocks from './TopStocks';
+import Spinner from '../Loader/Spinner';
 import Portfolios from './MenuSection/Portfolios';
 import Orders from './MenuSection/Orders';
 import SmallCase from './MenuSection/SmallCase';
@@ -23,6 +24,7 @@ import 'rsuite/dist/styles/rsuite-default.css';
 
 
 
+
 class ScripsBody extends React.Component
 {
 
@@ -30,27 +32,104 @@ class ScripsBody extends React.Component
     {
         super(props);
         this.state = {
-            chartdata : [],
+            chartdata : null,
             stockData : '',
             tempData : '',
-            endpoint : 'wss://masterswift-beta.mastertrust.co.in/hydrasocket/v2/websocket?access_token=qaoSOB-l4jmwXlxlucY4ZTKWsbecdrBfC7GoHjCRy8E.soJkcdbrMmew-w1C0_KZ2gcQBUPLlPTYNbt9WLJN2g8'}
+            stockDetails : this.props.stockDetails,
+            oldstockCode : null,
+            snapdata : null,
+            isLoaded : false,
+            endpoint : 'wss://masterswift-beta.mastertrust.co.in/hydrasocket/v2/websocket?access_token=qaoSOB-l4jmwXlxlucY4ZTKWsbecdrBfC7GoHjCRy8E.soJkcdbrMmew-w1C0_KZ2gcQBUPLlPTYNbt9WLJN2g8',
+            ws : null,
+            FeedConnection : false
+        }
+
+        this.SnapShotRequest = this.SnapShotRequest.bind(this);
     }
 
     componentDidMount()
     {
-        // this.loadData();
-        this.loadChartData();
-        this.checkConnection();
+        this.makeSocketConnection()
+        .then(()=>{
+            this.loadChartData();
+            this.checkConnection();
+            this.SnapShotRequest(this.state.stockDetails.stockSymbol,this.state.stockDetails.stockNSECode,this.state.stockDetails.stockBSECode);
+        });
+        
+    }
+
+    componentDidUpdate(prevProps)
+    {
+        if(prevProps.stockDetails.stockCode !== this.props.stockDetails.stockCode)
+        {
+            console.log('props update : ',this.props.stockDetails.stockCode);
+            this.setState({
+                stockDetails : this.props.stockDetails,
+                oldstockCode : this.state.stockDetails.stockCode,
+                isLoaded : false
+            },()=>{
+                this.loadChartData();
+                this.checkConnection();
+                this.SnapShotRequest(this.state.stockDetails.stockSymbol,this.state.stockDetails.stockNSECode,this.state.stockDetails.stockBSECode);
+
+            });
+            
+        }
+    }
+
+    async makeSocketConnection()
+    {
+        return new Promise((resolve,reject)=>{
+            let ws = new WebSocket(this.state.endpoint);
+            ws.onopen = ()=>{
+                console.log('connection done');
+                this.setState({
+                    ws : ws,
+                    FeedConnection : true
+                });
+                resolve(ws)
+            }
+            ws.onerror = ()=>{
+                console.log('Connection Error');
+                this.setState({
+                    ws : null,
+                    FeedConnection : false
+                })
+            }
+        })
+
     }
 
     checkConnection()
     {
-        let ws = new WebSocket(this.state.endpoint);
-        ws.onopen = ()=>{
-            console.log('connection done')
-            ws.send(JSON.stringify({"a": "subscribe", "v": [[1, this.props.stockCode]], "m": "marketdata"}))
+        console.log('connection : ',this.props.stockDetails.stockCode);
+        this.setState({
+            stockCode : this.props.stockDetails.stockCode,
+            stockSymbol : this.props.stockDetails.stockSymbol
+        },()=>{
+            if(this.state.FeedConnection)
+            {
+                this.feedLiveData(this.state.ws);
+            }
+        });     
+       
+    }
+
+    feedLiveData(ws)
+    {
+
+        console.log(this.state);
+        if(this.state.oldstockCode)
+        {
+            console.log('unsubscribe ',this.state.oldstockCode);
+            ws.send(JSON.stringify({"a": "unsubscribe", "v": [[1, this.state.oldstockCode]], "m": "marketdata"}))
         }
+        console.log('subscribe',this.state.stockDetails.stockCode);
+        ws.send(JSON.stringify({"a": "subscribe", "v": [[1, this.state.stockDetails.stockCode]], "m": "marketdata"}));
+
         ws.onmessage = (response)=>{
+
+            // console.log(response.data);
             
             var reader = new FileReader();
             
@@ -66,7 +145,7 @@ class ScripsBody extends React.Component
                 {
                     convertedData = readMarketData(data,-1);
                 }
-                // console.log(convertedData);
+                // console.log(convertedData.last_traded_price);
                 //get price change
 
                 this.setState({
@@ -78,9 +157,11 @@ class ScripsBody extends React.Component
 
     async loadChartData()
     {
-        axios.get(`https://mastertrust-charts.tradelab.in/api/v1/charts?exchange=NSE&token=${this.props.stockCode}&candletype=1&starttime=1609479368&endtime=1632583718&data_duration=1`)
+
+        Axios.get(`https://mastertrust-charts.tradelab.in/api/v1/charts?exchange=NSE&token=${this.props.stockDetails.stockCode}&candletype=1&starttime=1609479368&endtime=1632583718&data_duration=1`)
         .then(res=>{
             const data = res.data;
+            console.log(data);
             if(data.status === 'success')
             {
                 
@@ -100,42 +181,31 @@ class ScripsBody extends React.Component
 
                 });
                 this.setState({
-                    chartdata : tempDataArray
+                    chartdata : tempDataArray,
+                    isLoaded : true
                 })
             }
 
-            console.log('chart data');
+            // console.log('chart data');
             
+        })
+    } 
+
+    SnapShotRequest(stockSymbol,stockNSECode,stockBSECode)
+    {
+        Axios.get(`http://localhost:3001/detailed_view/snapshot/${stockSymbol}/${stockNSECode}/${stockBSECode}`).then(({ data }) => {
+            if (data.code === 900 || data.msg === 'success' && data.data) {
+                console.log('data = ', data)
+                this.setState({ error: null, snapdata: data.data })
+            } else {
+                this.setState({  error: data.msg })
+            }
+        }).catch(e => {
+            this.setState({  error: e.message })
         })
     }
 
-    async loadData()
-    {
-
-        // console.log('load');
-        let tempDataArray = [];
-        const parseDate = timeParse('%Y-%m-%d');
-        MSFTArray.forEach(d =>{
-            let dobj = {
-                date : parseDate(d[0]),
-                open : parseFloat(d[1]),
-                high : parseFloat(d[2]),
-                low : parseFloat(d[3]),
-                close : parseFloat(d[4]),
-                volume : parseInt(d[5])
-            }
-
-            tempDataArray.push(dobj);
-
-        });
-
-        // console.log(tempDataArray);
-
-        this.setState({
-            chartdata : tempDataArray
-        });
-
-    }
+    
 
     openNews()
     {
@@ -185,7 +255,7 @@ class ScripsBody extends React.Component
             }
         ]
 
-        if(this.state.chartdata.length > 0)
+        if(this.state.chartdata)
         {
 
             return <div className="app__body">
@@ -198,8 +268,8 @@ class ScripsBody extends React.Component
                         <div className="business__news__wrapper">
                             <div className="bn__title">
                                 <div>
-                                    <p className="bn__stock__name">RELIANCE.NS</p>
-                                    <p className="bn__stock__fullname">Reliance Industries Ltd.</p>
+                                    <p className="bn__stock__name">{this.state.stockDetails.stockSymbol}</p>
+                                    <p className="bn__stock__fullname">{this.props.stockDetails.stockName}</p>
                                 </div>
                                 <div>
                                     <p onClick={this.openNews.bind(this)}>Detailed View</p>
@@ -209,7 +279,11 @@ class ScripsBody extends React.Component
                                 </div>
                             </div>
                             <div className="business__news__content">
-                                <BusinessNews />
+                                <BusinessNews 
+                                    stockDetails={this.state.stockDetails}
+                                    stockData={this.state.stockData}
+                                    snapdata={this.state.snapdata}   
+                                    />
                             </div>
                             
                         </div>
@@ -238,7 +312,14 @@ class ScripsBody extends React.Component
                         </div>
                     }
                     <div className="app__body__left">
-                        <ChartContainer data={this.state.chartdata} stockData={this.state.stockData}/>
+                        <ChartContainer 
+                            data={this.state.chartdata} 
+                            stockData={this.state.stockData} 
+                            stockName={this.props.stockDetails.stockName}
+                            stockSymbol={this.state.stockDetails.stockSymbol}
+                            stockDetails={this.state.stockDetails}
+                            isLoaded={this.state.isLoaded}
+                        />
                         <StocksToWatch />
                         <KeyStatistics stockData={this.state.stockData}/>
                     </div>
@@ -248,10 +329,12 @@ class ScripsBody extends React.Component
                 </div>
 
             </div>
+           
+
         }
         else
         {
-            return null
+            return <Spinner size={50}/>
         }
     }
 }

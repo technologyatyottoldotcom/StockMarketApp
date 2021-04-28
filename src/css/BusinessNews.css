@@ -282,12 +282,36 @@
   display: flex;
   font-size: 12px;
   font-weight: 700;
-  color: var(--main-red);
+  margin-top: 0;
+  color: var(--font-primary);
 }
 
-.container__header .stock__info .stock__price__change span 
+.container__header .stock__info .stock__price__change div 
 {
   margin-left: 2px;
+}
+
+.container__header .stock__info .stock__price__change div .price__digit 
+{
+   height: 18px;
+   margin: 0 -0.8px;
+   overflow: hidden;
+}
+
+.container__header .stock__info .stock__price__change div .price__digit__column
+{
+  display : flex;
+  flex-direction : column;
+  transition : 1s;
+}
+     
+.container__header .stock__info .stock__price__change div .digit__box
+{
+ height: 18px;
+ font-size: 12px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
 }
 
 .business__news__section .business__news__wrapper .business__news__menu 
@@ -324,4 +348,65 @@
   padding : 20px 10px 0;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.price__decimals
+{
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.price__decimals .price__digit 
+{
+   height: 30px;
+   overflow: hidden;
+}
+
+.price__decimals .price__digit__column
+{
+  display : flex;
+  flex-direction : column;
+  transition : 1s;
+}
+     
+.price__decimals .digit__box
+{
+ height: 30px;
+ font-size: 24px;
+ color: var(--font-primary);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+.price__fraction
+{
+    color: var(--font-primary);
+    font-size: 14px;
+    font-weight: 700;
+    align-self: flex-start;
+    margin-left: 2px;
+}
+
+.price__fraction .price__digit 
+{
+   height: 20px;
+   overflow: hidden;
+}
+
+.price__fraction .price__digit__column
+{
+  display : flex;
+  flex-direction : column;
+  transition : 1s;
+}
+     
+.price__fraction .digit__box
+{
+ height: 20px;
+ font-size: 14px;
+ color: var(--font-primary);
+ display: flex;
+ justify-content: center;
+ align-items: center;
 }

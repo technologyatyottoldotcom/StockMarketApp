@@ -1,15 +1,18 @@
 //imports
-const express = require('express') , cors = require('cors')
+const express = require('express') , cors = require('cors');
 const app = express();
-const {conn} = require('./connection');
+app.use(cors());
+const {conn} = require('../server/connection');
 const {Twitter} = require("./twitter");
 const {GoogleFeeds} = require("./google_feeds");
 const {AutoComplete} = require('./AutoComplete');
+const { BusinessNews } = require('./BusinessNews/');
+
 
 //middlewares
 app.use(Twitter);
 app.use(GoogleFeeds);
-app.use(cors());
+app.use(BusinessNews);
 
 
 

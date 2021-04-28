@@ -15,7 +15,13 @@ class App extends React.Component
     this.state = {
       isActive : false,
       active : null,
-      stockCode : 2885,
+      stockDetails : {
+        stockCode : 2885,
+        stockSymbol : 'RELI.NS',
+        stockName : 'Reliance Industries Ltd.',
+        stockNSECode : 'RELIANCE',
+        stockBSECode : 500325
+      },
       search : ''
     }
     this.setActiveElement = this.setActiveElement.bind(this);
@@ -31,14 +37,28 @@ class App extends React.Component
     // console.log(element);
   }
 
-  selectedStock(event,value)
+  selectedStock(data)
   {
-      if(value && typeof value === 'string' && value!== '')
+      // console.log(data.code);
+      // console.log(data.symbol);
+      console.log(data);
+      let StockCode = data.code;
+      console.log(data,StockCode)
+      if(StockCode && typeof StockCode === 'string' && StockCode!== '')
       {
-        const stockArr = value.split(':');
-        console.log(stockArr);
+        // const stockArr = value.split(':');
+        // console.log(stockArr);
+        // console.log(data);
         this.setState({
-            stockCode : parseInt(stockArr[stockArr.length-1])
+
+            stockDetails : {
+              stockCode : parseInt(StockCode),
+              stockSymbol : data.symbol,
+              stockName : data.name,
+              stockNSECode : data.nse_code,
+              stockBSECode : data.bse_code
+            }
+            
         });
       }
   }
@@ -52,7 +72,12 @@ class App extends React.Component
       <div className="app">
         <ScripsHeader 
           setActiveElement={this.setActiveElement} selectedStock={this.selectedStock}/>
-        <ScripsBody stockCode={this.state.stockCode} setActiveElement={this.setActiveElement} isActive={this.state.isActive} active={this.state.active}/>
+        <ScripsBody 
+          stockDetails = {this.state.stockDetails}
+          setActiveElement={this.setActiveElement} 
+          isActive={this.state.isActive} 
+          active={this.state.active}
+        />
         <ScripsFooter />
       </div>
     );
