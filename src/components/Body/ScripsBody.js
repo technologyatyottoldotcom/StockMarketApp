@@ -36,7 +36,7 @@ class ScripsBody extends React.PureComponent
             stockData : '',
             tempData : '',
             stockDetails : this.props.stockDetails,
-            oldstockCode : null,
+            oldStockDetails : this.props.stockDetails,
             snapdata : null,
             isLoaded : false,
             endpoint : 'wss://masterswift-beta.mastertrust.co.in/hydrasocket/v2/websocket?access_token=qaoSOB-l4jmwXlxlucY4ZTKWsbecdrBfC7GoHjCRy8E.soJkcdbrMmew-w1C0_KZ2gcQBUPLlPTYNbt9WLJN2g8',
@@ -53,7 +53,7 @@ class ScripsBody extends React.PureComponent
         .then(()=>{
             this.loadChartData();
             this.checkConnection();
-            this.SnapShotRequest(this.state.stockDetails.stockSymbol,this.state.stockDetails.stockNSECode,this.state.stockDetails.stockBSECode);
+            this.SnapShotRequest(this.state.stockDetails.stockSymbol,this.state.stockDetails.stockNSECode,this.state.stockDetails.stockBSECode,this.state.stockDetails.stockExchange.exchange);
         });
         
     }
@@ -65,12 +65,12 @@ class ScripsBody extends React.PureComponent
             console.log('props update : ',this.props.stockDetails.stockCode);
             this.setState({
                 stockDetails : this.props.stockDetails,
-                oldstockCode : this.state.stockDetails.stockCode,
+                oldStockDetails : this.state.stockDetails,
                 isLoaded : false
             },()=>{
                 this.loadChartData();
                 this.checkConnection();
-                this.SnapShotRequest(this.state.stockDetails.stockSymbol,this.state.stockDetails.stockNSECode,this.state.stockDetails.stockBSECode);
+                this.SnapShotRequest(this.state.stockDetails.stockSymbol,this.state.stockDetails.stockNSECode,this.state.stockDetails.stockBSECode,this.state.stockDetails.stockExchange.exchange);
 
             });
             
@@ -119,13 +119,21 @@ class ScripsBody extends React.PureComponent
     {
 
         console.log(this.state);
-        if(this.state.oldstockCode)
+        if(this.state.oldStockDetails.stockCode)
         {
-            console.log('unsubscribe ',this.state.oldstockCode);
-            ws.send(JSON.stringify({"a": "unsubscribe", "v": [[1, this.state.oldstockCode]], "m": "marketdata"}))
+            console.log('unsubscribe ',this.state.oldStockDetails.stockCode);
+            ws.send(JSON.stringify({
+                "a": "unsubscribe", 
+                "v": [[this.state.oldStockDetails.stockExchange.code, this.state.oldStockDetails.stockCode]], 
+                "m": "marketdata"}
+            ))
         }
         console.log('subscribe',this.state.stockDetails.stockCode);
-        ws.send(JSON.stringify({"a": "subscribe", "v": [[1, this.state.stockDetails.stockCode]], "m": "marketdata"}));
+        ws.send(JSON.stringify({
+            "a": "subscribe", 
+            "v": [[this.state.stockDetails.stockExchange.code, this.state.stockDetails.stockCode]], 
+            "m": "marketdata"}
+        ));
 
         ws.onmessage = (response)=>{
 
@@ -158,7 +166,7 @@ class ScripsBody extends React.PureComponent
     async loadChartData()
     {
 
-        Axios.get(`https://mastertrust-charts.tradelab.in/api/v1/charts?exchange=NSE&token=${this.props.stockDetails.stockCode}&candletype=1&starttime=1609479368&endtime=1632583718&data_duration=1`)
+        Axios.get(`https://mastertrust-charts.tradelab.in/api/v1/charts?exchange=${this.props.stockDetails.stockExchange.exchange}&token=${this.props.stockDetails.stockCode}&candletype=1&starttime=1617235200&endtime=1632583718&data_duration=1`)
         .then(res=>{
             const data = res.data;
             console.log(data);
@@ -191,9 +199,9 @@ class ScripsBody extends React.PureComponent
         })
     } 
 
-    SnapShotRequest(stockSymbol,stockNSECode,stockBSECode)
+    SnapShotRequest(stockSymbol,stockNSECode,stockBSECode,stockExchange)
     {
-        Axios.get(`http://localhost:3001/detailed_view/snapshot/${stockSymbol}/${stockNSECode}/${stockBSECode}`).then(({ data }) => {
+        Axios.get(`http://localhost:3001/detailed_view/snapshot/${stockSymbol}/${stockNSECode}/${stockBSECode}/${stockExchange}`).then(({ data }) => {
             if (data.code === 900 || data.msg === 'success' && data.data) {
                 console.log('data = ', data)
                 this.setState({ error: null, snapdata: data.data })
@@ -224,7 +232,7 @@ class ScripsBody extends React.PureComponent
     render()
     {
 
-        console.log('Rendering ScripsBody ...');
+        // console.log('Rendering ScripsBody ...');
 
         let activeElement = this.props.active?.toLowerCase().replace(/ /g, '');
 

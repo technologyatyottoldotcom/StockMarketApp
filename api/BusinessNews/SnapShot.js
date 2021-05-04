@@ -18,8 +18,10 @@ class SnapShots {
     regex = /\d+_(.*)_\d+/
     ScreenerBalanceSheetAnnual = null
 
-    constructor(data) {
+    constructor(data,stock,conn) {
         this.data = data
+        this.stock = stock
+        this.conn = conn
         this.ScreenerBalanceSheetAnnual = data[17]
     }
 
@@ -740,16 +742,67 @@ class SnapShots {
 
     Beta()
     {
-        const data = [
-            { y: 2, x: 1 },
-            { y: 4, x: 2 },
-            { y: 5, x: 3 },
-            { y: 4, x: 4 },
-            { y: 5, x: 5 },
-          ];
-           
-          // Takes the following arguments (dataset, xKey, yKey)
-          return TrendLine(data, 'x', 'y');
+
+        return new Promise((resolve,reject)=>{
+            //get stock data as well as nifty data
+
+
+            let stock = this.stock;
+            let conn = this.conn;
+            // console.log(stock);
+
+            let sql,data=[];
+
+            if(stock.exchange === 'NSE')
+            {
+                sql = `(SELECT T1.TIMESTAMP AS Date,T1.OPEN AS stock,T2.Open AS base FROM nse_bhav_2021 T1 INNER JOIN IndexData_NSE_BSE T2 
+                    ON CAST(T1.TIMESTAMP AS DATE) = CAST(T2.Date AS DATE)
+                    WHERE T1.SYMBOL='${stock.nseCode}' AND T2.Symbol='NIFTY_50')
+                    UNION ALL
+                    (SELECT T1.TIMESTAMP AS Date,T1.OPEN AS stock,T2.Open AS base FROM nse_bhav_2020 T1 INNER JOIN IndexData_NSE_BSE T2 
+                    ON CAST(T1.TIMESTAMP AS DATE) = CAST(T2.Date AS DATE)
+                    WHERE T1.SYMBOL='${stock.nseCode}' AND T2.Symbol='NIFTY_50')
+                    ORDER BY Date DESC LIMIT 60`;
+            }
+            else if(stock.exchange === 'BSE')
+            {
+                sql = `(SELECT T1.TRADING_DATE AS Date,T1.OPEN AS stock,T2.Open AS base FROM bse_bhav_2021 T1 INNER JOIN IndexData_NSE_BSE T2 
+                    ON CAST(T1.TRADING_DATE AS DATE) = CAST(T2.Date AS DATE)
+                    WHERE T1.SC_CODE='${stock.bseCode}' AND T2.Symbol='NIFTY_50')
+                    UNION ALL
+                    (SELECT T1.TRADING_DATE AS Date,T1.OPEN AS stock,T2.Open AS base FROM bse_bhav_2020 T1 INNER JOIN IndexData_NSE_BSE T2 
+                    ON CAST(T1.TRADING_DATE AS DATE) = CAST(T2.Date AS DATE)
+                    WHERE T1.SC_CODE='${stock.bseCode}' AND T2.Symbol='NIFTY_50')
+                    ORDER BY Date DESC LIMIT 60`;
+            }
+
+
+            conn.query(sql,(error,result)=>{
+
+                // console.log(result.length);
+                if(!error)
+                {
+                    // console.log(result.length);
+                    result.forEach(row => {
+                        // console.log(row.Date,row.stock,row.base);
+                        data.push({
+                            x : parseFloat(row.base),
+                            y : parseFloat(row.stock)
+                        })
+                    });
+
+                    // console.log(data);
+                    resolve(TrendLine(data,'x','y'))
+
+                }
+                else
+                {
+                    // console.log(error);
+                    reject(error);
+                }
+            });
+            
+        })
 
           
     }
@@ -812,35 +865,62 @@ const StockSnapShot = (stock)=>{
         MYSQL({
             'reutersCode' : stock.reutersCode,
             'nseCode' : stock.nseCode,
-            'bseCode' : stock.bseCode
+            'bseCode' : stock.bseCode,
+            'exchange' : stock.exchange
         },
         (e, r) => {
     
             if(!e)
             {                
     
-                var snp = new SnapShots(r);
+                var snp = new SnapShots(r,stock,conn);
 
+                snp.Beta().
+                then(response=>{
+                    // console.log(response);
+                    resolve({
+                        'MarketCap' : FormatValue(snp.MarketCap(),'Market_Cap','s'),
+                        'PriceToEarnings' : FormatValue(snp.PriceToEarnings(),'Price_To_Earnings','rs'),
+                        'PriceToBook' : FormatValue(snp.PriceToBook(),'Price_To_Book','s'),
+                        'DividendYield' : FormatValue(snp.DividendYield(),'Dividend_Yield','s'),
+                        'FaceValue' : FormatValue(snp.FaceValue(),'Face_Value','s'),
+                        'EPS' : FormatValue(snp.EPS(),'EPS','rs'),
+                        'DebtToEquity' : FormatValue(snp.DebtToEquity(),'Debt_To_Equity','rs'),
+                        'PromoterHolding' : FormatValue(snp.PromoterHolding(),'Promoter_Holding','s'),
+                        'ROE_TTM' : FormatValue(snp.ROE_TTM(),'ROE_TTM','rs'),
+                        'ROE_3YR' : FormatValue(snp.ROE_3YR(),'ROE_3YR','rs'),
+                        'ROA_TTM' : FormatValue(snp.ROA_TTM(),'ROA_TTM','rs'),
+                        'ROA_3YR' : FormatValue(snp.ROA_3YR(),'ROA_3YR','rs'),
+                        'ROCE_TTM' : FormatValue(snp.ROCE_TTM(),'ROCE_TTM','rs'),
+                        'ROCE_3YR' : FormatValue(snp.ROCE_3YR(),'ROCE_3YR','rs'),
+                        'CurrentRatio' : FormatValue(snp.CurrentRatio(),'Current_Ratio','s'),
+                        'Beta' : (response.slope).toFixed(2)
+        
+                    })
+                }).catch(error=>{
+                    console.log(error);
+                    resolve({
+                        'MarketCap' : FormatValue(snp.MarketCap(),'Market_Cap','s'),
+                        'PriceToEarnings' : FormatValue(snp.PriceToEarnings(),'Price_To_Earnings','rs'),
+                        'PriceToBook' : FormatValue(snp.PriceToBook(),'Price_To_Book','s'),
+                        'DividendYield' : FormatValue(snp.DividendYield(),'Dividend_Yield','s'),
+                        'FaceValue' : FormatValue(snp.FaceValue(),'Face_Value','s'),
+                        'EPS' : FormatValue(snp.EPS(),'EPS','rs'),
+                        'DebtToEquity' : FormatValue(snp.DebtToEquity(),'Debt_To_Equity','rs'),
+                        'PromoterHolding' : FormatValue(snp.PromoterHolding(),'Promoter_Holding','s'),
+                        'ROE_TTM' : FormatValue(snp.ROE_TTM(),'ROE_TTM','rs'),
+                        'ROE_3YR' : FormatValue(snp.ROE_3YR(),'ROE_3YR','rs'),
+                        'ROA_TTM' : FormatValue(snp.ROA_TTM(),'ROA_TTM','rs'),
+                        'ROA_3YR' : FormatValue(snp.ROA_3YR(),'ROA_3YR','rs'),
+                        'ROCE_TTM' : FormatValue(snp.ROCE_TTM(),'ROCE_TTM','rs'),
+                        'ROCE_3YR' : FormatValue(snp.ROCE_3YR(),'ROCE_3YR','rs'),
+                        'CurrentRatio' : FormatValue(snp.CurrentRatio(),'Current_Ratio','s'),
+                        'Beta' : '-'
+        
+                    })
+                });
     
-                resolve({
-                    'MarketCap' : FormatValue(snp.MarketCap(),'Market_Cap','s'),
-                    'PriceToEarnings' : FormatValue(snp.PriceToEarnings(),'Price_To_Earnings','rs'),
-                    'PriceToBook' : FormatValue(snp.PriceToBook(),'Price_To_Book','s'),
-                    'DividendYield' : FormatValue(snp.DividendYield(),'Dividend_Yield','s'),
-                    'FaceValue' : FormatValue(snp.FaceValue(),'Face_Value','s'),
-                    'EPS' : FormatValue(snp.EPS(),'EPS','rs'),
-                    'DebtToEquity' : FormatValue(snp.DebtToEquity(),'Debt_To_Equity','rs'),
-                    'PromoterHolding' : FormatValue(snp.PromoterHolding(),'Promoter_Holding','s'),
-                    'ROE_TTM' : FormatValue(snp.ROE_TTM(),'ROE_TTM','rs'),
-                    'ROE_3YR' : FormatValue(snp.ROE_3YR(),'ROE_3YR','rs'),
-                    'ROA_TTM' : FormatValue(snp.ROA_TTM(),'ROA_TTM','rs'),
-                    'ROA_3YR' : FormatValue(snp.ROA_3YR(),'ROA_3YR','rs'),
-                    'ROCE_TTM' : FormatValue(snp.ROCE_TTM(),'ROCE_TTM','rs'),
-                    'ROCE_3YR' : FormatValue(snp.ROCE_3YR(),'ROCE_3YR','rs'),
-                    'CurrentRatio' : FormatValue(snp.CurrentRatio(),'Current_Ratio','s'),
-                    'Beta' : snp.Beta().slope
-    
-                })
+                
             }
             else
             {
@@ -886,8 +966,8 @@ const FormatValue = (snap,key,type)=>{
 //             'bseCode' : '500325'
 //         })
 //         .then((data)=>{
-//             // console.log(data);
-//             return data;
+//             console.log(data);
+//             // return data;
 //         })
 //         .catch((error)=>{
 //             return error

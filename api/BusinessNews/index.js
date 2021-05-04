@@ -46,11 +46,13 @@ function SnapShot(req,res){
     var reutersCode = req.params.ric_code;
     var nseCode = req.params.nse_code;
     var bseCode = req.params.bse_code;
+    var exchange = req.params.exchange
     // console.log(reutersCode,nseCode,bseCode);
     StockSnapShot({
         'reutersCode' : reutersCode,
         'nseCode' : nseCode,
-        'bseCode' : bseCode
+        'bseCode' : bseCode,
+        'exchange' : exchange
     })
     .then((data)=>{
         // console.log(data);
@@ -63,7 +65,7 @@ function SnapShot(req,res){
 
 BusinessNews.get("/detailed_view/overview/:ric_code", Overview)
 
-BusinessNews.get("/detailed_view/snapshot/:ric_code/:nse_code/:bse_code", SnapShot)
+BusinessNews.get("/detailed_view/snapshot/:ric_code/:nse_code/:bse_code/:exchange", SnapShot)
 
 
 exports.BusinessNews = BusinessNews

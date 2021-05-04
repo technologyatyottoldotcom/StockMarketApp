@@ -428,7 +428,7 @@ export class ChartContainer extends React.PureComponent {
 
     render() {
 
-        console.log('Rendering chart...');
+        // console.log('Rendering chart...');
 
         // console.log(this.props.data);
         let stockData = this.props.stockData;

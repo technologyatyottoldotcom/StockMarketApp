@@ -1,5 +1,6 @@
 import React from 'react';
 import Statistics from './Statistics';
+import Spinner from '../Loader/Spinner';
 
 export class KeyStatistics extends React.PureComponent {
 
@@ -37,7 +38,7 @@ export class KeyStatistics extends React.PureComponent {
                             <div className="ks__slot">
                                 <Statistics type="number" name="Market Cap" value={this.props.snapdata.MarketCap}/>
                                 <Statistics type="number" name="P/E" value={this.props.snapdata.PriceToEarnings}/>
-                                <Statistics type="number" name="Beta" value="1,236.56"/>
+                                <Statistics type="number" name="Beta" value={this.props.snapdata.Beta}/>
                             </div>
                             <div className="ks__slot">
                                 <Statistics type="number" name="ROE(TTM)" value={this.props.snapdata.ROE_TTM}/>
@@ -74,6 +75,12 @@ export class KeyStatistics extends React.PureComponent {
                     </div>
                 </div>
             )
+        }
+        else
+        {
+            return <div className="key__statistics">
+                <Spinner size={30}/>
+            </div>
         }
     }
 }

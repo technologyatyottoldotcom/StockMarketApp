@@ -160,9 +160,9 @@ export class Technicals extends React.PureComponent {
         return (
             <>
                 <div className="bn__stock__technicals">
-                    <div className="bn__stock__views">
+                    {/* <div className="bn__stock__views">
                         <FirstSection />
-                    </div>
+                    </div> */}
 
                     {/* <div className="col-2">
                         <CenterSection />
@@ -171,6 +171,7 @@ export class Technicals extends React.PureComponent {
                     {/* <div className="bn__stock__target">
                         <LastSection />
                     </div> */}
+                    <h3 style={{textAlign : 'center'}}>Technicals Field</h3>
                 </div>
 
             </>

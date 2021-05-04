@@ -11,7 +11,7 @@ export class Statistics extends React.PureComponent {
                 {type === 'range' ? 
                     <p className="ks__value">
                         {value[0] && <span>{value[0]}</span>}
-                        <div className="range__line"></div>
+                        <span className="range__line"></span>
                         {value[1] && <span>{value[1]}</span>}
                     </p>
                     :

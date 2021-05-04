@@ -20,7 +20,12 @@ class App extends React.Component
         stockSymbol : 'RELI.NS',
         stockName : 'Reliance Industries Ltd.',
         stockNSECode : 'RELIANCE',
-        stockBSECode : 500325
+        stockBSECode : 500325,
+        stockExchange : {
+          exchange : 'NSE',
+          code : 1,
+          multiplier : 100
+        }
       },
       search : ''
     }
@@ -39,16 +44,10 @@ class App extends React.Component
 
   selectedStock(data)
   {
-      // console.log(data.code);
-      // console.log(data.symbol);
-      console.log(data);
+      // console.log(data);
       let StockCode = data.code;
-      console.log(data,StockCode)
       if(StockCode && typeof StockCode === 'string' && StockCode!== '')
       {
-        // const stockArr = value.split(':');
-        // console.log(stockArr);
-        // console.log(data);
         this.setState({
 
             stockDetails : {
@@ -56,7 +55,8 @@ class App extends React.Component
               stockSymbol : data.symbol,
               stockName : data.name,
               stockNSECode : data.nse_code,
-              stockBSECode : data.bse_code
+              stockBSECode : data.bse_code,
+              stockExchange : data.exchange
             }
             
         });

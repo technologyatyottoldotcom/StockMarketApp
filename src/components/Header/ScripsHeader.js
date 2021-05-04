@@ -26,11 +26,12 @@ class StockSuggestion extends React.PureComponent{
                                 symbol : s.ric_code,
                                 nse_code : s.nse_code,
                                 bse_code : s.bse_code,
-                                name : s.name
+                                name : s.name,
+                                exchange : s.exchange
                             });this.props.handleSelection()}}>
                                 <span>{s.symbol}</span> 
                                 <span>{s.company}</span> 
-                                <span>{s.exchange}</span>
+                                <span>{s.exchange.exchange}</span>
                         </p>
                     })}
                 </>

@@ -62,7 +62,7 @@ class AnnualReports extends React.PureComponent {
 class Snapshot extends React.PureComponent {
     render() {
 
-        console.log(this.props.snapdata);
+        // console.log(this.props.snapdata);
 
         return (
             <>
@@ -262,7 +262,7 @@ class Overview extends React.PureComponent {
         Axios.get(`http://localhost:3001/detailed_view/overview/${stockSymbol}`)
         .then(({ data }) => {
             if (data.code === 900 || data.msg === 'success' && data.data) {
-                console.log('data = ', data)
+                // console.log('data = ', data)
                 this.setState({ loading: false, error: null, data: data.data })
             } else this.setState({ loading: false, error: data.msg })
         }).catch(e => {

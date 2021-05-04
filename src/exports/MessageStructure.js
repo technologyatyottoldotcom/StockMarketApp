@@ -121,4 +121,43 @@ let MarketDataStructure = [
     }
 ]
 
-module.exports = {MarketDataStructure};
+let Exchanges = [
+    {
+        'exchange' : 'NSE',
+        'code' : 1,
+        'multiplier' : 100
+    },
+    {
+        'exchange' : 'NFO',
+        'code' : 2,
+        'multiplier' : 100
+    },
+    {
+        'exchange' : 'CDS',
+        'code' : 3,
+        'multiplier' : 10000000
+    },
+    {
+        'exchange' : 'MCX',
+        'code' : 4,
+        'multiplier' : 100
+    },
+    {
+        'exchange' : 'BSE',
+        'code' : 6,
+        'multiplier' : 100
+    },
+    {
+        'exchange' : 'BFO',
+        'code' : 7,
+        'multiplier' : 100
+    }
+]
+
+function getExchangeCode(exchange)
+{
+    return Exchanges.find(e => e.exchange === exchange)
+}
+
+
+module.exports = {MarketDataStructure,getExchangeCode};
