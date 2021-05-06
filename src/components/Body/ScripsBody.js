@@ -23,7 +23,9 @@ import 'rsuite/dist/styles/rsuite-default.css';
 
 
 
+const REQUEST_BASE_URL = process.env.REQUEST_BASE_URL || 'localhost';
 
+console.log(REQUEST_BASE_URL);
 
 class ScripsBody extends React.PureComponent
 {
@@ -204,7 +206,7 @@ class ScripsBody extends React.PureComponent
 
     SnapShotRequest(stockSymbol,stockNSECode,stockBSECode,stockExchange)
     {
-        Axios.get(`http://localhost:8000/detailed_view/snapshot/${stockSymbol}/${stockNSECode}/${stockBSECode}/${stockExchange}`,{ crossDomain: true }).then(({ data }) => {
+        Axios.get(`http://${REQUEST_BASE_URL}:8000/detailed_view/snapshot/${stockSymbol}/${stockNSECode}/${stockBSECode}/${stockExchange}`,{ crossDomain: true }).then(({ data }) => {
             if (data.code === 900 || data.msg === 'success' && data.data) {
                 console.log('data = ', data)
                 this.setState({ error: null, snapdata: data.data })
