@@ -64,7 +64,7 @@
   justify-content: space-between;
   align-items: center;
   position: absolute;
-  width: 250px;
+  width: 240px;
   background-color: var(--white);
   right: 0%;
   top: -1%;
@@ -239,14 +239,6 @@
   font-size: 12px;
 }
 
-.container__header .stock__info .stock__price__details 
-{
- /* margin: 0 3px;
-  */
-  font-size: 12px;
-  font-weight: 700;
-}
-
 .container__header .stock__info .stock__purchase 
 {
   display: flex;
@@ -291,28 +283,7 @@
   margin-left: 2px;
 }
 
-.container__header .stock__info .stock__price__change div .price__digit 
-{
-   height: 18px;
-   margin: 0 -0.8px;
-   overflow: hidden;
-}
 
-.container__header .stock__info .stock__price__change div .price__digit__column
-{
-  display : flex;
-  flex-direction : column;
-  transition : 1s;
-}
-     
-.container__header .stock__info .stock__price__change div .digit__box
-{
- height: 18px;
- font-size: 12px;
- display: flex;
- justify-content: center;
- align-items: center;
-}
 
 .business__news__section .business__news__wrapper .business__news__menu 
 {
@@ -352,31 +323,9 @@
 
 .price__decimals
 {
-  font-size: 12px;
+  font-size: 30px;
+  color: var(--font-primary);
   font-weight: 700;
-}
-
-.price__decimals .price__digit 
-{
-   height: 30px;
-   overflow: hidden;
-}
-
-.price__decimals .price__digit__column
-{
-  display : flex;
-  flex-direction : column;
-  transition : 1s;
-}
-     
-.price__decimals .digit__box
-{
- height: 30px;
- font-size: 24px;
- color: var(--font-primary);
- display: flex;
- justify-content: center;
- align-items: center;
 }
 
 .price__fraction
@@ -387,26 +336,4 @@
     align-self: flex-start;
     margin-left: 2px;
 }
-
-.price__fraction .price__digit 
-{
-   height: 20px;
-   overflow: hidden;
-}
-
-.price__fraction .price__digit__column
-{
-  display : flex;
-  flex-direction : column;
-  transition : 1s;
-}
-     
-.price__fraction .digit__box
-{
- height: 20px;
- font-size: 14px;
- color: var(--font-primary);
- display: flex;
- justify-content: center;
- align-items: center;
-}
+    

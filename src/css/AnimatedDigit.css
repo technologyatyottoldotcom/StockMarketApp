@@ -1,0 +1,44 @@
+* 
+{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+ /* font-family: 'Quicksand', sans-serif;
+  */
+}
+
+:root 
+{
+  --main-blue : #00A0E3;
+  --main-green : #19E683;
+  --main-red : #E51A4B;
+  --light-grey : #EAEAEA;
+  --medium-grey : #BBBBBB;
+  --light-white : #FEFEFE;
+  --white : #FFFFFF;
+  --font-primary : #404040;
+  --font-secondary : #666666;
+  --shadow-primary : #F2F2F2;
+  --shadow-code : 1px 1px 2px rgba(0,0,0,.02) , -1px -1px 2px rgba(0,0,0,.02);
+}
+
+.price__digit
+{
+    overflow: hidden;
+    margin: 0px;
+}
+
+.price__digit__column
+{
+  display : flex;
+  flex-direction : column;
+  transition : 1s;
+}
+
+.digit__box
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

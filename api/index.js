@@ -7,12 +7,14 @@ const {Twitter} = require("./twitter");
 const {GoogleFeeds} = require("./google_feeds");
 const {AutoComplete} = require('./AutoComplete');
 const { BusinessNews } = require('./BusinessNews/');
+const { IndexChartData } = require('./IndexChartData/');
 
 
 //middlewares
 app.use(Twitter);
 app.use(GoogleFeeds);
 app.use(BusinessNews);
+app.use(IndexChartData);
 
 
 
@@ -127,4 +129,4 @@ app.get('/stock/:query',(req,res)=>{
     })
 })
 
-app.listen(3001,e=>console.log('server start'))
+app.listen(8000,e=>console.log('server start'))

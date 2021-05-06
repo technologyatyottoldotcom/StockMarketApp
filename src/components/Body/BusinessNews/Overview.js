@@ -259,7 +259,7 @@ class Overview extends React.PureComponent {
 
     DataRequest(stockSymbol) {
         console.log(stockSymbol);
-        Axios.get(`http://localhost:3001/detailed_view/overview/${stockSymbol}`)
+        Axios.get(`http://localhost:8000/detailed_view/overview/${stockSymbol}`)
         .then(({ data }) => {
             if (data.code === 900 || data.msg === 'success' && data.data) {
                 // console.log('data = ', data)

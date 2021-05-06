@@ -195,7 +195,7 @@ componentDidMount(){
 GetHashTagData(){
   let h = this.state.hashTag
   if(h){
-    Axios(`http://localhost:3001/twitter/${this.state.hashTag}/${this.state.resultType}/${this.state.hashTagDataLength || 1}`).then(({data})=>{
+    Axios(`http://localhost:8000/twitter/${this.state.hashTag}/${this.state.resultType}/${this.state.hashTagDataLength || 1}`).then(({data})=>{
       this.setState({
         data:data , 
         users : (data).map((v)=>{let s = {};s[v.user.screen_name] = v.user;return s}),
@@ -245,7 +245,7 @@ hasTagClick = e=>{
 hashTagsUsersClick(t){//@ is removed 
   return new Promise((res) => {
     if (!this.hasUser(t)) {
-      Axios(`http://localhost:3001/twitterUser/${t}`).then(({ data }) => {
+      Axios(`http://localhost:8000/twitterUser/${t}`).then(({ data }) => {
         let d = {}
         d[t] = data
         this.setState(e => { e.users.push(d) })
@@ -522,7 +522,7 @@ function RenderMedia({ data }){
   
   const [get, set] = React.useState({img:null,desc:null})
   if(!get.img){
-    Axios(`http://localhost:3001/getmetadata?url=${link}&types=og:image,og:description`).then(({data})=>{
+    Axios(`http://localhost:8000/getmetadata?url=${link}&types=og:image,og:description`).then(({data})=>{
        let d = data.data
        if( d && !data.error && typeof d==='object'){
          let img = d['og:image'] , desc = d['og:description'];
@@ -586,7 +586,7 @@ class GoogleFeeds extends React.PureComponent{
  }
 
  componentDidMount(){
-   Axios(`http://localhost:3001/feeds/${this.state.hashTag}`).then(({data})=>{
+   Axios(`http://localhost:8000/feeds/${this.state.hashTag}`).then(({data})=>{
     this.setState({data:data.data || [] , loading : false})
    }).catch(e=>{
      console.log("e = ",e)//handle this error

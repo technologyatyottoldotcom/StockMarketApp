@@ -599,13 +599,21 @@ export class ChartContainer extends React.PureComponent {
                                     <div className="price__decimals" style={{display : 'flex'}}>
                                         {dPrice &&
                                         dPrice.split('').map((n,i) => {
-                                            return <AnimatedDigit digit={n} transform={30} key={i}/>
+                                            return <AnimatedDigit 
+                                                digit={n} 
+                                                key={i}
+                                                size={30}
+                                            />
                                         })}
                                     </div>
                                     <div className="price__fraction" style={{display : 'flex'}}>
                                         {fPrice &&
                                         fPrice.split('').map((n,i) => {
-                                            return <AnimatedDigit digit={n} transform={20} key={i}/>
+                                            return <AnimatedDigit 
+                                                digit={n} 
+                                                key={i}
+                                                size={20}
+                                            />
                                         })}
                                     </div>
                                     
@@ -620,13 +628,23 @@ export class ChartContainer extends React.PureComponent {
                                 <div className={priceClass +' stock__performance__amount'} style={{display : 'flex'}}>
                                     {stockData.change_price &&
                                         stockData.change_price.split('').map((n,i) => {
-                                            return <AnimatedDigit digit={n} transform={18} key={i}/>
+                                            return <AnimatedDigit 
+                                            digit={n} 
+                                            size={18} 
+                                            key={i}    
+                                            digitMargin={-0.8}
+                                        />
                                     })}
                                 </div>
                                 <div className={priceClass +' stock__performance__percentage'} style={{display : 'flex'}}>
                                     ({stockData.change_percentage &&
                                         stockData.change_percentage.split('').map((n,i) => {
-                                            return <AnimatedDigit digit={n} transform={18} key={i}/>
+                                            return <AnimatedDigit 
+                                            digit={n} 
+                                            size={18} 
+                                            key={i}
+                                            digitMargin={-0.8}
+                                        />
                                     })})
                                 </div>
                                 

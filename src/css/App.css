@@ -20,6 +20,7 @@
   --font-primary : #404040;
   --font-secondary : #666666;
   --shadow-primary : #F2F2F2;
+  --shadow-code : 1px 1px 2px rgba(0,0,0,.02) , -1px -1px 2px rgba(0,0,0,.02);
 }
 
 ::placeholder 
@@ -68,6 +69,8 @@
   color: var(--main-red);
 }
 
+
+
 .app 
 {
   width: 100%;
@@ -89,7 +92,7 @@
   width: 100%;
   height: 7vh;
   background-color: var(--white);
-  padding: 0 140px;
+  padding: 0 100px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -113,13 +116,13 @@
   font-size: 18px!important;
   font-weight: 700;
   font-size: 30px;
-  margin: 0 30px 0 20px!important;
+  margin: 0 20px 0 20px!important;
   color: var(--font-primary);
 }
 
 .app__header .stock__search 
 {
-  width: 600px;
+  width: 560px;
   height: 70%;
  /* border: 1px solid #cccccc;
   */
@@ -222,9 +225,10 @@
 
 .app__header .app__menu span 
 {
-  font-size: 14px;
+  font-size: 12px;
   margin: 0 6px;
-  font-weight: 700;
+  letter-spacing: -0.2px;
+  font-weight: 900;
   color: var(--font-primary);
   cursor: pointer;
 }
@@ -233,13 +237,14 @@
 .app__body 
 {
   overflow: hidden;
-  padding: 0 20%;
+  padding: 0 19%;
+  height: 90vh;
 }
 
 .app__body__top 
 {
   width: 100%;
-  height: 8vh;
+  height: 8%;
 }
 
 .app__body__top .top__stocks 
@@ -258,6 +263,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .app__body__top .top__stocks .upper__stock .upper__stock__info 
@@ -272,13 +278,28 @@
 
 .app__body__top .top__stocks .upper__stock .upper__stock__value 
 {
-  margin-top: 5px;
+  font-weight: 600;
+  margin-top: 4px;
 }
 
 .app__body__top .top__stocks .upper__stock .upper__stock__change 
 {
-  color: var(--main-green);
   font-size: 10px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.app__body__top .top__stocks .upper__stock .upper__stock__change div .price__digit 
+{
+   height: 10px;
+   margin: 0 0px;
+   overflow: hidden;
+}
+
+.app__body__top .top__stocks .upper__stock .upper__stock__change div .digit__box
+{
+ height: 10px;
+ font-size: 11px;
 }
 
 .app__body__top .top__stocks .upper__stock .upper__stock__chart 
@@ -289,6 +310,7 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  /* background-color: #000000; */
 }
 
 .app__body__top__zoom 
@@ -300,7 +322,7 @@
 .app__body__bottom 
 {
   width: 100%;
-  height: 80vh;
+  height: 92%;
   background-color: var(--light-white);
   display: flex;
   align-items: center;
@@ -740,7 +762,7 @@
   border-radius: 3px;
   position: relative;
   background-color: var(--white);
-  box-shadow: 3px 3px 10px rgba(0,0,0,.02) , -3px -3px 10px rgba(0,0,0,.02) ;
+  box-shadow: var(--shadow-code);
   display: flex;
   flex-direction: column;
 }
@@ -887,7 +909,7 @@
   left: 0%;
   z-index: 10;
   padding-left: 20px;
-  padding-top: 20px;
+  padding-top: 15px;
   display: inline-block;
 }
 
@@ -960,53 +982,6 @@
   font-size: 30px;
   font-weight: 900;
 }
-
-.price__decimals .price__digit 
-{
-   height: 30px;
-   overflow: hidden;
-}
-
-.price__decimals .price__digit__column
-{
-  display : flex;
-  flex-direction : column;
-  transition : 1s;
-}
-     
-.price__decimals .digit__box
-{
- height: 30px;
- font-size: 24px;
- color: var(--font-primary);
- display: flex;
- justify-content: center;
- align-items: center;
-}
-
-.price__fraction .price__digit 
-{
-   height: 20px;
-   overflow: hidden;
-}
-
-.price__fraction .price__digit__column
-{
-  display : flex;
-  flex-direction : column;
-  transition : 1s;
-}
-     
-.price__fraction .digit__box
-{
- height: 20px;
- font-size: 14px;
- color: var(--font-primary);
- display: flex;
- justify-content: center;
- align-items: center;
-}
-
 
 .app__body .app__body__left .chart__container .stock__info .stock__price__details .price__fraction 
 {
@@ -1081,28 +1056,6 @@
   margin-left: 2px;
 }
 
-.app__body .app__body__left .chart__container .stock__info .stock__price__change div .price__digit 
-{
-   height: 18px;
-   margin: 0 -0.8px;
-   overflow: hidden;
-}
-
-.app__body .app__body__left .chart__container .stock__info .stock__price__change div .price__digit__column
-{
-  display : flex;
-  flex-direction : column;
-  transition : 1s;
-}
-     
-.app__body .app__body__left .chart__container .stock__info .stock__price__change div .digit__box
-{
- height: 18px;
- font-size: 12px;
- display: flex;
- justify-content: center;
- align-items: center;
-}
 
 .app__body .app__body__left .chart__container .stock__chart 
 {
@@ -1165,9 +1118,9 @@
  /* border: 1px solid #eeeeee;
   */
   background-color: var(--white);
-  box-shadow: 3px 3px 10px rgba(0,0,0,.02) , -3px -3px 10px rgba(0,0,0,.02);
+  box-shadow: var(--shadow-code);
   border-radius: 3;
-  padding: 5px 0px 5px 20px;
+  padding: 5px 20px 5px 20px;
   position: relative;
 }
 
@@ -1180,15 +1133,14 @@
 .app__body .app__body__left .key__statistics .ks__title 
 {
   color: var(--font-primary);
-  font-size: 16px!important;
-  font-weight: 700;
+  font-size: 14px!important;
+  font-weight: 900;
 }
 
 .app__body .app__body__left .key__statistics .ks__container 
 {
   width: 100%;
   height: 90%;
-  padding-top: 10px;
 }
 
 .app__body .app__body__left .key__statistics .ks__container .ks__container__half, .app__body .app__body__left .key__statistics .ks__container .ks__container__full 
@@ -1196,6 +1148,7 @@
   width: 100%;
   height: 100%;
   display: flex;
+  justify-content: space-between;
 }
 
 .app__body .app__body__left .key__statistics .ks__container .ks__container__full 
@@ -1205,7 +1158,6 @@
 
 .app__body .app__body__left .key__statistics .ks__container .ks__slot 
 {
-  flex: 1;
   display: flex;
   flex-direction: column;
  /* justify-content: space-around;
@@ -1219,7 +1171,7 @@
 
 .app__body .app__body__left .key__statistics .ks__container .ks__container__half .ks__slot .statistics .ks__name 
 {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--font-primary);
   font-weight: 700;
 }
@@ -1228,9 +1180,10 @@
 {
   font-size: 11px;
   color: var(--font-secondary);
-  font-weight: 500;
+  font-weight: 600;
   display: flex;
   align-items: center;
+  letter-spacing: -0.2px;
 }
 
 .app__body .app__body__left .key__statistics .ks__container .ks__container__half .ks__slot .statistics .ks__value .range__line
@@ -1305,11 +1258,11 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 4vh;
+  height: 3vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 180px 10px;
+  padding: 0 180px;
   background-color: var(--light-white);
 }
 
@@ -1321,7 +1274,7 @@
 
 .app__footer span 
 {
-  font-size: 14px;
+  font-size: 12px;
   color: var(--font-primary);
   margin: 0 8px;
   font-weight: 900;
@@ -1821,7 +1774,7 @@
      /* border: 1px solid #cccccc;
       */
       background-color: var(--white);
-      box-shadow: 3px 3px 10px rgba(0,0,0,.02) , -3px -3px 10px rgba(0,0,0,.02);
+      box-shadow: var(--shadow-code);
       border-radius: 3px;
       padding: 5px;
       overflow: hidden;

@@ -175,6 +175,7 @@ class ScripsBody extends React.PureComponent
                 
                 let stockArray = data.data.candles;
                 let tempDataArray = [];
+                // console.log(stockArray);
                 stockArray.forEach(d =>{
                     let dobj = {
                         date : new Date(d[0]),
@@ -188,6 +189,8 @@ class ScripsBody extends React.PureComponent
                     tempDataArray.push(dobj);
 
                 });
+
+                // console.log(tempDataArray);
                 this.setState({
                     chartdata : tempDataArray,
                     isLoaded : true
@@ -201,7 +204,7 @@ class ScripsBody extends React.PureComponent
 
     SnapShotRequest(stockSymbol,stockNSECode,stockBSECode,stockExchange)
     {
-        Axios.get(`http://localhost:3001/detailed_view/snapshot/${stockSymbol}/${stockNSECode}/${stockBSECode}/${stockExchange}`).then(({ data }) => {
+        Axios.get(`http://localhost:8000/detailed_view/snapshot/${stockSymbol}/${stockNSECode}/${stockBSECode}/${stockExchange}`,{ crossDomain: true }).then(({ data }) => {
             if (data.code === 900 || data.msg === 'success' && data.data) {
                 console.log('data = ', data)
                 this.setState({ error: null, snapdata: data.data })
@@ -236,33 +239,6 @@ class ScripsBody extends React.PureComponent
 
         let activeElement = this.props.active?.toLowerCase().replace(/ /g, '');
 
-        const dataArray = [
-            {
-                'name' : 'BSE Sensex',
-                'value' : '51,238.15',
-                'changeP' : '0.97%'
-            },
-            {
-                'name' : 'Nifty 50',
-                'value' : '51,238.15',
-                'changeP' : '0.97%'
-            },
-            {
-                'name' : 'NSE FMCG',
-                'value' : '51,238.15',
-                'changeP' : '0.97%'
-            },
-            {
-                'name' : 'Bank Nifty',
-                'value' : '51,238.15',
-                'changeP' : '0.97%'
-            },
-            {
-                'name' : 'NSE Midcap',
-                'value' : '51,238.15',
-                'changeP' : '0.97%'
-            }
-        ]
 
         if(this.state.chartdata)
         {
@@ -270,7 +246,7 @@ class ScripsBody extends React.PureComponent
             return <div className="app__body">
 
                 <div className="app__body__top">
-                    <TopStocks data={this.state.chartdata} dataArray={dataArray}/>
+                    <TopStocks ws={this.state.ws}/>
                 </div>
                 <div className="app__body__bottom">
                     <div className="business__news__section">

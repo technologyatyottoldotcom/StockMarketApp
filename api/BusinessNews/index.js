@@ -1,5 +1,5 @@
 const { conn } = require('../../server/connection');
-const { SendResponse , inArray } = require("./SendResponse");
+const { SendResponse , inArray } = require("../SendResponse");
 const { StockSnapShot } = require('./SnapShot');
 const BusinessNews = require('express').Router();
 

@@ -1,5 +1,5 @@
 const { conn } = require('../../server/connection');
-const { SendResponse } = require("./SendResponse");
+const { SendResponse } = require("../SendResponse");
 const { TrendLine } = require('../../src/exports/TrendLineCalculator');
 
 

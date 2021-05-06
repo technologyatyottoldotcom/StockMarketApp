@@ -74,7 +74,7 @@ class ScripsHeader extends React.Component
 
     getSuggestions()
     {
-        Axios.get(`http://localhost:3001/stock/${this.state.search}`)
+        Axios.get(`http://localhost:8000/stock/${this.state.search}`)
         .then((response) => {
             // console.log(response.data);
             this.setState({

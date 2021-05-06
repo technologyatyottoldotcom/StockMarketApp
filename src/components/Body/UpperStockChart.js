@@ -13,6 +13,8 @@ export class UpperStockChart extends React.PureComponent {
 
     render() {
 
+        // console.log(this.props.data);
+
         const { data : initialData, type, width, height , ratio } = this.props;
 
 
@@ -41,7 +43,7 @@ export class UpperStockChart extends React.PureComponent {
         start = xAccessorVal(last(dataVal));
         let weeks = Math.floor((30)/4);
         let days = (30) - (weeks*2);
-        end = xAccessorVal(dataVal[Math.max(0,dataVal.length - days)]);
+        end = xAccessorVal(dataVal[0]);
         const xExtents = [start,end];
 
         return (

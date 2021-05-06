@@ -25,7 +25,7 @@ componentDidMount(){
 axiosRequest(){
     Axios({
         method: 'GET',
-        url: `http://localhost:3001/${this.state.type}/${this.state.field}/${this.state.stockcode}`,
+        url: `http://localhost:8000/${this.state.type}/${this.state.field}/${this.state.stockcode}`,
         responseType: 'json',
         onDownloadProgress: (pEvnt) => {
           this.setState({loading: Math.round((pEvnt.loaded * 100) / pEvnt.total)})
