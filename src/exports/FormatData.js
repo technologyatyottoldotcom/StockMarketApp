@@ -14,10 +14,21 @@ export const readMarketData = (data,prevClose)=>
     //add custom data made from fetched data
 
     //get changed price
-    let PC = prevClose == -1? response['close_price'] : prevClose;
+    let PC = prevClose == -1 ? response['close_price'] : prevClose;
     let changed_amount = convertIntoNumber(response['last_traded_price'])-convertIntoNumber(PC);
+    // console.log(prevClose,response['last_traded_price'],PC,changed_amount);
+    // console.log(changed_amount);
+    if(Number.isNaN(changed_amount))
+    {
+        console.log('Not A Number....');
+        changed_amount = 0;
+        PC = '-1';
+    }
     response['change_price'] = convertIntoMoneyFormat(changed_amount);
     response['change_percentage'] = ((changed_amount/convertIntoNumber(PC))*100).toFixed(2)+'%';
+
+    // console.log(changed_amount,response['change_price'],response['change_percentage'])
+
 
     return response;
 

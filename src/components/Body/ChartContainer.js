@@ -440,7 +440,8 @@ export class ChartContainer extends React.PureComponent {
         let change_price = parseFloat(stockData.change_price);
         let change_percentage = parseFloat(stockData.change_percentage);
 
-        // console.log(change_price,change_percentage)
+        // console.log(change_price,change_percentage);
+        // console.log(typeof change_price,typeof change_percentage);
 
         let priceClass = change_price >= 0 ? 'positive' : 'negative';
         

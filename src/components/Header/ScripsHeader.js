@@ -4,6 +4,9 @@ import ScripsMenu from './ScripsMenu';
 import BrandLogo from '../../assets/icons/yottol.png';
 import Search from '../../assets/icons/search.svg';
 
+const REQUEST_BASE_URL = 'localhost';
+
+
 class StockSuggestion extends React.PureComponent{
     constructor(props)
     {
@@ -74,7 +77,7 @@ class ScripsHeader extends React.Component
 
     getSuggestions()
     {
-        Axios.get(`http://localhost:8000/stock/${this.state.search}`)
+        Axios.get(`http://${REQUEST_BASE_URL}:8000/stock/${this.state.search}`)
         .then((response) => {
             // console.log(response.data);
             this.setState({

@@ -23,9 +23,8 @@ import 'rsuite/dist/styles/rsuite-default.css';
 
 
 
-const REQUEST_BASE_URL = process.env.REQUEST_BASE_URL || 'localhost';
+const REQUEST_BASE_URL = '3.6.106.189';
 
-console.log(REQUEST_BASE_URL);
 
 class ScripsBody extends React.PureComponent
 {
@@ -248,7 +247,7 @@ class ScripsBody extends React.PureComponent
             return <div className="app__body">
 
                 <div className="app__body__top">
-                    <TopStocks ws={this.state.ws}/>
+                    <TopStocks />
                 </div>
                 <div className="app__body__bottom">
                     <div className="business__news__section">

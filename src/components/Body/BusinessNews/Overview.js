@@ -1,7 +1,9 @@
 import React from 'react';
 import Website from '../../../assets/icons/website.svg';
 import '../../../scss/Overview.scss';
-import Axios from 'axios'
+import Axios from 'axios';
+
+const REQUEST_BASE_URL = '3.6.106.189';
 
 const TempData =  {
     "name": "3i Infotech Ltd",
@@ -259,7 +261,7 @@ class Overview extends React.PureComponent {
 
     DataRequest(stockSymbol) {
         console.log(stockSymbol);
-        Axios.get(`http://localhost:8000/detailed_view/overview/${stockSymbol}`)
+        Axios.get(`http://${REQUEST_BASE_URL}:8000/detailed_view/overview/${stockSymbol}`)
         .then(({ data }) => {
             if (data.code === 900 || data.msg === 'success' && data.data) {
                 // console.log('data = ', data)

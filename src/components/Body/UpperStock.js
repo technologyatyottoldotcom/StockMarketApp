@@ -7,6 +7,9 @@ import AnimatedDigit from './AnimatedDigit';
 import {readMarketData} from '../../exports/FormatData';
 import Spinner from '../Loader/Spinner';
 
+const REQUEST_BASE_URL = '3.6.106.189';
+
+
 export class UpperStock extends React.PureComponent {
 
     constructor(props)
@@ -49,7 +52,7 @@ export class UpperStock extends React.PureComponent {
 
     getIndexData()
     {
-        Axios.get(`http://localhost:8000/indexdata/${this.props.Symbol}`)
+        Axios.get(`http://${REQUEST_BASE_URL}:8000/indexdata/${this.props.Symbol}`)
         .then((data)=>{
             let stockArray = data.data.chartdata;
             let tempDataArray = [];
