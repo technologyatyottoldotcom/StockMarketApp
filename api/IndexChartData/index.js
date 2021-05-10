@@ -1,5 +1,4 @@
 const { conn } = require('../../server/connection');
-const  moment   = require('moment');
 const IndexChartData = require('express').Router();
 
 function getIndexData(req,res){

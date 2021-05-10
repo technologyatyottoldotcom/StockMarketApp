@@ -1,9 +1,9 @@
 import React from 'react';
-import '../../css/CashPosition.css';
-import Coins from '../../assets/icons/coins.svg';
-import SuitCase from '../../assets/icons/suitcase.svg';
-import Hand from '../../assets/icons/hand.svg';
-import Eraser from '../../assets/icons/eraser.svg';
+import '../../../css/CashPosition.css';
+import Coins from '../../../assets/icons/coins.svg';
+import SuitCase from '../../../assets/icons/suitcase.svg';
+import Hand from '../../../assets/icons/hand.svg';
+import Eraser from '../../../assets/icons/eraser.svg';
 
 
 class PortfolioView extends React.PureComponent {

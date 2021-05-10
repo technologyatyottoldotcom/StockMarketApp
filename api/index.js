@@ -2,19 +2,23 @@
 const express = require('express') , cors = require('cors');
 const app = express();
 app.use(cors());
-const {conn} = require('../server/connection');
-const {Twitter} = require("./twitter");
-const {GoogleFeeds} = require("./google_feeds");
-const {AutoComplete} = require('./AutoComplete');
+const { conn } = require('../server/connection');
+const { Twitter } = require("./twitter");
+const { GoogleFeeds } = require("./google_feeds");
+const { AutoComplete } = require('./AutoComplete');
 const { BusinessNews } = require('./BusinessNews/');
 const { IndexChartData } = require('./IndexChartData/');
+const { StocksToWatch } = require('./StocksToWatch/');
+const { Common } = require('./Common/');
 
+//middlewares & apis
 
-//middlewares
 app.use(Twitter);
 app.use(GoogleFeeds);
 app.use(BusinessNews);
 app.use(IndexChartData);
+app.use(StocksToWatch);
+app.use(Common);
 
 
 
@@ -103,7 +107,7 @@ return JSON.stringify({fields:fields,values:values})
 }
 
 // only quarterly data will work
-app.get('/:type/:field/:stockcode', (req, res) => {
+app.get('createtable/:type/:field/:stockcode', (req, res) => {
 let p = req.params
 console.log(p);
  getData(p.type,p.field,p.stockcode)

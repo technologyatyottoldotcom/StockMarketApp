@@ -1,6 +1,6 @@
 import React from 'react';
 import Statistics from './Statistics';
-import Spinner from '../Loader/Spinner';
+import Spinner from '../../Loader/Spinner';
 
 export class KeyStatistics extends React.PureComponent {
 

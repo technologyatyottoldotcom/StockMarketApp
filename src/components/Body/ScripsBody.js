@@ -2,11 +2,11 @@ import React from 'react';
 import Axios from 'axios';
 import $ from 'jquery';
 import Close from '../../assets/icons/close.svg';
-import CashPosition from './CashPosition';
+import CashPosition from './CashPosition/CashPosition';
 import ChartContainer from './ChartContainer';
-import KeyStatistics from './KeyStatistics';
-import StocksToWatch from './StocksToWatch';
-import TopStocks from './TopStocks';
+import KeyStatistics from './KeyStatistics/KeyStatistics';
+import StocksToWatch from './StocksToWatch/StocksToWatch';
+import TopStocks from './TopStocks/TopStocks';
 import Spinner from '../Loader/Spinner';
 import Portfolios from './MenuSection/Portfolios';
 import Orders from './MenuSection/Orders';
@@ -14,7 +14,6 @@ import SmallCase from './MenuSection/SmallCase';
 import Research from './MenuSection/Research';
 import Exit from './MenuSection/Exit';
 import { timeParse } from "d3-time-format";
-import MSFTArray from '../../data/MSFT';
 import { BusinessNews } from './BusinessNews/BusinessNews';
 import {readMarketData} from '../../exports/FormatData';
 import '../../css/BusinessNews.css';
@@ -23,7 +22,7 @@ import 'rsuite/dist/styles/rsuite-default.css';
 
 
 
-const REQUEST_BASE_URL = '3.6.106.189';
+const REQUEST_BASE_URL = 'localhost';
 
 
 class ScripsBody extends React.PureComponent
@@ -304,8 +303,15 @@ class ScripsBody extends React.PureComponent
                             stockDetails={this.state.stockDetails}
                             isLoaded={this.state.isLoaded}
                         />
-                        <StocksToWatch />
-                        <KeyStatistics stockData={this.state.stockData} snapdata={this.state.snapdata}/>
+                        <StocksToWatch
+                            stockISIN={this.state.stockDetails.stockISIN} 
+                            stockIndustry={this.state.stockDetails.stockIndustry}
+                            selectedStock={this.props.selectedStock}
+                        />
+                        <KeyStatistics 
+                            stockData={this.state.stockData} 
+                            snapdata={this.state.snapdata}
+                        />
                     </div>
                     <div className="app__body__right">
                         <CashPosition />

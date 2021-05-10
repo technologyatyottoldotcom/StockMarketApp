@@ -20,7 +20,7 @@ export const readMarketData = (data,prevClose)=>
     // console.log(changed_amount);
     if(Number.isNaN(changed_amount))
     {
-        console.log('Not A Number....');
+        // console.log('Not A Number....');
         changed_amount = 0;
         PC = '-1';
     }

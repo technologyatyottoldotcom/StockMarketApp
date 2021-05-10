@@ -22,6 +22,7 @@ const AutoComplete = async (query)=>{
 
                     // console.log(row.name);
                     suggestions.push({
+                        isin : row.ISIN,
                         company : row.company,
                         code : row.code,
                         symbol : row.symbol,
@@ -29,7 +30,8 @@ const AutoComplete = async (query)=>{
                         ric_code : row.ric_code,
                         nse_code : row.nse_code,
                         bse_code : row.bse_code,
-                        name : row.name
+                        name : row.name,
+                        industry : row.reuters_industry 
                     })
                 });
                 resolve({

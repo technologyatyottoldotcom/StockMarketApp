@@ -24,14 +24,7 @@ class StockSuggestion extends React.PureComponent{
                     {this.props.suggestions.map((s,index)=>{
                         return <p 
                             key={s.code} 
-                            onClick={e => {this.props.selectedStock({
-                                code : s.code,
-                                symbol : s.ric_code,
-                                nse_code : s.nse_code,
-                                bse_code : s.bse_code,
-                                name : s.name,
-                                exchange : s.exchange
-                            });this.props.handleSelection()}}>
+                            onClick={e => {this.props.selectedStock(s);this.props.handleSelection()}}>
                                 <span>{s.symbol}</span> 
                                 <span>{s.company}</span> 
                                 <span>{s.exchange.exchange}</span>
@@ -106,13 +99,13 @@ class ScripsHeader extends React.Component
                 <img src={BrandLogo} alt="Yottol"/>
             </div>
             <div className="brand__name">
-                <p>Stocks</p>
+                <p>Air</p>
             </div>
             <div className="stock__search">
                 <div className="stock__search__icon">
                     <img src={Search} alt=""/>
                 </div>
-                <input placeholder='search' value={this.state.search} onChange={e => this.handleSearchChange(e)}/>
+                <input placeholder='Search' value={this.state.search} onChange={e => this.handleSearchChange(e)}/>
 
                 <div className="stock__suggestions">
                     <StockSuggestion suggestions={this.state.suggestions} selectedStock={this.props.selectedStock} handleSelection={this.handleSelection}/>

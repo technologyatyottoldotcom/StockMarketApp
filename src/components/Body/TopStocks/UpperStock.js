@@ -1,13 +1,12 @@
 import React from 'react';
 import $ from 'jquery';
-import moment from 'moment';
 import Axios from 'axios';
 import UpperStockChart from './UpperStockChart';
-import AnimatedDigit from './AnimatedDigit';
-import {readMarketData} from '../../exports/FormatData';
-import Spinner from '../Loader/Spinner';
+import AnimatedDigit from '../AnimatedDigit';
+import {readMarketData} from '../../../exports/FormatData';
+import Spinner from '../../Loader/Spinner';
 
-const REQUEST_BASE_URL = '3.6.106.189';
+const REQUEST_BASE_URL = 'localhost';
 
 
 export class UpperStock extends React.PureComponent {

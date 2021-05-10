@@ -1,7 +1,7 @@
 import React from 'react';
 import Axios from 'axios';
 
-const REQUEST_BASE_URL = '3.6.106.189';
+const REQUEST_BASE_URL = 'localhost';
 
 
 // create the data tables of Financials , Cash-Flow , etc.
@@ -28,7 +28,7 @@ componentDidMount(){
 axiosRequest(){
     Axios({
         method: 'GET',
-        url: `http://${REQUEST_BASE_URL}:8000/${this.state.type}/${this.state.field}/${this.state.stockcode}`,
+        url: `http://${REQUEST_BASE_URL}:8000/createtable/${this.state.type}/${this.state.field}/${this.state.stockcode}`,
         responseType: 'json',
         onDownloadProgress: (pEvnt) => {
           this.setState({loading: Math.round((pEvnt.loaded * 100) / pEvnt.total)})

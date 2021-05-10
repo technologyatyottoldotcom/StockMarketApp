@@ -6,7 +6,7 @@ import 'rsuite/dist/styles/rsuite-default.css';
 
 import Axios from 'axios';
 
-const REQUEST_BASE_URL = '3.6.106.189';
+const REQUEST_BASE_URL = 'localhost';
 
 const MonthNames = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec']
 

@@ -3,7 +3,7 @@ import Website from '../../../assets/icons/website.svg';
 import '../../../scss/Overview.scss';
 import Axios from 'axios';
 
-const REQUEST_BASE_URL = '3.6.106.189';
+const REQUEST_BASE_URL = 'localhost';
 
 const TempData =  {
     "name": "3i Infotech Ltd",

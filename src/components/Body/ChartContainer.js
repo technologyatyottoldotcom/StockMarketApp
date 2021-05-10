@@ -589,7 +589,7 @@ export class ChartContainer extends React.PureComponent {
                                 </p>
                                 <div className="stock__type">
                                     <img src={SettingIcon} alt="s"/>
-                                    <p>Oil & Gas</p>
+                                    <p>{this.props.stockDetails.stockIndustry}</p>
                                 </div>
                             </div>
                             <div id="stock__full__name">
