@@ -18,6 +18,7 @@ import { BusinessNews } from './BusinessNews/BusinessNews';
 import {readMarketData} from '../../exports/FormatData';
 import '../../css/BusinessNews.css';
 import '../../css/MenuSection.css';
+import '../../css/CustomChartComponents.css';
 import 'rsuite/dist/styles/rsuite-default.css';
 
 

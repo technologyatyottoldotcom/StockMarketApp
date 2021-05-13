@@ -6,6 +6,8 @@ import CreateSection from './CreateSection';
 import Chevron from '../../../assets/icons/chevron.svg';
 import '../../../css/StocksToWatch.css';
 
+const REQUEST_BASE_URL = 'localhost';
+
 const SVGIMG1 = {
     ChevronExpand: _ => {
         return (
@@ -52,7 +54,7 @@ class StocksToWatch extends React.PureComponent {
     }
 
     getStocksToWatch(industry,isin) {
-        Axios.get(`http://localhost:8000/stockstowatch/${industry}/${isin}`)
+        Axios.get(`http://${REQUEST_BASE_URL}:8000/stockstowatch/${industry}/${isin}`)
         .then(res=>{
             const data = res.data;
             console.log(data.stocks);
@@ -66,7 +68,7 @@ class StocksToWatch extends React.PureComponent {
     getStockFromISIN(isin)
     {
         console.log(isin);
-        Axios.get(`http://localhost:8000/StockFromISIN/${isin}`)
+        Axios.get(`http://${REQUEST_BASE_URL}:8000/StockFromISIN/${isin}`)
         .then((res)=>{
             let data = res.data;
             if(!data.error)

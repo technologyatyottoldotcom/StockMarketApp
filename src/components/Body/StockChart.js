@@ -18,6 +18,7 @@ import {getXCoordinateProps, getYCoordinateProps, getXAxisProps, getYAxisProps} 
 import { CrossHairCursor, MouseCoordinateX, MouseCoordinateY } from "react-stockcharts/lib/coordinates";
 import {sma20,wma20,ema20,tma20,bb,macdCalculator,rsiCalculator,atrCalculator,slowSTO,fastSTO,fullSTO,fi,fiEMA,elder,elderImpulseCalculator,defaultSar,changeCalculator,compareCalculator} from '../../exports/MathematicalIndicators';
 import {TrendLineAppearance,EquidistantChannelAppearance,StandardDeviationChannelAppearance,FibRetAppearance,GannFanAppearance} from '../../exports/InteractiveAppearance';
+import LastPointIndicator from './CustomChartComponents/LastPointEdgeIndicator/LastPointIndicator';
 
 export class StockChart extends React.PureComponent {
 
@@ -364,7 +365,11 @@ export class StockChart extends React.PureComponent {
         let calculatedData,chartSeries;
         if(chartType === 'line'){
             calculatedData = initialData;
-            chartSeries = <LineSeries yAccessor ={d =>d.open} strokeWidth ={2} stroke="#64b5f6"/>;
+            chartSeries = <>
+                            <LineSeries yAccessor ={d =>d.open} strokeWidth ={2} stroke="#64b5f6"/>
+                            <LastPointIndicator yAccessor={d => d.open} displayFormat={format(".4s")} fill="#55efc4" radius={5}/>
+                          </>;
+            
         }
         else if(chartType === 'rangeArea')
         {
@@ -595,12 +600,15 @@ export class StockChart extends React.PureComponent {
                     yExtents={d=> this.getYExtents(d.high,d.low)} 
                     height={this.getChartHeight(height,zoom,TotalCharts)}>
 
+
+                    
+
                     {zoom && <>
                         {TotalCharts === 1 ? 
                             <>
                                 <XAxis {...getXAxisProps()} {...gridProps}/>
                                 <MouseCoordinateX {...getXCoordinateProps()}/>
-                                
+                        
                             </> :
                             <>
                                 <XAxis {...getXAxisProps()} {...gridProps}/>

@@ -1,0 +1,94 @@
+/* pulse effect */
+
+.pulse-disk
+{
+  fill: #0984e3;
+}
+
+.pulse-circle-1,.pulse-circle-2
+{
+  /* stroke: #0984e3; */
+  transform-origin: center;
+  stroke-width: 1px;
+  fill: #0984e3;
+  transform: translate3d(0,0,0);
+}
+
+.pulse-circle-1
+{
+  r : 5;
+  fill: #0984e3;
+  animation: pulse 2s linear infinite;
+}
+
+.pulse-circle-2
+{
+  r : 5;
+  fill: #0984e3;
+  animation: pulse 2s linear infinite 1s;
+}
+
+@keyframes pulse
+{
+    0%
+    {
+        r : 5;
+        opacity: 1;
+    }
+    100%
+    {
+        r : 15;
+        opacity: 0;
+    }
+}
+
+
+/* @keyframes pulse1
+{
+  0%
+  {
+    r : 5;
+    opacity: 1;
+  }
+  50%
+  {
+    r : 20;
+    opacity: 0.5;
+  }
+  99%
+  {
+    opacity: 0;
+  }
+  100%
+  {
+    opacity: 0;
+    r : 20;
+  }
+}
+
+@keyframes pulse2
+{
+  0%
+  {
+    opacity: 1;
+  }
+  40%
+  {
+    opacity: 0.6;
+  }
+  49.99%
+  {
+    r : 20;
+    opacity: 0.5;
+  }
+  50%
+  {
+    r : 5;
+    opacity: 0.5;
+  }
+  100%
+  {
+    opacity: 0;
+    r : 20;
+  }
+} */
