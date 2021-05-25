@@ -8,12 +8,18 @@ const cursorFontSize = 10;
 const rectWidth = 100;
 
 
-const getXCoordinateProps = ()=>
+const getXCoordinateProps = (range)=>
 {
+
+    let df = timeFormat("%d %b '%y  %H:%M");
+    if(range === '1Y' || range === '5Y' || range === 'MAX')
+    {
+        df = timeFormat("%d %b %Y")
+    }
     return {
         at : 'bottom',
         orient : 'bottom',
-        displayFormat : timeFormat("%d %b '%y  %H:%M"),
+        displayFormat : df,
         fontFamily : fontFamily,
         fontSize : cursorFontSize,
         rectWidth : rectWidth,

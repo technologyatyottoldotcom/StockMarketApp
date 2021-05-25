@@ -489,6 +489,26 @@ export class StockChart extends React.PureComponent {
         {
             buffer = 30;
         }
+        else if(range === '6M')
+        {
+            buffer = 30;
+        }
+        else if(range === 'YTD')
+        {
+            buffer = 30;
+        }
+        else if(range === '1Y')
+        {
+            buffer = 30;
+        }
+        else if(range === '5Y')
+        {
+            buffer = 30;
+        }
+        else if(range === 'MAX')
+        {
+            buffer = 30;
+        }
         else
         {
             buffer = 2;
@@ -635,7 +655,7 @@ export class StockChart extends React.PureComponent {
                         {TotalCharts === 1 ? 
                             <>
                                 <XAxis {...getXAxisProps()} {...gridProps}/>
-                                <MouseCoordinateX {...getXCoordinateProps()}/>
+                                <MouseCoordinateX {...getXCoordinateProps(range)}/>
                                 <LabelEdgeCoordinate 
                                     at="right"
                                     orient="left"

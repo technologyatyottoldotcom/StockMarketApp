@@ -1,10 +1,5 @@
 let MarketDataStructure = [
-    {
-        field : 'exchange_code',
-        start : 1,
-        end : 2,
-        type : 'n'
-    },
+    
     {
         field : 'instrument_token',
         start : 2,
@@ -121,6 +116,7 @@ let MarketDataStructure = [
     }
 ]
 
+
 let Exchanges = [
     {
         'exchange' : 'NSE',
@@ -165,47 +161,76 @@ function getCandleDuration(range)
         case 'D' :
             return {
                 candle : 1,
-                duration : 1
+                duration : 1,
+                mixed : false
             }
         case '1D' :
             return {
                 candle : 1,
-                duration : 1
+                duration : 1,
+                mixed : false
             }
         case '5D' :
             return {
                 candle : 1,
-                duration : 5
+                duration : 5,
+                mixed : false
             }
         case '1M' :
             return {
                 candle : 1,
-                duration : 30
+                duration : 30,
+                mixed : false
             }
         case '3M' :
             return {
                 candle : 2,
-                duration : 1
+                duration : 1,
+                mixed : false
             }
         case '6M' :
             return {
                 candle : 1,
-                duration : 120
+                duration : 120,
+                mixed : false
             }
         case 'YTD' :
             return {
                 candle : 3,
-                duration : 1 
+                duration : 1,
+                mixed : false 
             }
         case '1Y' :
             return {
                 candle : 3,
-                duration : 1 
+                duration : 1,
+                mixed : true 
+            }
+        
+        case '1Y' :
+                return {
+                    candle : 3,
+                    duration : 1,
+                    mixed : true 
+                }
+        case '5Y' :
+            return {
+                candle : 3,
+                duration : 1,
+                mixed : true 
+            }
+
+        case 'MAX' :
+            return {
+                candle : 3,
+                duration : 1,
+                mixed : true 
             }
         default :
             return {
                 candle : 3,
-                duration : 1
+                duration : 1,
+                mixed : false
             }
     }
 }

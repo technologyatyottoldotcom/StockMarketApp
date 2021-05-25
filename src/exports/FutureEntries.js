@@ -1,4 +1,5 @@
 const moment = require('moment');
+const { fi } = require('./MathematicalIndicators');
 
 
 //please don't specify date in DD-MM-YYYY format for all months
@@ -21,7 +22,7 @@ const holidays = [
         '4-11-2021'
 ];
 
-function getNextDays(days)
+function getNextDays(days,isCount=true)
 {
     //does not count saturday and sunday
     let nod = 0,incr = 1;
@@ -36,17 +37,20 @@ function getNextDays(days)
         endMinute : 29,
         endSecond : 0
     }
-    let today = moment();
-
-    if(isWorkingDay(today))
+    if(isCount)
     {
-        futureDays.push({
-            date : today.clone(),
-            startHour : parseInt(today.format('H')),
-            startMinute : parseInt(today.format('m')),
-            startSecond : parseInt(today.format('s')),
-            ...defaultEndTime
-        })
+        let today = moment();
+
+        if(isWorkingDay(today))
+        {
+            futureDays.push({
+                date : today.clone(),
+                startHour : parseInt(today.format('H')),
+                startMinute : parseInt(today.format('m')),
+                startSecond : parseInt(today.format('s')),
+                ...defaultEndTime
+            })
+        }
     }
 
     let addedDay = moment();
@@ -191,7 +195,7 @@ function isWorkingDay(day)
     }
 }
 
-function generatePoints(days,incr)
+function generatePointsMinutes(days,incr)
 {
     let points = [];
 
@@ -225,6 +229,29 @@ function generatePoints(days,incr)
     console.log(points.length);
     return points;
 
+}
+
+function generatePointsDays(days)
+{
+    let points = [];
+
+    console.log('generate points');
+
+    days.forEach(day => {
+
+        points.push({
+            date : new Date(day.date.clone().set({
+                    'hour' : day.startHour,
+                    'minute' : day.startMinute,
+                    'second' : day.startSecond
+                }))
+        })
+        
+        
+    });
+
+    console.log(points.length);
+    return points;
 }
 
 function getMinuteInterval(startDate,endDate,incr)
@@ -284,7 +311,6 @@ function isEnoughTime(day,time)
     }
 }
 
-
 export function getFuturePoints(range)
 {
 
@@ -294,51 +320,88 @@ export function getFuturePoints(range)
         case 'D' : 
             futureDaysArr = getNextMinutes(30);
             console.log(futureDaysArr);
-            points = generatePoints(futureDaysArr,1);
+            points = generatePointsMinutes(futureDaysArr,1);
             // console.log(points);
             return points;
         
         case '1D' : 
             futureDaysArr = getNextDays(1);
             console.log(futureDaysArr);
-            points = generatePoints(futureDaysArr,1);
+            points = generatePointsMinutes(futureDaysArr,1);
             // console.log(points);
             return points;
         
         case '5D' : 
             futureDaysArr = getNextDays(5);
             console.log(futureDaysArr);
-            points = generatePoints(futureDaysArr,5);
+            points = generatePointsMinutes(futureDaysArr,5);
             // console.log(points);
             return points;
         
         case '1M' : 
-            futureDaysArr = getNextDays(30);
+            futureDaysArr = getNextDays(10);
             console.log(futureDaysArr);
-            points = generatePoints(futureDaysArr,30);
+            points = generatePointsMinutes(futureDaysArr,30);
             // console.log(points);
             return points;
         
         case '3M' : 
-            futureDaysArr = getNextDays(30);
+            futureDaysArr = getNextDays(10);
             console.log(futureDaysArr);
-            points = generatePoints(futureDaysArr,30);
+            points = generatePointsMinutes(futureDaysArr,60);
             // console.log(points);
+            return points;
+        
+        case '6M' : 
+            futureDaysArr = getNextDays(10);
+            console.log(futureDaysArr);
+            points = generatePointsMinutes(futureDaysArr,120);
+            // console.log(points);
+            return points;
+        
+        case 'YTD' : 
+            futureDaysArr = getNextDays(60,false);
+            console.log(futureDaysArr);
+            points = generatePointsDays(futureDaysArr);
+            return points;
+        
+        case '1Y' : 
+            futureDaysArr = getNextDays(60,false);
+            console.log(futureDaysArr);
+            points = generatePointsDays(futureDaysArr);
+            return points;
+        
+        case '5Y' : 
+            futureDaysArr = getNextDays(60,false);
+            console.log(futureDaysArr);
+            points = generatePointsDays(futureDaysArr);
+            return points;
+
+        case 'MAX' : 
+            futureDaysArr = getNextDays(60,false);
+            console.log(futureDaysArr);
+            points = generatePointsDays(futureDaysArr);
             return points;
 
         default : 
             futureDaysArr = getNextDays(5);
             console.log(futureDaysArr);
-            points = generatePoints(futureDaysArr,60);
+            points = generatePointsMinutes(futureDaysArr,60);
             // console.log(points);
             return points;
     }
     
 }
 
-
-export function getStartPointIndex(data,range,lastPoint)
+export function getStartPointIndex(data,range,lastPoint,firstPoint)
 {
+
+    let first = moment().set({
+        'date' : firstPoint.date.getDate(),
+        'month' : firstPoint.date.getMonth(),
+        'year' : firstPoint.date.getFullYear()
+    });
+
     if(range === 'D')
     {
       return data.length - 120;
@@ -395,25 +458,33 @@ export function getStartPointIndex(data,range,lastPoint)
         })
         .subtract(1,'months');        
         console.log(dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
-        while(!found)
+        if(dt < first)
         {
-            let indx = data.findIndex(d => {
-                return d.date.getDate() === dt.get('date') && d.date.getMonth() === (dt.get('month')) && d.date.getFullYear() === dt.get('year');
-            });
-            console.log(indx,dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
-            if(indx === -1)
-            {
-                dt = dt.subtract(1,'days');
-            }
-            else
-            {
-                found = true;
-                index = indx;
-                break;
-            }
-
-            console.log('checking .... ',dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+            index = 0;
         }
+        else
+        {
+            while(!found)
+            {
+                let indx = data.findIndex(d => {
+                    return d.date.getDate() === dt.get('date') && d.date.getMonth() === (dt.get('month')) && d.date.getFullYear() === dt.get('year');
+                });
+                console.log(indx,dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+                if(indx === -1)
+                {
+                    dt = dt.subtract(1,'days');
+                }
+                else
+                {
+                    found = true;
+                    index = indx;
+                    break;
+                }
+    
+                console.log('checking .... ',dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+            }
+        }
+        
         console.log('INDEX :  -----> ',index);
         return index;
     }
@@ -429,27 +500,208 @@ export function getStartPointIndex(data,range,lastPoint)
         })
         .subtract(3,'months');        
         console.log(dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
-        while(!found)
+        if(dt < first)
         {
-            let indx = data.findIndex(d => {
-                return d.date.getDate() === dt.get('date') && d.date.getMonth() === (dt.get('month')) && d.date.getFullYear() === dt.get('year');
-            });
-            console.log(indx,dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
-            if(indx === -1)
-            {
-                dt = dt.subtract(1,'days');
-            }
-            else
-            {
-                found = true;
-                index = indx;
-                break;
-            }
-
-            console.log('checking .... ',dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+            index = 0;
         }
+        else
+        {
+            while(!found)
+            {
+                let indx = data.findIndex(d => {
+                    return d.date.getDate() === dt.get('date') && d.date.getMonth() === (dt.get('month')) && d.date.getFullYear() === dt.get('year');
+                });
+                console.log(indx,dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+                if(indx === -1)
+                {
+                    dt = dt.subtract(1,'days');
+                }
+                else
+                {
+                    found = true;
+                    index = indx;
+                    break;
+                }
+
+                console.log('checking .... ',dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+            }
+        }
+        
         console.log('INDEX :  -----> ',index);
         return index;
+    }
+
+    else if(range === '6M')
+    {
+        let found = false,index;
+        let dt = moment().
+        set({
+            'date' : lastPoint.date.getDate(),
+            'month' : lastPoint.date.getMonth(),
+            'year' : lastPoint.date.getFullYear()
+        })
+        .subtract(6,'months');        
+        console.log(dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+        if(dt < first)
+        {
+            index = 0;
+        }
+        else
+        {
+            while(!found)
+            {
+                let indx = data.findIndex(d => {
+                    return d.date.getDate() === dt.get('date') && d.date.getMonth() === (dt.get('month')) && d.date.getFullYear() === dt.get('year');
+                });
+                console.log(indx,dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+                if(indx === -1)
+                {
+                    dt = dt.subtract(1,'days');
+                }
+                else
+                {
+                    found = true;
+                    index = indx;
+                    break;
+                }
+    
+                console.log('checking .... ',dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+            }
+        }
+        
+        console.log('INDEX :  -----> ',index);
+        return index;
+    }
+
+    else if(range === 'YTD')
+    {
+        let found = false,index;
+        let dt = moment().
+        set({
+            'date' : lastPoint.date.getDate(),
+            'month' : lastPoint.date.getMonth(),
+            'year' : lastPoint.date.getFullYear()
+        })
+        .startOf('year');        
+        console.log(dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+        if(dt < first)
+        {
+            index = 0;
+        }
+        else
+        {
+            while(!found)
+            {
+                let indx = data.findIndex(d => {
+                    return d.date.getDate() === dt.get('date') && d.date.getMonth() === (dt.get('month')) && d.date.getFullYear() === dt.get('year');
+                });
+                console.log(indx,dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+                if(indx === -1)
+                {
+                    dt = dt.add(1,'days');
+                }
+                else
+                {
+                    found = true;
+                    index = indx;
+                    break;
+                }
+    
+                console.log('checking .... ',dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+            }
+        }
+      
+        console.log('INDEX :  -----> ',index);
+        return index;
+    }
+    else if(range === '1Y')
+    {
+        let found = false,index;
+        let dt = moment().
+        set({
+            'date' : lastPoint.date.getDate(),
+            'month' : lastPoint.date.getMonth(),
+            'year' : lastPoint.date.getFullYear()
+        })
+        .subtract(1,'year');        
+        console.log(dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+        if(dt < first)
+        {
+            index = 0;
+        }
+        else
+        {
+            while(!found)
+            {
+                let indx = data.findIndex(d => {
+                    return d.date.getDate() === dt.get('date') && d.date.getMonth() === (dt.get('month')) && d.date.getFullYear() === dt.get('year');
+                });
+                console.log(indx,dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+                if(indx === -1)
+                {
+                    dt = dt.add(1,'days');
+                }
+                else
+                {
+                    found = true;
+                    index = indx;
+                    break;
+                }
+
+                console.log('checking .... ',dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+            }
+        }
+        
+        console.log('INDEX :  -----> ',index);
+        return index;
+    }
+    else if(range === '5Y')
+    {
+        let found = false,index;
+        let dt = moment().
+        set({
+            'date' : lastPoint.date.getDate(),
+            'month' : lastPoint.date.getMonth(),
+            'year' : lastPoint.date.getFullYear()
+        })
+        .subtract(5,'year').startOf('year');        
+        console.log(dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+        
+
+        if(dt < first)
+        {
+            index = 0;
+        }
+        else
+        {
+            while(!found)
+            {
+                let indx = data.findIndex(d => {
+                    return d.date.getDate() === dt.get('date') && d.date.getMonth() === (dt.get('month')) && d.date.getFullYear() === dt.get('year');
+                });
+                console.log(indx,dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+                if(indx === -1)
+                {
+                    dt = dt.add(1,'days');
+                }
+                else
+                {
+                    found = true;
+                    index = indx;
+                    break;
+                }
+
+                console.log('checking .... ',dt.format('D'),dt.format('MMM'),dt.format('YYYY'));
+            }
+        }
+        
+        console.log('INDEX :  -----> ',index);
+        return index;
+    }
+
+    else if(range === 'MAX')
+    {        
+        return 0;
     }
     else
     {
@@ -458,4 +710,3 @@ export function getStartPointIndex(data,range,lastPoint)
 }
 
 
-// module.exports = {getFuturePoints,getStartPointIndex};

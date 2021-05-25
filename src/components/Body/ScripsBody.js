@@ -14,7 +14,7 @@ import SmallCase from './MenuSection/SmallCase';
 import Research from './MenuSection/Research';
 import Exit from './MenuSection/Exit';
 import { BusinessNews } from './BusinessNews/BusinessNews';
-import {readMarketData} from '../../exports/FormatData';
+import {readMarketData,readMarketStatus} from '../../exports/FormatData';
 import {getCandleDuration} from '../../exports/MessageStructure';
 import {getFuturePoints,getStartPointIndex} from '../../exports/FutureEntries';
 import {convertToUNIX} from '../../exports/TimeConverter';
@@ -59,7 +59,7 @@ class ScripsBody extends React.PureComponent
         let options = getCandleDuration(this.state.range);
         this.makeSocketConnection()
         .then(()=>{
-            this.loadChartData(this.state.range,options.candle,options.duration);
+            this.loadChartData(this.state.range,options.candle,options.duration,options.mixed);
             this.checkConnection();
             this.SnapShotRequest(this.state.stockDetails.stockSymbol,this.state.stockDetails.stockNSECode,this.state.stockDetails.stockBSECode,this.state.stockDetails.stockExchange.exchange);
         });
@@ -77,7 +77,7 @@ class ScripsBody extends React.PureComponent
                 oldStockDetails : this.state.stockDetails,
                 isLoaded : false
             },()=>{
-                this.loadChartData(this.state.range,options.candle,options.duration);
+                this.loadChartData(this.state.range,options.candle,options.duration,options.mixed);
                 this.checkConnection();
                 this.SnapShotRequest(this.state.stockDetails.stockSymbol,this.state.stockDetails.stockNSECode,this.state.stockDetails.stockBSECode,this.state.stockDetails.stockExchange.exchange);
 
@@ -118,6 +118,9 @@ class ScripsBody extends React.PureComponent
         },()=>{
             if(this.state.FeedConnection)
             {
+                //check if market is open or not
+                console.log('Check Market Status');
+                // this.isMarketOpen(this.state.ws);
                 this.feedLiveData(this.state.ws);
             }
         });     
@@ -170,9 +173,19 @@ class ScripsBody extends React.PureComponent
                 })
             }
         }
+
+       setInterval(()=>{
+            //heartbeat message
+            ws.send(JSON.stringify({
+                "a": "h", 
+                "v": [], 
+                "m": ""
+            }));
+       },10000)
+
     }
 
-    async loadChartData(type,ct,dd)
+    async loadChartData(type,ct,dd,mixed)
     {
 
         this.setState({
@@ -183,18 +196,40 @@ class ScripsBody extends React.PureComponent
 
         console.log(startUNIX,type,ct,dd);
 
-        let url = `https://mastertrust-charts.tradelab.in/api/v1/charts?exchange=${this.props.stockDetails.stockExchange.exchange}&token=${this.props.stockDetails.stockCode}&candletype=${ct}&starttime=${startUNIX}&endtime=1632583718&data_duration=${dd}`;
+        let exchange = this.props.stockDetails.stockExchange.exchange;
+        let code;
 
-        console.log(url);
+        if(exchange === 'NSE')
+        {
+            code = this.state.stockDetails.stockNSECode;
+        }
+        else if(exchange === 'BSE')
+        {
+            code = this.state.stockDetails.stockBSECode;
+        }
 
-        Axios.get(url)
+        
+
+        Axios.get(`http://${REQUEST_BASE_URL}:8000/stockdata`,{
+            params : {
+                'ct' : ct,
+                'starttime' : startUNIX,
+                'dd' : dd,
+                'exchange' : exchange,
+                'token' : this.state.stockDetails.stockCode,
+                'code' : code,
+                'mixed' : mixed,
+                'type' : type
+            }
+        })
         .then(res=>{
             const data = res.data;
-            console.log(data);
+            // console.log(data);
             if(data.status === 'success')
             {
                 
-                let stockArray = data.data.candles;
+                let stockArray = data.data;
+                console.log(stockArray);
                 let tempDataArray = [];
                 // console.log(stockArray);
                 stockArray.forEach(d =>{
@@ -213,7 +248,8 @@ class ScripsBody extends React.PureComponent
 
                 // console.log(tempDataArray);
                 let lastPoint = tempDataArray[tempDataArray.length - 1];
-                let startIndex = getStartPointIndex(tempDataArray,type,lastPoint);
+                let firstPoint = tempDataArray[0];
+                let startIndex = getStartPointIndex(tempDataArray,type,lastPoint,firstPoint);
 
                 // console.log(startIndex);
 
@@ -242,6 +278,35 @@ class ScripsBody extends React.PureComponent
         })
     } 
 
+    isMarketOpen(ws)
+    {
+        //send market status request
+        console.log('Market Status');
+        ws.send(JSON.stringify({
+            "a": "subscribe", 
+            "v": [1,2,3,4,6], 
+            "m": "market_status"
+        }));
+
+        ws.onmessage = (response)=>{
+
+            console.log('Got');
+            console.log(response.data);
+            
+            var reader = new FileReader();
+            
+            reader.readAsArrayBuffer(response.data);
+            let convertedData;
+            reader.onloadend = (event) => {
+                let data = new Uint8Array(reader.result);
+                console.log(data);
+                convertedData = readMarketStatus(data);
+                // console.log(convertedData);
+            }
+        }
+
+    }
+
     SnapShotRequest(stockSymbol,stockNSECode,stockBSECode,stockExchange)
     {
         Axios.get(`http://${REQUEST_BASE_URL}:8000/detailed_view/snapshot/${stockSymbol}/${stockNSECode}/${stockBSECode}/${stockExchange}`,{ crossDomain: true }).then(({ data }) => {
@@ -269,11 +334,11 @@ class ScripsBody extends React.PureComponent
         $('.bn__close').removeClass('active');
     }
 
-    setRange(range)
+    setRange(range,mixed)
     {
         let options = getCandleDuration(range);
         console.log(options);
-        this.loadChartData(range,options.candle,options.duration)
+        this.loadChartData(range,options.candle,options.duration,options.mixed)
         .then(()=>{
             this.setState({
                 range : range,

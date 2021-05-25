@@ -1068,11 +1068,12 @@
 {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
 .app__body .app__body__left .chart__container .stock__chart.stock__chart__blur 
 {
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 .app__body .app__body__left .chart__container .chart__range 

@@ -653,25 +653,31 @@ export class ChartContainer extends React.PureComponent {
                                 {/* <ChartClock /> */}
                             </div>
                         </div>
-                        <div className={this.props.dataLoaded ? "stock__chart" : "stock__chart stock__chart__blur"}>
-                            <StockChart 
-                                key={1} 
-                                openPrice={this.props.stockData.open_price}
-                                data={this.props.data} 
-                                range={this.state.range} 
-                                width={this.state.chartWidth} 
-                                height={this.state.chartHeight} 
-                                zoom={this.state.zoom} 
-                                chartType={this.state.chartType}
-                                IndicatorType={this.state.indicatorType}
-                                TotalCharts={this.state.TotalCharts}
-                                IndicatorChartTypeArray={this.state.IndicatorChartTypeArray}
-                                trendLineType={this.state.trendLineType} 
-                                interactiveType={this.state.interactiveType}
-                                chartProps={this.props.chartProps}
-                                stockDetails={this.props.stockDetails}
+                        {this.props.dataLoaded ? 
+                            <div className="stock__chart">
+                                <StockChart 
+                                    key={1} 
+                                    openPrice={this.props.stockData.open_price}
+                                    data={this.props.data} 
+                                    range={this.state.range} 
+                                    width={this.state.chartWidth} 
+                                    height={this.state.chartHeight} 
+                                    zoom={this.state.zoom} 
+                                    chartType={this.state.chartType}
+                                    IndicatorType={this.state.indicatorType}
+                                    TotalCharts={this.state.TotalCharts}
+                                    IndicatorChartTypeArray={this.state.IndicatorChartTypeArray}
+                                    trendLineType={this.state.trendLineType} 
+                                    interactiveType={this.state.interactiveType}
+                                    chartProps={this.props.chartProps}
+                                    stockDetails={this.props.stockDetails}
                             />
-                        </div>
+                            </div>:
+                            <div className="stock__chart stock__chart__blur ">
+                                <Spinner size={30}/>
+                            </div>
+                        }
+                        
                     </div>
                     
                     
@@ -684,7 +690,7 @@ export class ChartContainer extends React.PureComponent {
                         <div data-range="YTD" className="chart__range__value" onClick={this.changeRange.bind(this,'YTD')}>YTD</div>
                         <div data-range="1Y" className="chart__range__value" onClick={this.changeRange.bind(this,'1Y')}>1Y</div>
                         <div data-range="5Y" className="chart__range__value" onClick={this.changeRange.bind(this,'5Y')}>5Y</div>
-                        <div data-range="Max" className="chart__range__value" onClick={this.changeRange.bind(this,'Max')}>Max</div>
+                        <div data-range="MAX" className="chart__range__value" onClick={this.changeRange.bind(this,'MAX')}>Max</div>
                     </div>
                     <div className="chart__zoom" onClick={this.OpenZoomMode.bind(this)}>
                         <img src={Zoom} alt="zoom"/> 

@@ -8,6 +8,7 @@ const { GoogleFeeds } = require("./google_feeds");
 const { AutoComplete } = require('./AutoComplete');
 const { BusinessNews } = require('./BusinessNews/');
 const { IndexChartData } = require('./IndexChartData/');
+const { StockChartData } = require('./StockChartData/');
 const { StocksToWatch } = require('./StocksToWatch/');
 const { Common } = require('./Common/');
 
@@ -17,6 +18,7 @@ app.use(Twitter);
 app.use(GoogleFeeds);
 app.use(BusinessNews);
 app.use(IndexChartData);
+app.use(StockChartData);
 app.use(StocksToWatch);
 app.use(Common);
 

@@ -34,6 +34,18 @@ export const readMarketData = (data,prevClose)=>
 
 }
 
+export const readMarketStatus = (data)=>{
+    let exchange_code = parseInt(buf2hex(data.slice(0,1),16));
+    let market_type_length = parseInt(buf2hex(data.slice(1,3),16))/100;
+    let market_type = buf2hex(data.slice(3,3+market_type_length),16);
+    let status_length = parseInt(buf2hex(data.slice(3+market_type_length,5+market_type_length),16));
+    let status = buf2hex(data.slice(5+market_type_length,5+market_type_length+status_length),16);
+    let timestamp = parseInt(buf2hex(data.slice(5+market_type_length+status_length,9+market_type_length+status_length),16));
+
+    console.log(exchange_code,market_type_length,market_type,status_length,status,timestamp);
+
+}
+
 function convertIntoFormat(data,a,b,type,multiplier)
 {
     if(type === 'p')
