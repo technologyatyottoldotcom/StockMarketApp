@@ -7,7 +7,7 @@ import {readMarketData} from '../../../exports/FormatData';
 import {getEndOfDayMinutes} from '../../../exports/FutureEntries';
 import Spinner from '../../Loader/Spinner';
 
-const REQUEST_BASE_URL = 'localhost';
+const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;;
 
 
 export class UpperStock extends React.PureComponent {

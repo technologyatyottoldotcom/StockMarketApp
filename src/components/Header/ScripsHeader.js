@@ -4,7 +4,7 @@ import ScripsMenu from './ScripsMenu';
 import BrandLogo from '../../assets/icons/yottol.png';
 import Search from '../../assets/icons/search.svg';
 
-const REQUEST_BASE_URL = 'localhost';
+const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;;
 
 
 class StockSuggestion extends React.PureComponent{

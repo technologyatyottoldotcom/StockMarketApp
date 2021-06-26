@@ -127,7 +127,7 @@ export class StockChart extends React.PureComponent {
 			.withIndex(index);
 		const { data: linearData, xScale, xAccessor, displayXAccessor } = xScaleProvider(calculatedData.slice(-LENGTH_TO_SHOW));
 
-        console.log(linearData);
+        // console.log(linearData);
 
         this.setState({
             apidata : inputdata,

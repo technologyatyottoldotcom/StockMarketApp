@@ -4,15 +4,15 @@ const path = require('path');
 
 
 dotenv.config({
-    path : path.join(__dirname,'../config.env')
+    path : path.join(__dirname,'../.env')
 });
 
 
 var conn = mysql.createConnection({
-    host : process.env.HOST,
-    user : process.env.DBUSER,
-    password : process.env.PASSWORD,
-    database : process.env.DATABASE,
+    host : process.env.DB_HOST,
+    user : process.env.DB_USER,
+    password : process.env.DB_PASSWORD,
+    database : process.env.DB_NAME,
     multipleStatements : true
 });
 

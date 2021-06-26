@@ -5,6 +5,7 @@ import { PL } from './PL';
 import { BalanceSheet } from './BalanceSheet';
 import { CashFlow } from './CashFlow';
 import { Ratio } from './Ratio';
+import { Shareholding } from './Shareholding';
 
 class FinanceLeft extends React.PureComponent {
     constructor(props) {
@@ -12,11 +13,12 @@ class FinanceLeft extends React.PureComponent {
         this.state = {
             type: 'annual', // annual , quarterly
             field: 'balancesheet', //profit&loass , balancesheet , cashflows , ratios
-            stockcode: "RELI.NS",
+            stockcode: "RELI.NS",//RELI.NS //HDFCBANK
+            from : 'reuters' // reuters // screener
         }
     }
     render() {
-        var field = this.state.field
+        var field = this.state.field;
         return (
                 <>
                     <div className="financials__left__nav">
@@ -25,21 +27,26 @@ class FinanceLeft extends React.PureComponent {
                             <button active={true}>Balance Sheet</button>
                             <button>Cash Flow</button>
                             <button>Ratios</button>
+                            <button>Shareholding</button>
                         </QuoteNav>
                     </div>
 
                     <div className="financials__left__nav">
-                        <QuoteNav onClick={(i, e) => { this.setState({ type: e.target.innerText?.toLowerCase() }) }} activeClassName="chart-nav-fields-active" className="chart-nav-fields" style={{ paddingLeft: 0, margin: 0, listStyleType: 'none' }}>
-                            <button active={this.state.type === 'annual'}>Annual</button>
-                            <button active={this.state.type === 'quarterly'}>Quarterly</button>
-                        </QuoteNav>
+                        {
+                            field === 'ratios' || field==="shareholding" ? '' : 
+                            <QuoteNav onClick={(i, e) => { this.setState({ type: e.target.innerText?.toLowerCase() }) }} activeClassName="chart-nav-fields-active" className="chart-nav-fields" style={{ paddingLeft: 0, margin: 0, listStyleType: 'none' }}>
+                                <button active={this.state.type === 'annual'}>Annual</button>
+                                <button active={this.state.type === 'quarterly'}>Quarterly</button>
+                            </QuoteNav>
+                         }
                     </div>
 
                     <div className="financials__table">
-                        {(field === 'incomestatement') && <PL type={this.state.type} field={this.state.field} stockcode={this.state.stockcode} />}
+                        {(field === 'profit&loss') && <PL type={this.state.type} field="income" stockcode={this.state.stockcode} />} 
                         {(field === 'balancesheet') && <BalanceSheet type={this.state.type} field={this.state.field} stockcode={this.state.stockcode} />}
-                        {(field === 'cashflows') && <CashFlow type={this.state.type} field={this.state.field} stockcode={this.state.stockcode} />}
+                        {(field === 'cashflow') && <CashFlow type={this.state.type} field={this.state.field} stockcode={this.state.stockcode} />}
                         {(field === 'ratios') && <Ratio type={this.state.type} field={this.state.field} stockcode={this.state.stockcode} />}
+                        {(field === 'shareholding') && <Shareholding type={this.state.type} field={this.state.field} stockcode={this.state.stockcode} />}
                     </div>
 
                 </>

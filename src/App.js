@@ -5,6 +5,7 @@ import ScripsHeader from './components/Header/ScripsHeader';
 import ScripsBody from './components/Body/ScripsBody';
 import ScripsFooter from './components/Footer/ScripsFooter';
 
+
 class App extends React.Component
 {
 

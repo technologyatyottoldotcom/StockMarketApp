@@ -6,7 +6,7 @@ import CreateSection from './CreateSection';
 import Chevron from '../../../assets/icons/chevron.svg';
 import '../../../css/StocksToWatch.css';
 
-const REQUEST_BASE_URL = 'localhost';
+const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;;
 
 const SVGIMG1 = {
     ChevronExpand: _ => {

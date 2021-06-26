@@ -285,14 +285,14 @@
 
 .app__body__top .top__stocks .upper__stock .upper__stock__value 
 {
-  font-weight: 600;
+  font-weight: 700;
   margin-top: 4px;
 }
 
 .app__body__top .top__stocks .upper__stock .upper__stock__change 
 {
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   margin-top: 2px;
 }
 
