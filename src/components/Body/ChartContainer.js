@@ -235,7 +235,7 @@ export class ChartContainer extends React.PureComponent {
                     dataLoaded : true,
                     
                 },()=>{
-                    console.log(this.state.chartProps,this.state.dataLoaded);
+                    // console.log(this.state.chartProps,this.state.dataLoaded);
                     this.loadCompareData();
                     this.updateChartData(type,ct,dd,mixed);
                     // this.appendRandomData(type);
@@ -514,13 +514,13 @@ export class ChartContainer extends React.PureComponent {
 
                 });
 
-                console.log(tempDataArray);
+                // console.log(tempDataArray);
 
                 this.setState({
                     bigdataLoaded : true,
                     bigchartdata : tempDataArray
                 },()=>{
-                    console.log('big data loaded ',tempDataArray[tempDataArray.length - 1]);
+                    // console.log('big data loaded ',tempDataArray[tempDataArray.length - 1]);
                 })
             }
 

@@ -194,7 +194,7 @@ class ScripsBody extends React.PureComponent
                 }
                 else
                 {
-                    console.log('---GET FROM DATABASE---');
+                    // console.log('---GET FROM DATABASE---');
                     let livedata = this.state.stockData;
                     let trade_price = this.state.stockData && this.state.stockData.last_traded_price;
                     let open_price = this.state.stockData && this.state.stockData.open_price;
@@ -204,8 +204,8 @@ class ScripsBody extends React.PureComponent
                     // livedata
                     livedata['change_price'] = change_price;
                     livedata['change_percentage'] = change_percentage;
-                    console.log(change_price,change_percentage);
-                    console.log(livedata);
+                    // console.log(change_price,change_percentage);
+                    // console.log(livedata);
                     this.setState({
                         stockData : livedata
                     });

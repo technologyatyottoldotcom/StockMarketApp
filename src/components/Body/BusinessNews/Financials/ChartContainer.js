@@ -27,6 +27,7 @@ export class ChartContainer extends React.PureComponent {
         return (
             <div>
                  <BusinessChart field="income" {...this.state} stockDetails={this.props.stockDetails}/>
+                 <BusinessChart field="margin" {...this.state} stockDetails={this.props.stockDetails}/>
                  <BusinessChart field="ratios" {...this.state} stockDetails={this.props.stockDetails}/>
                  <BusinessChart field="shareholdings" {...this.state} stockDetails={this.props.stockDetails}/>
             </div>

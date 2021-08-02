@@ -1423,13 +1423,32 @@ Financial.get('/createcharts/:field/:type/:stockcode',(req,res)=>{
 
     if(field === 'ratios')
     {
-
         // console.log('IN RATIO');
         Ratio(stockcode,fromtype).then(d=>{
 
             let fields = FilterFields(d.fields);
             let values = FilterChartData(d.values,['ROE','ROCE']);
             res.json({
+                'fields' : fields,
+                'values' : values
+            })
+        }).catch(e=>{
+            console.log(e);
+            res.json({
+                'status' : 'failure',
+                'message' : e.message
+            });
+        });
+    }
+
+    else if(field === 'margin')
+    {
+        Ratio(stockcode,fromtype).then(d=>{
+
+            let fields = FilterFields(d.fields);
+            let values = FilterChartData(d.values,['Operating Margin','Net Profit Margin']);
+            res.json({
+                'data' : d,
                 'fields' : fields,
                 'values' : values
             })
@@ -1491,6 +1510,7 @@ Financial.get('/createcharts/:field/:type/:stockcode',(req,res)=>{
     }
 
 });
+
 
 Financial.get('/creditrating/:stockcode',(req,res)=>{
     let stockcode = req.params.stockcode;
