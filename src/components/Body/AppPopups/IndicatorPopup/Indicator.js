@@ -3,12 +3,13 @@ import React from 'react';
 export class Indicator extends React.PureComponent {
     render() {
 
-        const {IndicatorName,IndicatorInfo,ChangeIndicatorType,InfoType} = this.props;
+        const {IndicatorName,IndicatorInfo,ChangeIndicatorType,InfoType,Indicator} = this.props;
 
         return (
             <div className="Indicator__option__block">
                 <div className="indicator__option__title"  onClick={()=>{
-                ChangeIndicatorType(InfoType);
+                // ChangeIndicatorType(InfoType,Indicator);
+                ChangeIndicatorType(Indicator);
             }}>
                     <p>{IndicatorName}</p>
                 </div>

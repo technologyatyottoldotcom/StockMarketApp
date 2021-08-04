@@ -59,7 +59,7 @@ export class IndicatorPopup extends React.PureComponent {
                     <IndicatorInfo CloseIndicatorInfo={this.CloseIndicatorInfo} indicatorInfoType={this.state.indicatorInfoType}/>
                     {IndicatorsList.map((indicator,indx)=>{
                         return <>
-                            <Indicator key={indx} IndicatorName={indicator.IndicatorName} IndicatorInfo={this.OpenIndicatorInfo} ChangeIndicatorType={this.props.ChangeIndicatorType} InfoType={indicator.InfoType}/>
+                            <Indicator key={indx} IndicatorName={indicator.IndicatorName} IndicatorInfo={this.OpenIndicatorInfo} ChangeIndicatorType={this.props.ChangeIndicatorType} Indicator={indicator} InfoType={indicator.InfoType}/>
                         </>
                     })}
 

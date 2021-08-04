@@ -2,7 +2,7 @@
 /* hover tooltip */
 .react-stockcharts-tooltip-content
 {
-  filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.2));
+  filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.1));
 }
 
 .react-stockcharts-indicator-options
@@ -26,4 +26,17 @@
 .recharts-legend-item 
 { 
   font-size: 10px; 
+}
+
+.custom-tooltip
+{
+  background-color: #fffffff3;
+  padding : 5px 10px;
+  box-shadow: 0px 0px 1px #dedede;
+}
+
+.custom-tooltip .custom-label
+{
+  font-size: 10px!important;
+  margin-bottom: 5px!important;
 }

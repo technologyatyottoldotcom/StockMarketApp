@@ -91,7 +91,7 @@
   width: 240px;
   background-color: var(--white);
   right: 0%;
-  top: -1%;
+  top: -0.5%;
   transform: translateY(-100%);
   padding: 5px 10px;
   box-shadow: -2px 2px 2px var(--shadow-primary), -2px -2px 2px var(--shadow-primary);
@@ -465,15 +465,16 @@
   width: 25%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items : center;
-  padding-right: 5px;
 }
 
 .bn__stock__technicals .bn__stock__views .bn__stock__tech__view .bn__stock__text p,
 .bn__stock__technicals .bn__stock__target .bn__stock__tech__view .bn__stock__text p
 {
-  font-size: 11px!important;
+  font-size: 10px!important;
+  margin: 5px 0!important;
+  font-weight: 600!important;
 }
 
 .bn__stock__technicals .bn__stock__views .bn__stock__tech__view .bn__stock__text p>span
@@ -484,24 +485,29 @@
 
 .bn__stock__technicals .bn__stock__target .bn__stock__target__price
 {
-  display: flex;
-  justify-content: space-between;
+  /* display: flex; */
+  /* justify-content: space-between; */
   box-shadow: 1px 1px 20px rgb(0 0 0 / 3%);
   margin: 5px 0;
   padding: 10px 2px;
+  min-height: 300px;
+  text-align: center;
 }
 
 .bn__stock__technicals .bn__stock__target .bn__stock__target__price .bn__stock__target__genie
 {
-  width: 50%;
+  width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 30px;
+  margin-top: 20px;
 }
 
 .bn__stock__technicals .bn__stock__target .bn__stock__target__price .bn__stock__target__genie img
 {
-  width: 80px;
+  width: 70px;
 }
 
 .bn__stock__technicals .bn__stock__target .bn__stock__target__price .bn__stock__target__genie p
@@ -509,12 +515,12 @@
   font-size: 12px!important;
   font-weight: 700;
   color: var(--font-primary);
-  margin-left: 14px!important;
+  margin-top: 10px!important;
 }
 
 .bn__stock__technicals .bn__stock__target .bn__stock__target__price .bn__stock__target__value
 {
-  width: 50%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -586,7 +592,7 @@
   /* border: 0.5px solid black!important; */
 }
 
-.financials__table tbody tr:nth-child(odd)
+/* .financials__table tbody tr:nth-child(odd)
 {
   background-color: #fafafa;
 }
@@ -594,7 +600,7 @@
 .financials__table tbody tr:nth-child(even)
 {
   background-color: #ffffff;
-}
+} */
 
 /* .financials__table tbody tr
 {
@@ -615,12 +621,13 @@
 
 .financials__table td.cell__bold
 {
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--font-primary);
 }
 
 .financials__table td.cell__blue
 {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--main-blue);
 }
 
@@ -642,6 +649,7 @@
   overflow-x: hidden;
   scroll-behavior: smooth;
   min-width: 80%;
+  color: var(--font-primary);
 }
 
 .credit__ratings .credit__loader
@@ -672,20 +680,20 @@
 .credit__ratings .credit__title
 {
   font-size: 13px!important;
-  color: black;
+  color: var(--font-primary);
   font-weight: 700!important;
   margin-bottom: 10px!important;
 }
 
 .bn__stock__credit .bn__credit__block
 {
-  margin: 0px 0 15px 0;
+  margin: 0px 0 8px 0;
 }
 
 .bn__stock__credit .bn__credit__block .bn__credit__title
 {
   font-size: 12px!important;
-  color: black;
+  color: var(--font-primary);
   font-weight: 700!important;
   text-decoration: none;
 }

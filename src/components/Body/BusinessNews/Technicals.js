@@ -1,10 +1,9 @@
 import React from 'react';
-import Axios from 'axios';
 import '../../../scss/Technicals.scss';
-import learning from "../../../assets/icons/learning.svg" //new (MK)
+import learning from "../../../assets/icons/learning.svg";
+import AI from '../../../assets/icons/ai.svg';
 import CustomSlider from '../CustomChartComponents/CustomSlider/CustomSlider';
 
-const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;
 
 const marksa = [
     {
@@ -61,8 +60,8 @@ class TechnicalsViews extends React.PureComponent {
                         </div>
                     </div>
                     <div className="bn__stock__text">
-                        <p>5 Day MA <br /><span>{targets.STTV.text1 && targets.STTV.text1}</span><br /> 10 Day MA</p>
-                        <p>10 Day MA <br /><span>{targets.STTV.text2 && targets.STTV.text2}</span><br /> 20 Day MA</p>
+                        <p>EMA(5) {targets.STTV.text1 && targets.STTV.text1} EMA(10)</p>
+                        <p>EMA(10) {targets.STTV.text2 && targets.STTV.text2} EMA(20)</p>
                     </div>
                 </div>
                 <div className="bn__stock__tech__view">
@@ -73,8 +72,8 @@ class TechnicalsViews extends React.PureComponent {
                         </div>
                     </div>
                     <div className="bn__stock__text">
-                        <p>20 Day MA <br /><span>{targets.LTTV.text1 && targets.LTTV.text1}</span><br /> 50 Day MA</p>
-                        <p>50 Day MA <br /><span>{targets.LTTV.text2 && targets.LTTV.text2}</span><br /> 100 Day MA</p>
+                        <p>EMA(20) {targets.LTTV.text1 && targets.LTTV.text1} EMA(50)</p>
+                        <p>EMA(50) {targets.LTTV.text2 && targets.LTTV.text2} EMA(100)</p>
                     </div>
                 </div>
                 <div className="bn__stock__tech__view">
@@ -125,9 +124,20 @@ class TechnicalsTargets extends React.PureComponent {
 
         return (
             <>
+                <div className="bn__stock__tech__view">
+                    <div className="bn__stock__slider__wrapper">
+                        <p className="bn__stock__view__title">Short Term Technical View</p>
+                        <div className="bn__stock__slider">
+                            <CustomSlider min={-2} max={2} value={targets.OVERV.point || 0} marks={marksa}/>
+                        </div>
+                    </div>
+                    <div className="bn__stock__text">
+                        <p>This indicator is based on the results of the four indicators on the left hand side.</p>
+                    </div>
+                </div>
                 <div className="bn__stock__target__price">
                     <div className="bn__stock__target__genie">
-                        <img src={learning} alt="AI_ML_GENIE_LOGO" />
+                        <img src={AI} alt="AI_ML_GENIE_LOGO" />
                         <p>AI & ML Genie</p>
                     </div>
                     {targets.FPV.Enough ? 
@@ -155,17 +165,7 @@ class TechnicalsTargets extends React.PureComponent {
                         
                     }
                 </div>
-                <div className="bn__stock__tech__view">
-                    <div className="bn__stock__slider__wrapper">
-                        <p className="bn__stock__view__title">Short Term Technical View</p>
-                        <div className="bn__stock__slider">
-                            <CustomSlider min={-2} max={2} value={targets.OVERV.point || 0} marks={marksa}/>
-                        </div>
-                    </div>
-                    <div className="bn__stock__text">
-                        <p>This indicator is based on the results of the four indicators on the left hand side.</p>
-                    </div>
-                </div>
+                
             </>
         )
     }

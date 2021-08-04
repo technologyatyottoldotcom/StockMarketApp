@@ -58,7 +58,7 @@ class TopStocks extends React.PureComponent {
 								if (v && typeof v == 'object') {
 									return <UpperStock 
 											{...v} 
-											key={i+Math.random()*9999 + Date.now()}
+											key={i}
 											ws={this.props.ws}
 									/>
 

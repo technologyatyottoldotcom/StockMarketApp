@@ -1,68 +1,84 @@
 const IndicatorsList = [
     {
         IndicatorName : 'Simple Moving Average (SMA)',
-        InfoType:"SMA"
+        InfoType:"SMA",
+        Position : 1,
     },
     {
         IndicatorName : 'Weighted Moving Average (WMA)',
-        InfoType:"WMA"
+        InfoType:"WMA",
+        Position : 1,
     },
     {
         IndicatorName : 'Exponential Moving Average (EMA)',
-        InfoType:"EMA"
+        InfoType:"EMA",
+        Position : 1,
     },
     {
         IndicatorName : 'Triangular Moving Average (TMA)',
-        InfoType:"TMA"
+        InfoType:"TMA",
+        Position : 1,
     },
     {
         IndicatorName : 'Bollinger Bands (BBands)',
-        InfoType:"BB"
+        InfoType:"BB",
+        Position : 1,
     },
     {
         IndicatorName : 'Moving Average Convergence/Divergence (MACD)',
-        InfoType:"MACD"
+        InfoType:"MACD",
+        Position : 1,
     },
     {
         IndicatorName : 'Relative Strength Index (RSI)',
-        InfoType:"RSI"
+        InfoType:"RSI",
+        Position : 1,
     },
     {
         IndicatorName : 'Average True Range (ATR)',
-        InfoType:"ATR"
+        InfoType:"ATR",
+        Position : 1,
     },
     {
         IndicatorName : 'Stochastic Oscillator (Slow)',
-        InfoType:"SOSlow"
+        InfoType:"SOSlow",
+        Position : 1,
     },
     {
         IndicatorName : 'Stochastic Oscillator (Fast)',
-        InfoType:"SOFast"
+        InfoType:"SOFast",
+        Position : 1,
     },
     {
         IndicatorName : 'Stochastic Oscillator (Full)',
-        InfoType:"SOFull"
+        InfoType:"SOFull",
+        Position : 1,
     },
     {
         IndicatorName : 'Force Index (FI)',
-        InfoType:"FI"
+        InfoType:"FI",
+        Position : 1,
     },
     {
         IndicatorName : 'Elder Ray Indicator (ERI)',
-        InfoType:"ERI"
+        InfoType:"ERI",
+        Position : 1,
     },
     {
         IndicatorName : 'Elder Ray Indicator Bull Power (ERI)',
-        InfoType:"ERIBull"
+        InfoType:"ERIBull",
+        Position : 1,
     },
     {
         IndicatorName : 'Elder Ray Indicator Bear Power (ERI)',
-        InfoType:"ERIBear"
+        InfoType:"ERIBear",
+        Position : 1,
     },
-    {
-        IndicatorName : 'Elder Ray Impulse (ERIMP)',
-        InfoType:"ERIMP"
-    },
+    // {
+    //     IndicatorName : 'Elder Ray Impulse (ERIMP)',
+    //     InfoType:"ERIMP",
+    //     Position : 1,
+    // },
     // {
     //     IndicatorName : 'Parabolic SAR (PSAR)',
     //     InfoType:"PSAR"

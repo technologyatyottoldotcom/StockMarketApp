@@ -388,7 +388,9 @@
 
 .app__body__top .top__stocks .upper__stock .upper__stock__name 
 {
-  color: var(--font-primary) 
+  color: var(--font-primary);
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .app__body__top .top__stocks .upper__stock .upper__stock__value 
@@ -425,7 +427,6 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  /* background-color: #000000; */
 }
 
 .app__body__top__zoom 
@@ -514,7 +515,7 @@
   background-color: #ffffff;
   box-shadow: 1px 1px 5px 1px #cccccc;
   z-index: 1000;
-  width: 50%;
+  width: 40%;
   height: 70%;
   border-radius: 5px;
   overflow-x: hidden;
@@ -613,8 +614,10 @@
 
 .app__body .app__body__left .Indicator__popup .Indicator__options .Indicator__option__block p 
 {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  color: var(--font-primary);
 }
 
 .app__body .app__body__left .Indicator__popup .Indicator__options .Indicator__option__block>div 
@@ -842,15 +845,16 @@
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item .Compare__stock__name
 {
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 12px;
   text-transform: uppercase;
-  color: #000;
+  color: var(--font-primary);
 } 
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item .Compare__stock__fullname
 {
-  font-size: 12px;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item .Compare__stock__exchange__section
@@ -861,9 +865,9 @@
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item .Compare__stock__exchange
 {
-  font-weight: 500;
-  font-size: 16px;
-  color: #000000;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--font-primary);
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item .Compare__stock__exchange__section>div
@@ -1311,7 +1315,7 @@
 {
   font-size: 11px;
   margin: 0 2px;
-  color: var(--font-secondary);
+  color: var(--font-primary);
   font-weight: 700;
   cursor: pointer;
   padding: 2px;

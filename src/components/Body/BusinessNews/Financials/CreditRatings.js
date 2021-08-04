@@ -56,7 +56,7 @@ class CreditRatings extends React.PureComponent{
 
     checkCompany(line)
     {
-        let words = ['icra','care','crisil'];
+        let words = ['icra','care','crisil','fitch'];
 
         words.forEach((word)=>{
             if(line.includes(word))

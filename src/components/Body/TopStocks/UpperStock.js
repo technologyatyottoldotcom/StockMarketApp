@@ -3,7 +3,7 @@ import $ from 'jquery';
 import Axios from 'axios';
 import UpperStockChart from './UpperStockChart';
 import AnimatedDigit from '../AnimatedDigit';
-import {readMarketData} from '../../../exports/FormatData';
+import {readMarketData,setChange} from '../../../exports/FormatData';
 import {getEndOfDayMinutes} from '../../../exports/FutureEntries';
 import Spinner from '../../Loader/Spinner';
 import Pulse from '../../Loader/Pulse';
@@ -23,6 +23,7 @@ export class UpperStock extends React.PureComponent {
             chartWidth : 0,
             chartHeight : 0,
             stockData : '',
+            change : '',
             ws : null,
             FeedConnection : false,
             endpoint : 'wss://masterswift-beta.mastertrust.co.in/hydrasocket/v2/websocket?access_token=qaoSOB-l4jmwXlxlucY4ZTKWsbecdrBfC7GoHjCRy8E.soJkcdbrMmew-w1C0_KZ2gcQBUPLlPTYNbt9WLJN2g8',
@@ -150,24 +151,65 @@ export class UpperStock extends React.PureComponent {
             let convertedData;
             reader.onloadend = (event) => {
                 let data = new Uint8Array(reader.result);
-                if(this.state.stockData)
+                // console.log(response.data.size)
+                if(response.data.size >= 86)
                 {
-                    convertedData = readMarketData(data,this.state.stockData.close_price);
+                    if(this.state.stockData)
+                    {
+
+                        let stockdata = this.state.stockData;
+                        // console.log(stockdata.last_traded_price,stockdata.close_price);
+                        if(stockdata.last_traded_price === stockdata.close_price)
+                        {
+                            // console.log('open');
+                            const {change_price,change_percentage} = setChange(stockdata.last_traded_price,stockdata.open_price);
+                            // livedata
+
+                            let livedata = stockdata;
+                            livedata['change_price'] = change_price;
+                            livedata['change_percentage'] = change_percentage;
+
+                            convertedData = {
+                                livedata
+                            }
+
+                        }
+                        else
+                        {
+                            // console.log('close');
+                            convertedData = readMarketData(data,this.state.stockData['close_price']);
+                        }
+                    }
+                    else
+                    {
+                        convertedData = readMarketData(data,-1);
+                    }
+    
+                    let livedata = convertedData.livedata;
+                    // console.log(livedata);
+                    this.setState({
+                        stockData : livedata,
+                        change : livedata.change_percentage
+                    });
                 }
                 else
                 {
-                    convertedData = readMarketData(data,-1);
-                }
+                    // console.log('---GET FROM DATABASE---');
+                    let livedata = this.state.stockData;
+                    let trade_price = this.state.stockData && this.state.stockData.last_traded_price;
+                    let open_price = this.state.stockData && this.state.stockData.open_price;
 
-                let livedata = convertedData.livedata;
-                // console.log(convertedData.last_traded_price);
-                //get price change
+                    const {change_price,change_percentage} = setChange(trade_price,open_price);
 
-                if(response.data.size >= convertedData.size)
-                {
+                    // livedata
+                    livedata['change_price'] = change_price;
+                    livedata['change_percentage'] = change_percentage;
+                    // console.log(change_price,change_percentage);
+                    // console.log(livedata);
                     this.setState({
                         stockData : livedata,
-                    })
+                        change : livedata.change_percentage
+                    });
                 }
             }
         }
@@ -226,6 +268,7 @@ export class UpperStock extends React.PureComponent {
         const {Name,Symbol} = this.props;
         let stockData = this.state.stockData;
 
+        // console.log(stockData);
         let TradePrice = this.convertIntoPriceFormat(stockData.last_traded_price);
         let change_price = parseFloat(stockData.change_price);
 

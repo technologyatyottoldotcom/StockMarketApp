@@ -18,6 +18,7 @@ function NumberWithCommas(num,fixed) {
 
             let fixednum =  num.toLocaleString('en-IN',{
                 maximumFractionDigits: fixed,
+                minimumFractionDigits: fixed,
                 currency: 'INR'
             });
             // console.log('AFTER ',fixednum);
@@ -351,7 +352,10 @@ function FilterData({ field, type, action, data, from }) {
    
     }
    
-    return res;
+    return {
+        ...res,
+        from
+    };
 }
 
 const DataEvents = {
@@ -402,10 +406,13 @@ class CreateTable extends React.PureComponent{
         })
         .then(
             (response) => {
+                let fromtype = response.data.from;
                 this.setState({
                     data: response.data,
                     loading : false,
-                })  
+                },()=>{
+                    this.props.setFromType(fromtype);
+                })
             }
         )
         .catch(
@@ -441,7 +448,11 @@ class CreateTable extends React.PureComponent{
     //       console.log("this = ",this.props)
     //   }
 
+    //   console.log(this.state.data);
+
       var data = FilterData({ action: this.props.action, ...this.state }) || this.state.data;
+
+    //   console.log(data);
 
       data = data && typeof data === 'object' && data;
 
@@ -463,8 +474,12 @@ class CreateTable extends React.PureComponent{
                                         e = e?.replace(/_/g, " ")?.replace(/\b\w/g, l => l.toUpperCase()).replace(/ /g, "-")
                                         let s = e.split('-'), l = s.length;
                                         if (l >= 2) {
-                                            let k = s[l - 1]
-                                            e = e.replace(k, k?.toString().substr(-2))
+                                            let k = s[l - 1];
+                                            let f = s[0];
+                                            e = e.replace(k, k?.toString().substr(-2));
+
+                                            e = l > 2 ? e.replace(f, ' ') : e;
+                                            
                                         }
                                     }
                                     let p = String(e)?.toLowerCase()
@@ -493,7 +508,7 @@ class CreateTable extends React.PureComponent{
                                                             isBold = r.bold ? 'cell__bold' : 'cell__normal';
                                                             isBold = r.blue ? 'cell__blue' : isBold;
                                                             fixed = r.fixed ? r.fixed : 0;
-                                                            console.log(r.fixed,fixed);
+                                                            {/* console.log(r.fixed,fixed); */}
                                                             return <td className={isBold} key={indx}>{r.title}</td>;
                                                         }
                                                         else

@@ -91,32 +91,32 @@ class TechnicalAnalysis{
             {
                 return {
                     'point' : -2,
-                    'text1' : 'is lower than',
-                    'text2' : 'is lower than',
+                    'text1' : '<',
+                    'text2' : '<',
                 };
             }
             else if(EMA5 < EMA10 && EMA10 > EMA20)
             {
                 return {
                     'point' : -1,
-                    'text1' : 'is lower than',
-                    'text2' : 'is higher than',
+                    'text1' : '<',
+                    'text2' : '>',
                 };
             }
             else if(EMA5 > EMA10 && EMA10 < EMA20)
             {
                 return {
                     'point' : 1,
-                    'text1' : 'is higher than',
-                    'text2' : 'is lower than',
+                    'text1' : '>',
+                    'text2' : '<',
                 };
             }
             else if(EMA5 > EMA10 && EMA10 > EMA20)
             {
                 return {
                     'point' : 2,
-                    'text1' : 'is higher than',
-                    'text2' : 'is higher than',
+                    'text1' : '>',
+                    'text2' : '>',
                 };
             }
             else
@@ -147,32 +147,32 @@ class TechnicalAnalysis{
             {
                 return {
                     'point' : -2,
-                    'text1' : 'is lower than',
-                    'text2' : 'is lower than',
+                    'text1' : '<',
+                    'text2' : '<',
                 };
             }
             else if(EMA20 < EMA50 && EMA50 > EMA100)
             {
                 return {
                     'point' : -1,
-                    'text1' : 'is lower than',
-                    'text2' : 'is higher than',
+                    'text1' : '<',
+                    'text2' : '>',
                 };
             }
             else if(EMA20 > EMA50 && EMA50 < EMA100)
             {
                 return {
                     'point' : 1,
-                    'text1' : 'is higher than',
-                    'text2' : 'is lower than',
+                    'text1' : '>',
+                    'text2' : '<',
                 };
             }
             else if(EMA20 > EMA50 && EMA50 > EMA100)
             {
                 return {
                     'point' : 2,
-                    'text1' : 'is higher than',
-                    'text2' : 'is higher than',
+                    'text1' : '>',
+                    'text2' : '>',
                 };
             }
             else

@@ -8,6 +8,7 @@ import { tooltipContent } from '../../../exports/ChartProps';
 import LastPointIndicator from '../CustomChartComponents/LastPointEdgeIndicator/LastPointIndicator';
 import LabelEdgeCoordinate from '../CustomChartComponents/EdgeLabel/LabelEdgeCoordinate';
 import PriceMarkerCoordinate from '../CustomChartComponents/PriceMarker/PriceMarkerCoordinate';
+import PriceEdgeIndicator from '../CustomChartComponents/EdgeIndicator/PriceEdgeIndicator';
 import {StockMarker} from '../CustomChartComponents/StockMarker/StockMarker';
 import { HoverTooltip } from "../CustomChartComponents/HoverTooltip/HoverTooltip";
 import { CompareStockTooltip } from '../CustomChartComponents/CompareStockToolip/CompareStockTooltip';
@@ -32,22 +33,22 @@ function getChartType(chartType,chartdata)
     else if(chartType === 'rangeArea')
     {
         calculatedData = chartdata;
-        chartSeries = <LineSeries yAccessor ={d =>d.open} strokeWidth ={30} stroke="#64b5f6"/>
+        chartSeries = <LineSeries yAccessor ={d =>d.open} strokeWidth={30} stroke="#00a0e3" opacity={1} />
     }
     else if(chartType === 'jumpLine')
     {
         calculatedData = chartdata;
-        chartSeries = <ScatterSeries yAccessor ={d =>d.open} marker={SquareMarker} markerProps={{ width : 8 , height : 1 , fill : '#00A0E3' , stroke : '#00A0E3' , strokeWidth : 1}}/>
+        chartSeries = <ScatterSeries yAccessor ={d =>d.open} marker={SquareMarker} markerProps={{ width : 8 , height : 1 , fill : '#00A0E3' , stroke : '#00A0E3' , strokeWidth : 0 , opacity : 1}}/>
     }
     else if(chartType === 'column')
     {
         calculatedData = chartdata;
-        chartSeries = <BarSeries yAccessor ={d =>d.open} width={5} stroke={false} fill='#00a0e3'/>
+        chartSeries = <BarSeries yAccessor ={d =>d.open} stroke={false} fill='#00a0e3' opacity={1}/>
     }
     else if(chartType === 'stick')
     {
         calculatedData = chartdata;
-        chartSeries = <BarSeries yAccessor ={d =>d.open} width={1} stroke={true} fill='#00a0e3'/>
+        chartSeries = <BarSeries yAccessor ={d =>d.open} width={1} stroke={true} fill='#00a0e3' opacity={1}/>
     }
     else if(chartType === 'candlestick')
     {
@@ -85,7 +86,7 @@ function getChartType(chartType,chartdata)
     else
     {
         calculatedData = chartdata;
-        chartSeries = <AreaSeries yAccessor ={d =>d.open} strokeWidth ={2} stroke="#64b5f6" fill='#00a0e3'/>
+        chartSeries = <AreaSeries yAccessor ={d =>d.open} strokeWidth={2} stroke="#00a0e3" fill='#00a0e3' opacity={0.3} interpolation={curveMonotoneX}/>
     }
 
     return [calculatedData,chartSeries];
@@ -99,7 +100,7 @@ function ChartWrapper(range,chartType,closePrice)
     return (
         <>
             {chartSeries}
-            <EdgeIndicator 
+            <PriceEdgeIndicator 
                 orient="left"
                 edgeAt="right"
                 itemType="last"
@@ -111,6 +112,9 @@ function ChartWrapper(range,chartType,closePrice)
                 textFill="#00a0e3"
                 strokeWidth={1}
                 lineOpacity={0}
+                opacity={1}
+                rectRadius={2}
+                fontWeight="600"
                 dx={1}
             />
             <PriceMarkerCoordinate 
@@ -127,7 +131,7 @@ function ChartWrapper(range,chartType,closePrice)
             />
             <HoverTooltip
                 tooltipContent={tooltipContent(range)}
-                fontSize={12}
+                fontSize={10}
                 bgOpacity={0}
                 fill='#ffffff'
                 opacity={1}
@@ -145,6 +149,7 @@ function ChartWrapperZoom(range,lastPoint,stockDetails,chartType,closePrice,tota
     return (
         <>
             {chartSeries}
+            {/* <LineSeries yAccessor={d =>d.sma}/> */}
             <YAxis {...getYAxisProps(totalCharts)} />
             {
                 totalCharts === 1 ?
@@ -400,7 +405,7 @@ function ChartWrapperCompare(zoom,range,stockDetails,CompareStockConfig,toggleHi
     )
 }
 
-function ChartIndicators(index,indicator,width,height,range,series,title,color,indicatorConfig,yAccessor,TotalCharts,IndicatorChartTypeArray,DeleteIndicatorType,SwapCharts)
+function ChartIndicators(index,indicator,width,height,range,series,title,color,indicatorConfig,yAccessor,TotalCharts,IndicatorOutside,DeleteIndicatorType,SwapCharts)
 {
     return <>
         <IndicatorOptions
@@ -408,13 +413,13 @@ function ChartIndicators(index,indicator,width,height,range,series,title,color,i
             indicator={indicator}
             origin={[width - 180,20]}
             showup={index === 0 ? false : true}
-            showdown={index === IndicatorChartTypeArray.length - 1 ? false : true}
+            showdown={index === IndicatorOutside.length - 1 ? false : true}
             DeleteIndicatorType={DeleteIndicatorType}
             SwapCharts={SwapCharts}
         />
         {series}
         {
-            index === IndicatorChartTypeArray.length - 1 ?
+            index === IndicatorOutside.length - 1 ?
                 <> 
                     <XAxis {...getXAxisProps()} />
                     <MouseCoordinateX {...getXCoordinateProps(range)}/>
@@ -460,6 +465,15 @@ function ChartIndicators(index,indicator,width,height,range,series,title,color,i
             yAccessor={yAccessor}
         />
     </>
+}
+
+function ChartIndicatorInside(indicator,series)
+{
+    // console.log(series);
+   return <>
+     {series}
+     {/* <LineSeries yAccessor={d => d.wma}/> */}
+   </>
 }
 
 function getIndicatorData(indicator,chartdata)
@@ -878,4 +892,4 @@ function getChartHeight(height,zoom,TotalCharts)
 }
 
 
-export { getChartHeight, getIndicatorData, ChartWrapper, ChartWrapperZoom, ChartWrapperCompare , ChartIndicators }
+export { getChartHeight, getIndicatorData, ChartWrapper, ChartWrapperZoom, ChartWrapperCompare , ChartIndicators , ChartIndicatorInside }

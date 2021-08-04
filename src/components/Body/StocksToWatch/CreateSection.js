@@ -78,6 +78,7 @@ export class CreateSection extends React.PureComponent {
                     }
     
                     let livedata = convertedData.livedata;
+                    console.log(livedata.change_percentage);
                     this.setState({
                         stockData : livedata,
                         change : livedata.change_percentage
@@ -95,7 +96,7 @@ export class CreateSection extends React.PureComponent {
                     // livedata
                     livedata['change_price'] = change_price;
                     livedata['change_percentage'] = change_percentage;
-                    // console.log(change_price,change_percentage);
+                    console.log(change_price,change_percentage);
                     // console.log(livedata);
                     this.setState({
                         stockData : livedata,
@@ -142,7 +143,6 @@ export class CreateSection extends React.PureComponent {
         
         let stockData = this.state.stockData;
 
-        // console.log(stockData);
 
         let change_price = parseFloat(stockData.change_price);
         let priceClass = change_price >= 0 ? 'positive' : 'negative';

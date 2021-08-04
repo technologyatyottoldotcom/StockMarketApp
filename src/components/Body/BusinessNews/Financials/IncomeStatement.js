@@ -8,7 +8,7 @@ class IncomeStatement extends React.PureComponent{
                 <div>
                     <b>Condensed </b> Detailed
                 </div>
-                <CreateTable type={this.props.type} field={this.props.field} stockcode={this.props.stockcode} />
+                <CreateTable type={this.props.type} field={this.props.field} stockcode={this.props.stockcode} setFromType={this.props.setFromType}/>
             </>
         )
     }

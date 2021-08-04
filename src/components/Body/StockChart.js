@@ -20,7 +20,7 @@ import { HoverTooltip } from "./CustomChartComponents/HoverTooltip/HoverTooltip"
 import {getXCoordinateProps, getYCoordinateProps, getXAxisProps, getYAxisProps , tooltipContent } from '../../exports/ChartProps';
 import {getMaxArray,CalculateIndicatorData} from '../../exports/MathematicalIndicators';
 import LastPointIndicator from './CustomChartComponents/LastPointEdgeIndicator/LastPointIndicator';
-import {getChartHeight,getIndicatorData,ChartWrapper,ChartWrapperZoom,ChartWrapperCompare,ChartIndicators} from './Charts/ChartFunctions';
+import {getChartHeight,getIndicatorData,ChartWrapper,ChartWrapperZoom,ChartWrapperCompare,ChartIndicators,ChartIndicatorInside} from './Charts/ChartFunctions';
 import { splitAdjustment } from '../../exports/SplitAdjustment';
 import { CrossHairCursor,MouseCoordinateX, MouseCoordinateY ,PriceCoordinate, EdgeIndicator } from "react-stockcharts/lib/coordinates";
 import IndicatorOptions from './CustomChartComponents/IndicatorOptions/IndicatorOptions';
@@ -105,7 +105,8 @@ export class StockChart extends React.PureComponent {
             console.log('Compare Added');
             this.updateChart();
         }
-        else if(this.props.IndicatorChartTypeArray.length !== prevProps.IndicatorChartTypeArray.length
+        else if(this.props.IndicatorOutside.length !== prevProps.IndicatorOutside.length
+                 || this.props.IndicatorInside.length !== prevProps.IndicatorInside.length
                  || this.props.OldIndicator !== prevProps.OldIndicator
                  || this.props.TotalSwapCharts !== prevProps.TotalSwapCharts )
         {
@@ -136,10 +137,10 @@ export class StockChart extends React.PureComponent {
 
         let sadata = splitAdjustment(inputdata);
 
-        const maxWindowSize = getMaxUndefined(getMaxArray(this.props.IndicatorChartTypeArray));
+        const maxWindowSize = getMaxUndefined(getMaxArray(this.props.IndicatorOutside));
         let chartdata,dataToCalculate,calculatedData,accessordata,LENGTH_TO_SHOW;
 
-        if(this.props.IndicatorChartTypeArray.length === 0)
+        if(this.props.IndicatorOutside.length === 0)
         {
             chartdata = sadata.concat(extradata);
             LENGTH_TO_SHOW = chartdata.length - startIndex;
@@ -206,7 +207,7 @@ export class StockChart extends React.PureComponent {
 
         let chartdata,dataToCalculate,calculatedData,accessordata;
 
-        if(this.props.IndicatorChartTypeArray.length === 0)
+        if(this.props.IndicatorOutside.length === 0)
         {
             chartdata = newdata.concat(extradata);
             dataToCalculate = chartdata.slice(
@@ -227,7 +228,7 @@ export class StockChart extends React.PureComponent {
 
         }
 
-        calculatedData = CalculateIndicatorData(this.props.IndicatorChartTypeArray,dataToCalculate);
+        calculatedData = CalculateIndicatorData(this.props.IndicatorOutside,dataToCalculate);
 
         // console.log(calculatedData[calculatedData.length - 1])
 
@@ -295,13 +296,13 @@ export class StockChart extends React.PureComponent {
 
 		const rowsToDownload = end - Math.ceil(start);
 
-        const maxWindowSize = getMaxUndefined(getMaxArray(this.props.IndicatorChartTypeArray));
+        const maxWindowSize = getMaxUndefined(getMaxArray(this.props.IndicatorOutside));
         // const maxWindowSize = getMaxUndefined([this.state.wma26,this.state.sma26]);
 
         const dataToCalculate = inputData
 			.slice(-rowsToDownload - maxWindowSize - prevData.length, - prevData.length);
 
-        const calculatedData = CalculateIndicatorData(this.props.IndicatorChartTypeArray,dataToCalculate);
+        const calculatedData = CalculateIndicatorData(this.props.IndicatorOutside,dataToCalculate);
         // const calculatedData = this.state.wma26(this.state.sma26(dataToCalculate));
 
         // console.log(calculatedData);
@@ -604,7 +605,7 @@ export class StockChart extends React.PureComponent {
             }
             else
             {
-                h = 0.5;
+                h = 0.15;
                 l = 0.1;
             }
             if(high && low)
@@ -682,21 +683,13 @@ export class StockChart extends React.PureComponent {
         
     }
 
-    calculateChartData(data)
-    {
-        let chartdata = data;
-        let IndicatorChartTypeArray = this.props.IndicatorChartTypeArray;
-        IndicatorChartTypeArray.forEach((indicator,indx)=>{
-
-        });
-    }
-
+    
     render() {
 
         if(this.state.data)
         {
             // console.log('---RENDER CHART---')
-            const {type,width,height,ratio,range,zoom,chartType,TotalCharts,IndicatorChartTypeArray,trendLineType} = this.props;
+            const {type,width,height,ratio,range,zoom,chartType,TotalCharts,IndicatorOutside,IndicatorInside,trendLineType} = this.props;
 
             let { data, xScale, xAccessor, displayXAccessor } = this.state;
 
@@ -704,7 +697,7 @@ export class StockChart extends React.PureComponent {
 
             // console.log(width);
 
-            // console.log('INDICATOR CHART ARRAY : ',IndicatorChartTypeArray);
+            // console.log('INDICATOR CHART ARRAY : ',IndicatorOutside,IndicatorInside);
 
             let margin;
 
@@ -714,7 +707,7 @@ export class StockChart extends React.PureComponent {
             }
             else
             {
-                margin = {left: 0, right: 0, top: 30, bottom: 20};
+                margin = {left: 0, right: 0, top: 30, bottom: 0};
             }
             var gridHeight = height - margin.top - margin.bottom;
             var gridWidth = width - margin.left - margin.right;
@@ -790,7 +783,7 @@ export class StockChart extends React.PureComponent {
 
                     <Chart 
                         id={1} 
-                        padding={30}
+                        padding={0}
                         yExtents={yExtents}
                         origin={[0,0]} 
                         height={getChartHeight(height,zoom,TotalCharts)}
@@ -808,10 +801,13 @@ export class StockChart extends React.PureComponent {
                         </>}
 
                         {zoom && <>
-                            {CompareStockConfig.length > 0 ? 
-                                (ChartWrapperCompare(zoom,range,this.props.stockDetails,CompareStockConfig,this.props.toggleHide,this.props.removeStock,this.props.TotalCharts)                                )
+                            {
+                                CompareStockConfig.length > 0 ? 
+                                (ChartWrapperCompare(zoom,range,this.props.stockDetails,CompareStockConfig,this.props.toggleHide,this.props.removeStock,this.props.TotalCharts))
                                 :
+
                                 (ChartWrapperZoom(range,this.state.lastPoint,this.props.stockDetails,chartType,this.props.closePrice,this.props.TotalCharts))
+                                
                             }
 
 
@@ -894,16 +890,17 @@ export class StockChart extends React.PureComponent {
                     </Chart>
 
                     {zoom &&
-                        IndicatorChartTypeArray.map((indicator,index)=>{
+                        IndicatorOutside.map((indicator,index)=>{
                             const [indicatordata,yAccessor,series,title,accessor,color,indicatorConfig] = getIndicatorData(indicator,data);
 
                             let chartHeight = getChartHeight(height,zoom,TotalCharts);
                             let originHeight = (chartHeight*(index+1)) + (index+1)*10;
 
+                                    {/* console.log(indicatordata); */}
 
                             return <Chart id={(index+2)} yExtents={accessor} height={chartHeight} origin={(w,h)=>[0,originHeight]} padding={5}>
 
-                                {ChartIndicators(index,indicator,width,height,range,series,title,color,indicatorConfig,yAccessor,TotalCharts,IndicatorChartTypeArray,this.props.DeleteIndicatorType,this.props.SwapCharts)}
+                                {ChartIndicators(index,indicator,width,height,range,series,title,color,indicatorConfig,yAccessor,TotalCharts,IndicatorOutside,this.props.DeleteIndicatorType,this.props.SwapCharts)}
                                 
                             </Chart>
                         })
@@ -937,3 +934,9 @@ StockChart.defaultProps ={
 StockChart = fitWidth(StockChart);
 
 export default StockChart;
+
+
+{/* IndicatorInside.map((indicator,index)=>{
+                                    const [indicatordata,yAccessor,series,title,accessor,color,indicatorConfig] = getIndicatorData(indicator,data);
+                                    return ChartIndicatorInside(indicator,series)
+                                }) */}

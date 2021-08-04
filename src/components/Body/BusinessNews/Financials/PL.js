@@ -15,7 +15,7 @@ class PL extends React.PureComponent{
         return(
             <>
                {/* <RightNav childrens={['Condensed', 'Detailed']} active={this.state.action} setAction={i=>{this.setState({ action : i })}} /> */}
-               <CreateTable type={this.props.type} field={this.props.field} action={this.state.action ? 'detailed' : 'condensed'} stockcode={this.props.stockcode} />
+               <CreateTable type={this.props.type} field={this.props.field} action={this.state.action ? 'detailed' : 'condensed'} stockcode={this.props.stockcode} setFromType={this.props.setFromType}/>
             </>
         )
     }

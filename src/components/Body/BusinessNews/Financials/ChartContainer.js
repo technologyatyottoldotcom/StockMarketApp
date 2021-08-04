@@ -26,10 +26,10 @@ export class ChartContainer extends React.PureComponent {
     render() {
         return (
             <div>
-                 <BusinessChart field="income" {...this.state} stockDetails={this.props.stockDetails}/>
-                 <BusinessChart field="margin" {...this.state} stockDetails={this.props.stockDetails}/>
-                 <BusinessChart field="ratios" {...this.state} stockDetails={this.props.stockDetails}/>
-                 <BusinessChart field="shareholdings" {...this.state} stockDetails={this.props.stockDetails}/>
+                 <BusinessChart field="income" {...this.state} stockDetails={this.props.stockDetails} fixed={0}/>
+                 <BusinessChart field="margin" {...this.state} stockDetails={this.props.stockDetails} fixed={1}/>
+                 <BusinessChart field="ratios" {...this.state} stockDetails={this.props.stockDetails} fixed={1}/>
+                 <BusinessChart field="shareholdings" {...this.state} stockDetails={this.props.stockDetails} fixed={1}/>
             </div>
         )
     }

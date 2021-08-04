@@ -359,6 +359,9 @@ function FilterChartData(values,indices)
 
 }
 
+
+
+
 function FilterFields(fields)
 {
 

@@ -72,7 +72,8 @@ export class ChartContainer extends React.PureComponent {
             chartdata : [],
             TotalCharts : 1,
             TotalSwapCharts : 0,
-            IndicatorChartTypeArray : [],
+            IndicatorOutside : [],
+            IndicatorInside : [],
             OldIndicator : {},
             indicatorInfoType : '',
             indicatorType : 'none',
@@ -933,39 +934,53 @@ export class ChartContainer extends React.PureComponent {
         $('.chart__range>div[data-range="'+range+'"]').addClass('active__range');
     }
 
-    ChangeIndicatorType(type)
+    ChangeIndicatorType(indicator)
     {
-        console.log('INDICATOR TYPE ',type);
-        if(this.state.TotalCharts <= 3)
+        let type = indicator.InfoType;
+        let position = indicator.Position;
+        console.log('INDICATOR TYPE ',type,indicator);
+        if(position)
         {
-            this.setState({
-                indicatorType : type,
-                TotalCharts : this.state.TotalCharts+1,
-                IndicatorChartTypeArray : [...this.state.IndicatorChartTypeArray,type]
-            },()=>{
-                console.log(this.state.IndicatorChartTypeArray)
-            });
+            if(this.state.TotalCharts <= 3)
+            {
+                this.setState({
+                    indicatorType : type,
+                    TotalCharts : this.state.TotalCharts+1,
+                    IndicatorOutside : [...this.state.IndicatorOutside,type]
+                },()=>{
+                    console.log(this.state.IndicatorOutside)
+                });
+            }
+            else
+            {
+                this.indicatorLimitReached();
+            }
         }
         else
         {
-            this.indicatorLimitReached();
+            this.setState({
+                indicatorType : type,
+                IndicatorInside : [...this.state.IndicatorInside,type]
+            },()=>{
+                console.log(this.state.IndicatorInside)
+            })
         }
     }
 
     DeleteIndicatorType(type)
     {
-        let IndicatorChartTypeArray = this.state.IndicatorChartTypeArray;
-        let indx = IndicatorChartTypeArray.findIndex((c)=> c === type);
+        let IndicatorOutside = this.state.IndicatorOutside;
+        let indx = IndicatorOutside.findIndex((c)=> c === type);
         // console.log(indx);
 
         if(indx !== -1)
         {
-            let OldIndicator = IndicatorChartTypeArray[indx];
-            IndicatorChartTypeArray.splice(indx,1);
-            console.log(IndicatorChartTypeArray);
+            let OldIndicator = IndicatorOutside[indx];
+            IndicatorOutside.splice(indx,1);
+            console.log(IndicatorOutside);
             this.setState({
                 OldIndicator,
-                IndicatorChartTypeArray,
+                IndicatorOutside,
                 TotalCharts : this.state.TotalCharts-1,
             });
         }
@@ -973,7 +988,7 @@ export class ChartContainer extends React.PureComponent {
 
     SwapCharts(action,indx)
     {
-        let IndicatorChartTypeArray = this.state.IndicatorChartTypeArray;
+        let IndicatorOutside = this.state.IndicatorOutside;
         let cindx;
         if(action === 'up')
         {
@@ -986,11 +1001,11 @@ export class ChartContainer extends React.PureComponent {
 
         console.log(indx,cindx);
 
-        [IndicatorChartTypeArray[indx],IndicatorChartTypeArray[cindx]] = [IndicatorChartTypeArray[cindx],IndicatorChartTypeArray[indx]];
+        [IndicatorOutside[indx],IndicatorOutside[cindx]] = [IndicatorOutside[cindx],IndicatorOutside[indx]];
 
-        console.log(IndicatorChartTypeArray);
+        console.log(IndicatorOutside);
         this.setState({
-            IndicatorChartTypeArray,
+            IndicatorOutside,
             TotalSwapCharts : this.state.TotalSwapCharts + 1
         });
 
@@ -1304,9 +1319,9 @@ export class ChartContainer extends React.PureComponent {
                                     <div data-chart="ohlc" onClick={this.changeChart.bind(this,'ohlc')}><img src={OHLC} alt="+"/><span>OHLC</span></div>
                                     <div data-chart="marker" onClick={this.changeChart.bind(this,'marker')}><img src={Marker} alt="+"/><span>Marker</span></div>
                                     <div data-chart="stick" onClick={this.changeChart.bind(this,'stick')}><img src={Stick} alt="+"/><span>Stick</span></div>
-                                    <div data-chart="renko" onClick={this.changeChart.bind(this,'renko')}><img src={Renko} alt="+"/><span>Renko</span></div>
+                                    {/* <div data-chart="renko" onClick={this.changeChart.bind(this,'renko')}><img src={Renko} alt="+"/><span>Renko</span></div>
                                     <div data-chart="kagi" onClick={this.changeChart.bind(this,'kagi')}><img src={Kagi} alt="+"/><span>Kagi</span></div>
-                                    <div data-chart="point" onClick={this.changeChart.bind(this,'point')}><img src={Point} alt="+"/><span>Point & Figure</span></div>
+                                    <div data-chart="point" onClick={this.changeChart.bind(this,'point')}><img src={Point} alt="+"/><span>Point & Figure</span></div> */}
                                 </div>
                             </div>
                             <div className="chart__option__block" onClick={this.OpenComparePopup.bind(this)}>
@@ -1431,7 +1446,8 @@ export class ChartContainer extends React.PureComponent {
                                             OldCompareStockConfig={this.props.OldCompareStockConfig}
                                             toggleHide={this.props.toggleHide}
                                             removeStock={this.props.removeStock}
-                                            IndicatorChartTypeArray={this.state.IndicatorChartTypeArray}
+                                            IndicatorOutside={this.state.IndicatorOutside}
+                                            IndicatorInside={this.state.IndicatorInside}
                                             OldIndicator={this.state.OldIndicator}
                                             DeleteIndicatorType={this.DeleteIndicatorType}
                                             SwapCharts={this.SwapCharts}
@@ -1443,32 +1459,6 @@ export class ChartContainer extends React.PureComponent {
                                         <div className="stock__chart__pulse">
                                             <Pulse />
                                         </div>
-                                        {/* <StockChart 
-                                            key={this.state.zoom ? 3 : 4} 
-                                            openPrice={this.props.stockData.open_price}
-                                            closePrice={this.props.stockData.close_price}
-                                            currentPrice={this.props.stockData.last_traded_price}
-                                            initial={this.props.initial}
-                                            // stockData={this.props.stockData}
-                                            range={this.state.range} 
-                                            width={this.state.chartWidth} 
-                                            height={this.state.chartHeight} 
-                                            zoom={this.state.zoom} 
-                                            chartType={this.state.chartType}
-                                            IndicatorType={this.state.indicatorType}
-                                            TotalCharts={this.state.TotalCharts}
-                                            IndicatorChartTypeArray={this.state.IndicatorChartTypeArray}
-                                            trendLineType={this.state.trendLineType} 
-                                            interactiveType={this.state.interactiveType}
-                                            chartProps={this.state.chartProps}
-                                            stockDetails={this.props.stockDetails}
-                                            CompareStockConfig={this.props.CompareStockConfig}
-                                            NewCompareStockConfig={this.props.NewCompareStockConfig}
-                                            OldCompareStockConfig={this.props.OldCompareStockConfig}
-                                            toggleHide={this.props.toggleHide}
-                                            removeStock={this.props.removeStock}
-                                            RemoveFlag={this.state.RemoveFlag}
-                                    /> */}
                                     </div>
                             )
                             :
