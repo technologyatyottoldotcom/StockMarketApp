@@ -43,6 +43,7 @@ class ScripsBody extends React.PureComponent
             stockDetails : this.props.stockDetails,
             oldStockDetails : this.props.stockDetails,
             snapdata : null,
+            zoom : false,
             isLoaded : false,
             dataLoaded : false,
             bigdataLoaded : false,
@@ -52,6 +53,7 @@ class ScripsBody extends React.PureComponent
             ws : null,
             FeedConnection : false,
             CompareStockConfig : [],
+            WatchStocks : [],
             NewCompareStockConfig : {},
             OldCompareStockConfig : {},
         }
@@ -62,6 +64,7 @@ class ScripsBody extends React.PureComponent
         this.toggleHide = this.toggleHide.bind(this);
         this.removeStock = this.removeStock.bind(this);
         this.closeNews = this.closeNews.bind(this);
+        this.toggleZoom = this.toggleZoom.bind(this);
         // this.appendRandomData = this.appendRandomData.bind(this);
     }
 
@@ -71,6 +74,7 @@ class ScripsBody extends React.PureComponent
         .then(()=>{
             this.checkConnection();
             this.SnapShotRequest(this.state.stockDetails.stockSymbol,this.state.stockDetails.stockNSECode,this.state.stockDetails.stockBSECode,this.state.stockDetails.stockExchange.exchange);
+            this.getStocksToWatch(this.state.stockDetails.stockIndustry,this.state.stockDetails.stockISIN);
         });
         
     }
@@ -91,10 +95,23 @@ class ScripsBody extends React.PureComponent
                 
                 this.checkConnection();
                 this.SnapShotRequest(this.state.stockDetails.stockSymbol,this.state.stockDetails.stockNSECode,this.state.stockDetails.stockBSECode,this.state.stockDetails.stockExchange.exchange);
-
+                this.getStocksToWatch(this.state.stockDetails.stockIndustry,this.state.stockDetails.stockISIN);
             });
             
         }
+    }
+
+    getStocksToWatch(industry,isin) {
+
+        console.log('GET')
+        Axios.get(`${REQUEST_BASE_URL}/stockstowatch/${industry}/${isin}/15`)
+        .then(res=>{
+            const data = res.data;
+            // console.log(data.stocks);
+            this.setState({
+                WatchStocks : data.stocks
+            })
+        })
     }
 
     /*<--- Live Data Feed Methods --->*/
@@ -217,9 +234,6 @@ class ScripsBody extends React.PureComponent
        
 
     }
-
-
-    
 
     /*<--- Snap Shot Request Methods --->*/
     SnapShotRequest(stockSymbol,stockNSECode,stockBSECode,stockExchange)
@@ -375,6 +389,13 @@ class ScripsBody extends React.PureComponent
         }
     }
 
+    toggleZoom(zoom)
+    {
+        this.setState({
+            zoom : zoom
+        });
+    }
+
     
     
     render()
@@ -455,19 +476,23 @@ class ScripsBody extends React.PureComponent
                             compareStock={this.compareStock}
                             toggleHide={this.toggleHide}
                             removeStock={this.removeStock}
+                            WatchStocks={this.state.WatchStocks}
                             CompareStockConfig={this.state.CompareStockConfig}
                             NewCompareStockConfig={this.state.NewCompareStockConfig}
                             OldCompareStockConfig={this.state.OldCompareStockConfig}
                             limitFlag={this.state.limitFlag}
                             selectedStock={this.props.selectedStock}
+                            toggleZoom={this.toggleZoom}
 
                         />
                         <StocksToWatch
+                            WatchStocks={this.state.WatchStocks}
                             stockISIN={this.state.stockDetails.stockISIN} 
                             stockIndustry={this.state.stockDetails.stockIndustry}
                             selectedStock={this.props.selectedStock}
                         />
                         <KeyStatistics 
+                            zoom={this.state.zoom}
                             stockData={this.state.stockData} 
                             snapdata={this.state.snapdata}
                             lastPoint={this.state.lastPoint}

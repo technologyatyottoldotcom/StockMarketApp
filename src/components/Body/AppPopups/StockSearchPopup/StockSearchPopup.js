@@ -18,49 +18,11 @@ export class StockSearchPopup extends React.PureComponent {
             search : '',
             suggestions : [],
             suggestionsLoaded : true,
-            stockISIN : this.props.stockDetails.stockISIN,
-            stockIndustry : this.props.stockDetails.stockIndustry,
-            isLoading : true,
-            stocks : [],
         }
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSelection = this.handleSelection.bind(this);
-        this.getStocksToWatch = this.getStocksToWatch.bind(this);
     }
 
-    componentDidMount()
-    {
-        console.log('MOUNT')
-        this.getStocksToWatch(this.state.stockIndustry,this.state.stockISIN);
-    }
-
-    componentDidUpdate(prevProps)
-    {
-        if(this.props.stockDetails.stockISIN !== prevProps.stockDetails.stockISIN)
-        {
-            this.setState({
-                stockISIN : this.props.stockDetails.stockISIN,
-                stockIndustry : this.props.stockDetails.stockIndustry,
-                isLoading : true
-            },()=>{
-                this.getStocksToWatch(this.state.stockIndustry,this.state.stockISIN);
-            })
-        }
-    }
-
-    getStocksToWatch(industry,isin) {
-
-        console.log('GET')
-        axios.get(`${REQUEST_BASE_URL}/stockstowatch/${industry}/${isin}/15`)
-        .then(res=>{
-            const data = res.data;
-            console.log(data.stocks);
-            this.setState({
-                isLoading : false,
-                stocks : data.stocks
-            })
-        })
-    }
 
     handleSearchChange(e)
     {
@@ -109,6 +71,8 @@ export class StockSearchPopup extends React.PureComponent {
 
     render() {
 
+        const stocks = this.props.WatchStocks;
+
         return (
             <>
                 <div className="Stock__popup">
@@ -154,7 +118,7 @@ export class StockSearchPopup extends React.PureComponent {
                             :
                             <>
                                 
-                                    {this.state.isLoading ? 
+                                    {stocks.length <=0 ? 
 
                                         <div className="Stock__suggessted__loader">
                                             <Pulse />
@@ -165,10 +129,10 @@ export class StockSearchPopup extends React.PureComponent {
                                         <>
                                         <div className="Stock__suggessted">
                                             <p className="Stock__section">Similar Symbols</p>
-                                                {this.state.stocks && this.state.stocks.map((s,indx)=>{
+                                                {stocks && stocks.map((s,indx)=>{
 
                                                    
-                                                    return <>
+                                                    return (
                                                         <StockItem 
                                                             key={indx} 
                                                             config={s}
@@ -176,7 +140,7 @@ export class StockSearchPopup extends React.PureComponent {
                                                             handleSelection={this.handleSelection}
 
                                                         />
-                                                    </>
+                                                    )
                                                 })}
                                             </div>
                                         </>

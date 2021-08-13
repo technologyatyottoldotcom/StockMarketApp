@@ -30,7 +30,7 @@ function NumberWithCommas(num,fixed) {
             return num;
         }
     } catch (e) { }
-    return "--"
+    return ""
 }
 
 const FiltersDatacashflow = [
@@ -151,30 +151,30 @@ const FiltersDataTypes = {
 
     Ratio : [
 
-        { title : "ROE" , bold : true , blue : false },
-        { title : "ROA" , bold : false , blue : false },
-        { title : "ROCE" , bold : true , blue : false },
-        { title : "Asset Turnover" , bold : false , blue : false },
-        { title : "Inventory Turnover" , bold : false , blue : false },
-        { title : "Recievables Turnover" , bold : false , blue : false },
-        { title : "Margins" , bold : true , blue : true },
-        { title : "Gross Margin" , bold : false , blue : false },
-        { title : "Operating Margin" , bold : false , blue : false },
-        { title : "Net Profit Margin" , bold : true , blue : false },
-        { title : "Financial Strength" , bold : true , blue : true },
-        { title : "Losses to Revenue" , bold : false , blue : false },
-        { title : "Deposit to Loan Ratio" , bold : true , blue : false },
-        { title : "Current Ratio" , bold : true , blue : false },
-        { title : "Debt to Equity" , bold : true , blue : false },
-        { title : "Net Interest Coverage" , bold : false , blue : false }
+        { title : "ROE" , bold : true , blue : false, fixed : 2 },
+        { title : "ROA" , bold : false , blue : false, fixed : 2 },
+        { title : "ROCE" , bold : true , blue : false, fixed : 2 },
+        { title : "Asset Turnover" , bold : false , blue : false, fixed : 2 },
+        { title : "Inventory Turnover" , bold : false , blue : false, fixed : 2 },
+        { title : "Recievables Turnover" , bold : false , blue : false, fixed : 2 },
+        { title : "Margins" , bold : true , blue : true, fixed : 2 },
+        { title : "Gross Margin" , bold : false , blue : false, fixed : 2 },
+        { title : "Operating Margin" , bold : false , blue : false, fixed : 2 },
+        { title : "Net Profit Margin" , bold : true , blue : false, fixed : 2 },
+        { title : "Financial Strength" , bold : true , blue : true, fixed : 2 },
+        { title : "Losses to Revenue" , bold : false , blue : false, fixed : 2 },
+        { title : "Deposit to Loan Ratio" , bold : true , blue : false, fixed : 2 },
+        { title : "Current Ratio" , bold : true , blue : false, fixed : 2 },
+        { title : "Debt to Equity" , bold : true , blue : false, fixed : 2 },
+        { title : "Net Interest Coverage" , bold : false , blue : false, fixed : 2 }
     ],
 
 
     ShareHoldings : [
-        { title : 'Promoters' , bold : false , fixed : 1},
-        { title : 'FIIs' , bold : false , fixed : 1},
-        { title : 'DIIs' , bold : false , fixed : 1},
-        { title : 'Others' , bold : false , fixed : 1}
+        { title : 'Promoters' , bold : false , fixed : 2},
+        { title : 'FIIs' , bold : false , fixed : 2},
+        { title : 'DIIs' , bold : false , fixed : 2},
+        { title : 'Others' , bold : false , fixed : 2}
     ]
 
 }
@@ -514,7 +514,7 @@ class CreateTable extends React.PureComponent{
                                                         else
                                                         {
                                                             let v = typeof r === 'string' ? String(NumberWithCommas(r,fixed))?.replace(/[+|-]/gi,'') : String(r)?.replace(/[+|-]/gi,'')
-                                                            r = (r && r !== ' ' && r !== null) ? v : '--';
+                                                            r = (r && r !== ' ' && r !== null) ? v : '';
                                                             return <td className={isBold} key={indx}>{r}</td>;
                                                         }
                                                     }

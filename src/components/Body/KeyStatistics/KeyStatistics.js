@@ -25,6 +25,8 @@ export class KeyStatistics extends React.PureComponent {
         let stockData = this.props.stockData;
         let snapData = this.props.snapdata;
 
+        const zoom = this.props.zoom;
+
         // console.log(lastPoint);
         // console.log(stockData);
         // console.log(stockData.close_price);
@@ -41,7 +43,8 @@ export class KeyStatistics extends React.PureComponent {
                         <p>Key Statistics</p>
                     </div>
                     <div className="ks__container">
-                        <div className="ks__container__half">
+                        {!zoom ? 
+                            <div className="ks__container__half">
                             <div className="ks__slot">
                                 <Statistics 
                                     type="number" 
@@ -86,6 +89,7 @@ export class KeyStatistics extends React.PureComponent {
                                 <Statistics type="number" name="ROCE(TTM)" value={this.props.snapdata.ROCE_TTM}/>
                             </div>
                         </div>
+                        :
                         <div className="ks__container__full">
                             <div className="ks__slot">
                                 <Statistics 
@@ -132,6 +136,8 @@ export class KeyStatistics extends React.PureComponent {
                                 <Statistics type="number" name="ROCE(TTM)" value={this.props.snapdata.ROCE_TTM}/>
                             </div>
                         </div>
+                        }
+                        
                     </div>
                 </div>
             )

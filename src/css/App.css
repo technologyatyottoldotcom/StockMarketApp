@@ -373,7 +373,7 @@
 .app__body 
 {
   overflow: hidden;
-  padding: 0 19%;
+  padding: 0 15%;
   height: 93vh;
 }
 
@@ -557,7 +557,8 @@
 
 .app__body .app__body__left .Indicator__popup .Indicator__title__name, 
 .app__body .app__body__left .Compare__popup .Compare__title__name, .app__body .app__body__left .Interactive__popup .Interactive__title__name,
-.Stock__popup .Stock__title__name
+.Stock__popup .Stock__title__name,
+.Stock__watch__popup .Stock__watch__title__name
 {
   width: 100%;
   height: 10%;
@@ -576,7 +577,8 @@
 .app__body .app__body__left .Indicator__popup .Indicator__title__name #Indicator__close, 
 .app__body .app__body__left .Compare__popup .Compare__title__name #Compare__close, 
 .app__body .app__body__left .Interactive__popup .Interactive__title__name #Interactive__close,
-.app__body .app__body__left .Stock__popup .Stock__title__name #Stock__close
+.app__body .app__body__left .Stock__popup .Stock__title__name #Stock__close,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__title__name #Stock__watch__close
 {
   width: 30px;
   height: 30px;
@@ -590,7 +592,8 @@
 .app__body .app__body__left .Indicator__popup .Indicator__title__name #Indicator__close:hover, 
 .app__body .app__body__left .Compare__popup .Compare__title__name #Compare__close:hover, 
 .app__body .app__body__left .Interactive__popup .Interactive__title__name #Interactive__close:hover,
-.app__body .app__body__left .Stock__popup .Stock__title__name #Stock__close:hover 
+.app__body .app__body__left .Stock__popup .Stock__title__name #Stock__close:hover,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__title__name #Stock__watch__close:hover 
 {
   background-color: #f5f5f5;
 }
@@ -664,7 +667,7 @@
 .app__body .app__body__left .Indicator__popup .Indicator__options .Indicator__option__block p 
 {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.1px;
   color: var(--font-primary);
 }
@@ -791,7 +794,8 @@
 
 
 .app__body .app__body__left .Compare__popup ,
-.app__body .app__body__left .Stock__popup
+.app__body .app__body__left .Stock__popup,
+.app__body .app__body__left .Stock__watch__popup
 {
   position: absolute;
   top: 50%;
@@ -859,7 +863,8 @@
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container ,
-.app__body .app__body__left .Stock__popup .Stock__container 
+.app__body .app__body__left .Stock__popup .Stock__container ,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container 
 {
   width: 100%;
   height: 85%;
@@ -868,15 +873,24 @@
 }
 
 
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container.loader
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .app__body .app__body__left .Stock__popup .Stock__container .Stock__suggessted,
-.app__body .app__body__left .Stock__popup .Stock__container .Stock__searched
+.app__body .app__body__left .Stock__popup .Stock__container .Stock__searched,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__suggessted
 {
   width: 100%;
   height: 100%;
 }
 
 .app__body .app__body__left .Stock__popup .Stock__container .Stock__suggessted__loader,
-.app__body .app__body__left .Stock__popup .Stock__container .Stock__searched__loader
+.app__body .app__body__left .Stock__popup .Stock__container .Stock__searched__loader,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__suggessted__loader
 {
   width: 100%;
   height: 100%;
@@ -886,7 +900,8 @@
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__section,
-.app__body .app__body__left .Stock__popup .Stock__container .Stock__section
+.app__body .app__body__left .Stock__popup .Stock__container .Stock__section,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__section
 {
   background-color: #f1f2f6;
   padding: 5px 30px;
@@ -895,7 +910,8 @@
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item,
-.app__body .app__body__left .Stock__popup .Stock__container .Stock__item 
+.app__body .app__body__left .Stock__popup .Stock__container .Stock__item,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__item
 {
   width: 100%;
   padding: 8px 30px 8px 30px;
@@ -908,21 +924,32 @@
   cursor: pointer;
 }
 
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__item.loader
+{
+  min-height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item:hover,
-.app__body .app__body__left .Stock__popup .Stock__container .Stock__item:hover  
+.app__body .app__body__left .Stock__popup .Stock__container .Stock__item:hover,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__item:hover  
 {
   background-color: #f5f5f5;
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item:hover .Compare__stock__exchange__section>div,
-.app__body .app__body__left .Stock__popup .Stock__container .Stock__item:hover .Stock__exchange__section>div
+.app__body .app__body__left .Stock__popup .Stock__container .Stock__item:hover .Stock__exchange__section>div,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__item:hover .Stock__watch__exchange__section>div
 {
   background-color:#ffffff;
 } 
 
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item .Compare__stock__name,
-.app__body .app__body__left .Stock__popup .Stock__container .Stock__item .Stock__name
+.app__body .app__body__left .Stock__popup .Stock__container .Stock__item .Stock__name,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__item .Stock__watch__name
 {
   font-weight: 700;
   font-size: 12px;
@@ -931,21 +958,24 @@
 } 
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item .Compare__stock__fullname,
-.app__body .app__body__left .Stock__popup .Stock__container .Stock__item .Stock__fullname
+.app__body .app__body__left .Stock__popup .Stock__container .Stock__item .Stock__fullname,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__item .Stock__watch__fullname
 {
   font-size: 10px;
   font-weight: 600;
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item .Compare__stock__exchange__section,
-.app__body .app__body__left .Stock__popup .Stock__container .Stock__item .Stock__exchange__section
+.app__body .app__body__left .Stock__popup .Stock__container .Stock__item .Stock__exchange__section,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__item .Stock__watch__exchange__section
 {
   display: flex;
   align-items: center;
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item .Compare__stock__exchange,
-.app__body .app__body__left .Stock__popup .Stock__container .Stock__item .Stock__exchange
+.app__body .app__body__left .Stock__popup .Stock__container .Stock__item .Stock__exchange,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__item .Stock__watch__exchange
 {
   font-weight: 700;
   font-size: 12px;
@@ -953,7 +983,8 @@
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item .Compare__stock__exchange__section>div,
-.app__body .app__body__left .Stock__popup .Stock__container .Stock__item .Stock__exchange__section>div
+.app__body .app__body__left .Stock__popup .Stock__container .Stock__item .Stock__exchange__section>div,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__item .Stock__watch__exchange__section>div
 {
   background-color: #f1f2f6;
   margin-left: 30px;
@@ -964,6 +995,13 @@
   border-radius: 3px;
 }
 
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container .Stock__watch__item .Stock__watch__exchange__section .Stock__watch__change__per
+{
+  margin-right: 15px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
 .app__body .app__body__left .Compare__popup .Compare__stock__container .Compare__stock__item .Compare__stock__exchange__section>div>img,
 .app__body .app__body__left .Stock__popup .Stock__container .Stock__item .Stock__exchange__section>div>img
 {
@@ -971,27 +1009,31 @@
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container::-webkit-scrollbar ,
-.app__body .app__body__left .Stock__popup .Stock__container::-webkit-scrollbar 
+.app__body .app__body__left .Stock__popup .Stock__container::-webkit-scrollbar,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container::-webkit-scrollbar 
 {
   width: 2px;
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container::-webkit-scrollbar-track ,
-.app__body .app__body__left .Stock__popup .Stock__container::-webkit-scrollbar-track 
+.app__body .app__body__left .Stock__popup .Stock__container::-webkit-scrollbar-track ,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container::-webkit-scrollbar-track
 {
   /* display: none; */
   background: #f4f7f9;
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container::-webkit-scrollbar-thumb ,
-.app__body .app__body__left .Stock__popup .Stock__container::-webkit-scrollbar-thumb 
+.app__body .app__body__left .Stock__popup .Stock__container::-webkit-scrollbar-thumb,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container::-webkit-scrollbar-thumb
 {
   background: #e6e6e6;
   border-radius: 3px;
 }
 
 .app__body .app__body__left .Compare__popup .Compare__stock__container::-webkit-scrollbar-thumb:hover ,
-.app__body .app__body__left .__popup .Stock__container::-webkit-scrollbar-thumb:hover 
+.app__body .app__body__left .Stock__popup .Stock__container::-webkit-scrollbar-thumb:hover ,
+.app__body .app__body__left .Stock__watch__popup .Stock__watch__container::-webkit-scrollbar-thumb:hover
 {
   background: #bebebe;
 }
@@ -1045,7 +1087,11 @@
 }
 
 
-.app__body .app__body__left .Indicator__popup.active, .app__body .app__body__left .Compare__popup.active, .app__body .app__body__left .Interactive__popup.active,.app__body .app__body__left .Stock__popup.active 
+.app__body .app__body__left .Indicator__popup.active, 
+.app__body .app__body__left .Compare__popup.active, 
+.app__body .app__body__left .Interactive__popup.active,
+.app__body .app__body__left .Stock__popup.active,
+.app__body .app__body__left .Stock__watch__popup.active 
 {
   display: block;
 }
@@ -1095,7 +1141,7 @@
   height: 100%;
   background-color: #ffffff;
   /* background-color: #19E683; */
-  border: 1px solid #eeeeee;
+  /* border: 1px solid #eeeeee; */
   z-index: 100;
   display: flex;
   align-items: center;
@@ -1111,12 +1157,12 @@
   font-size: 16px;
   height: 100%;
   padding: 0px 15px;
-  border: 1px solid #eeeeee;
+  /* border: 1px solid #eeeeee; */
   position: relative;
   cursor: pointer;
 }
 
-.app__body .app__body__left .chart__container .chart__container__stock__options .chart__options .chart__option__block span 
+.app__body .app__body__left .chart__container .chart__container__stock__options .chart__options .chart__option__block>span 
 {
   display: flex;
   justify-content: center;
@@ -1134,6 +1180,18 @@
 .app__body .app__body__left .chart__container .chart__container__stock__options .chart__options .chart__option__block img 
 {
   width: 28px;
+}
+
+.app__body .app__body__left .chart__container .chart__container__stock__options .chart__options .chart__option__block img#stock-watch-arrow
+{
+  width: 15px;
+  height: 15px;
+  transform: rotate(0deg);
+}
+
+.app__body .app__body__left .chart__container .chart__container__stock__options .chart__options .chart__option__block img#stock-watch-arrow.active
+{
+  transform: rotate(180deg);
 }
 
 .app__body .app__body__left .chart__container .chart__container__stock__options .chart__options .chart__option__block span#chart__type__icon 
@@ -1192,7 +1250,7 @@
 {
   margin-left: 10px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--font-primary);
 }
 
@@ -1203,8 +1261,8 @@
 
 .app__body .app__body__left .chart__container .chart__container__stock__options .chart__options .chart__option__block #chart__type__icon 
 {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
 }
 
 .app__body .app__body__left .chart__container .stock__info__chart
@@ -1493,6 +1551,12 @@
   border-radius: 0px;
 }
 
+.app__body .app__body__left__zoom .key__statistics
+{
+  height: 15%;
+  border-radius: 0px;
+}
+
 .app__body .app__body__left .key__statistics .ks__title 
 {
   color: var(--font-primary);
@@ -1506,7 +1570,8 @@
   height: 90%;
 }
 
-.app__body .app__body__left .key__statistics .ks__container .ks__container__half, .app__body .app__body__left .key__statistics .ks__container .ks__container__full 
+.app__body .app__body__left .key__statistics .ks__container .ks__container__half, 
+.app__body .app__body__left .key__statistics .ks__container .ks__container__full 
 {
   width: 100%;
   height: 100%;
@@ -1514,10 +1579,10 @@
   justify-content: space-between;
 }
 
-.app__body .app__body__left .key__statistics .ks__container .ks__container__full 
+/* .app__body .app__body__left .key__statistics .ks__container .ks__container__full 
 {
   display: none;
-}
+} */
 
 .app__body .app__body__left .key__statistics .ks__container .ks__slot 
 {
@@ -1605,7 +1670,7 @@
 .app__body .app__body__right 
 {
   width: 30%;
-  height: 96%;
+  height: 100%;
   box-shadow: 1px 1px 20px rgb(0 0 0 / 3%);
 }
 

@@ -41,7 +41,7 @@ class StocksToWatch extends React.PureComponent {
 
     componentDidUpdate(prevProps)
     {
-        console.log(this.props,prevProps);
+        // console.log(this.props,prevProps);
         if(this.props.stockISIN !== prevProps.stockISIN)
         {
             this.setState({
@@ -58,7 +58,7 @@ class StocksToWatch extends React.PureComponent {
         Axios.get(`${REQUEST_BASE_URL}/stockstowatch/${industry}/${isin}/5`)
         .then(res=>{
             const data = res.data;
-            console.log(data.stocks);
+            // console.log(data.stocks);
             this.setState({
                 isLoading : false,
                 stocks : data.stocks
@@ -83,7 +83,8 @@ class StocksToWatch extends React.PureComponent {
 
     render() {
 
-        if(!this.state.isLoading)
+        const stocks = this.props.WatchStocks;
+        if(stocks.length > 0)
         {
             return (
                 <>
@@ -108,7 +109,7 @@ class StocksToWatch extends React.PureComponent {
     
     
                         <div className="app__StocksToWatch__container">
-                            {this.state.stocks && this.state.stocks.map((s,i)=>{
+                            {stocks && stocks.map((s,i)=>{
                                 return <CreateSection 
                                         key={i} 
                                         config={s}

@@ -22,7 +22,7 @@ export class IndicatorPopup extends React.PureComponent {
 
     OpenIndicatorInfo(type)
     {
-        console.log('open info',type);
+        // console.log('open info',type);
         if(!this.state.indicatorInfoOpen)
         {
             $('.Indicator__info').addClass('active');
@@ -58,9 +58,7 @@ export class IndicatorPopup extends React.PureComponent {
                 <div className="Indicator__options">
                     <IndicatorInfo CloseIndicatorInfo={this.CloseIndicatorInfo} indicatorInfoType={this.state.indicatorInfoType}/>
                     {IndicatorsList.map((indicator,indx)=>{
-                        return <>
-                            <Indicator key={indx} IndicatorName={indicator.IndicatorName} IndicatorInfo={this.OpenIndicatorInfo} ChangeIndicatorType={this.props.ChangeIndicatorType} Indicator={indicator} InfoType={indicator.InfoType}/>
-                        </>
+                        return <Indicator key={indx} IndicatorName={indicator.IndicatorName} IndicatorInfo={this.OpenIndicatorInfo} ChangeIndicatorType={this.props.ChangeIndicatorType} Indicator={indicator} InfoType={indicator.InfoType}/>
                     })}
 
                 </div> 

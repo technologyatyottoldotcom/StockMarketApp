@@ -34,7 +34,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 30px 0 10px;
+    padding: 0 5%;
 }
 
 .portfolio__container .portfolio__details
@@ -170,9 +170,11 @@
 
 .portfolio__container .portfolio__table
 {
-    padding: 0 10px;
+    padding: 10px 0px 0px;
     max-height: 70%;
     font-size: 12px;
+    display: flex;
+    justify-content: center;
 }
 
 .portfolio__container .portfolio__table table thead

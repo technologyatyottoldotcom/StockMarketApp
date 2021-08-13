@@ -302,7 +302,7 @@ function getMinuteInterval(startDate,endDate,incr)
         );
 
     }
-    console.log(interval.length,interval[0],interval[interval.length-1]);
+    // console.log(interval.length,interval[0],interval[interval.length-1]);
     return interval;
 }
 

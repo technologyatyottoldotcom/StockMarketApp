@@ -9,6 +9,7 @@
     width : 100% ;
     text-align: center;
     border-collapse: collapse;
+    overflow-x: scroll;
   th {
     width: 150px;
   } 
@@ -16,7 +17,7 @@
       width: 80px;
    }
  tr td:first-child{
-      padding: 5px;
+      padding: 0px 30px;
       text-align: left;
   }
   tbody{
@@ -29,6 +30,7 @@
       padding-left : 2px !important;
       height : 10px;
       border:none;
+      padding: 0 30px;
       &:not(:first-child){
         border : 1px solid #ccc;
         border-bottom-style:1px solid;
@@ -41,26 +43,26 @@
 }
 
 
-.GlobalScrollBar{
-  overflow : scroll;
-  scroll-behavior : smooth;
-  overflow-wrap : break-word;
-  color: black;
+// .GlobalScrollBar{
+//   overflow : scroll;
+//   scroll-behavior : smooth;
+//   overflow-wrap : break-word;
+//   color: black;
 
-  &::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
-    }
+//   &::-webkit-scrollbar {
+//       width: 5px;
+//       height: 5px;
+//     }
     
-  &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-  &::-webkit-scrollbar-thumb {
-      background: #dbd9d9;
-      border-radius: 20px;
-    }
-  &::-webkit-scrollbar-thumb:hover {
-      background: #dbd9d9;
-    }
-}
+//   &::-webkit-scrollbar-track {
+//       background: transparent;
+//     }
+//   &::-webkit-scrollbar-thumb {
+//       background: #dbd9d9;
+//       border-radius: 20px;
+//     }
+//   &::-webkit-scrollbar-thumb:hover {
+//       background: #dbd9d9;
+//     }
+// }
 

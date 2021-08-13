@@ -24,7 +24,7 @@ function getData(options)
 
         let stockArray = [];
         
-        let url = `https://mastertrust-charts.tradelab.in/api/v1/charts?exchange=${options.exchange}&token=${options.token}&candletype=${options.ct}&starttime=${options.starttime}&endtime=1632583718&data_duration=${options.dd}`;
+        let url = `https://masterswift.mastertrust.co.in/api/v1/charts/tdv?exchange=${options.exchange}&token=${options.token}&candletype=${options.ct}&starttime=${options.starttime}&endtime=1632583718&data_duration=${options.dd}`;
         // console.log(url);
         axios.get(url)
         .then(res=>{

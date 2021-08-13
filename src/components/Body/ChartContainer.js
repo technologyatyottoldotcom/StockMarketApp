@@ -8,8 +8,11 @@ import Interactive from './Interactive';
 import ComparePopup from './AppPopups/ComparePopup/ComparePopup';
 import IndicatorPopup from './AppPopups/IndicatorPopup/IndicatorPopup';
 import StockSearchPopup from './AppPopups/StockSearchPopup/StockSearchPopup';
+import StockWatchPopup from './AppPopups/StockWatchPopup/StockWatchPopup';
+import StockWatchHero from './AppPopups/StockWatchPopup/StockWatchHero';
 import { Alert } from './CustomChartComponents/CustomAlert/CustomAlert';
 import Zoom from '../../assets/icons/zoom.svg';
+import Chevron from '../../assets/icons/ChevronDown.svg';
 import Compare from '../../assets/icons/compare.svg';
 import IndicatorIcon from '../../assets/icons/indicator.svg';
 import CrossIcon from '../../assets/icons/crossicon.svg';
@@ -54,6 +57,7 @@ export class ChartContainer extends React.PureComponent {
         this.CloseComparePopup = this.CloseComparePopup.bind(this);
         this.CloseIndicatorPopup = this.CloseIndicatorPopup.bind(this);
         this.CloseStockPopup = this.CloseStockPopup.bind(this);
+        this.CloseStockWatchPopup = this.CloseStockWatchPopup.bind(this);
         this.ChangeIndicatorType = this.ChangeIndicatorType.bind(this);
         this.addCompareData = this.addCompareData.bind(this);
         this.removeCompareData = this.removeCompareData.bind(this);
@@ -69,6 +73,7 @@ export class ChartContainer extends React.PureComponent {
             interactiveOpen : false,
             indicatorInfoOpen : false,
             stockOpen : false,
+            stockWatchOpen : false,
             comparedataLoaded : true,
             bigcomparedataLoaded : true,
             RemoveFlag : false,
@@ -1109,6 +1114,26 @@ export class ChartContainer extends React.PureComponent {
         }
     }
 
+    OpenStockWatchPopup()
+    {
+        if(!this.state.stockWatchOpen)
+        {
+            $('#stock-watch-arrow').addClass('active');
+            this.wrapPopups('Stock__watch__popup',true);
+            this.wrapStates('stockWatchOpen',true);
+        }
+    }
+
+    CloseStockWatchPopup()
+    {
+        if(this.state.stockWatchOpen)
+        {
+            $('#stock-watch-arrow').removeClass('active');
+            this.wrapPopups('Stock__watch__popup',false);
+            this.wrapStates('stockWatchOpen',false);
+        }
+    }
+
     changeInteractiveType(Itype,Stype)
     {
         this.setState({
@@ -1136,14 +1161,15 @@ export class ChartContainer extends React.PureComponent {
             
             $('.chart__container__stock__options').removeClass('active');
             $('.cash__position').removeClass('cash__position__zoom');
-            $('.ks__container__full').css('display','none');
-            $('.ks__container__half').css('display','flex');
+            // $('.ks__container__full').css('display','none');
+            // $('.ks__container__half').css('display','flex');
         
             this.setState({
                 zoom : false,
                 chartWidth : $('.stock__chart').width(),
                 chartHeight : $('.stock__chart').height()
             });
+            this.props.toggleZoom(false);
             console.log('zoom out',$('.stock__chart').height(),$('.stock__chart').width());
         }
         else
@@ -1159,20 +1185,22 @@ export class ChartContainer extends React.PureComponent {
             $('.app__body__bottom').addClass('app__body__bottom__zoom');
             $('.cash__position').addClass('cash__position__zoom');
             $('.chart__container__stock__options').addClass('active');
-            $('.ks__container__full').css('display','flex');
-            $('.ks__container__half').css('display','none');
+            // $('.ks__container__full').css('display','flex');
+            // $('.ks__container__half').css('display','none');
 
             this.setState({
                 zoom : true,
                 chartWidth : $('.stock__chart').width(),
                 chartHeight : $('.stock__chart').height()
             });
+            this.props.toggleZoom(true);
 
             console.log('zoom in',$('.stock__chart').height(),$('.stock__chart').width());
 
            
             
         }
+
        
     }
 
@@ -1225,7 +1253,7 @@ export class ChartContainer extends React.PureComponent {
 
     wrapPopups(popup,open)
     {
-        const PopupArray = ['Compare__popup','Interactive__popup','Indicator__popup','Stock__popup'];
+        const PopupArray = ['Compare__popup','Interactive__popup','Indicator__popup','Stock__popup','Stock__watch__popup'];
 
         PopupArray.map((p,i)=>{
             popup && $('.'+p).removeClass('active');
@@ -1249,7 +1277,7 @@ export class ChartContainer extends React.PureComponent {
 
     wrapStates(state,open)
     {
-        const states = ['compareOpen','indicatorOpen','interactiveOpen','stockOpen'];
+        const states = ['compareOpen','indicatorOpen','interactiveOpen','stockOpen','stockOpen','stockWatchOpen'];
 
         let stateobj = {};
 
@@ -1297,8 +1325,6 @@ export class ChartContainer extends React.PureComponent {
 
         let stockName = this.props.stockDetails.stockExchange.exchange === 'NSE' ? this.props.stockDetails.stockNSECode : this.props.stockDetails.stockBSECode; 
         
-        // console.log('DATA LOADED ',this.state.dataLoaded);
-        // console.log(this.state.chartHeight,this.state.chartWidth)
             return (
 
                 <>
@@ -1311,6 +1337,7 @@ export class ChartContainer extends React.PureComponent {
                     stockDetails={this.props.stockDetails}
                     CloseComparePopup={this.CloseComparePopup}
                     CompareStockConfig={this.props.CompareStockConfig}
+                    WatchStocks={this.props.WatchStocks}
                     compareStock={this.props.compareStock}
                     removeStock={this.props.removeStock}
                     RemoveFlag={this.state.RemoveFlag}
@@ -1322,12 +1349,22 @@ export class ChartContainer extends React.PureComponent {
                     stockDetails={this.props.stockDetails}
                     CloseStockPopup={this.CloseStockPopup}
                     CompareStockConfig={this.props.CompareStockConfig}
+                    WatchStocks={this.props.WatchStocks}
                     compareStock={this.props.compareStock}
                     removeStock={this.props.removeStock}
                     RemoveFlag={this.state.RemoveFlag}
                     selectedStock={this.props.selectedStock}
 
                 />
+
+                <StockWatchPopup 
+                    WatchStocks={this.props.WatchStocks}
+                    stockDetails={this.props.stockDetails}
+                    CloseStockWatchPopup={this.CloseStockWatchPopup}
+                    selectedStock={this.props.selectedStock}
+                />
+
+                
     
                 <div className="Interactive__popup">
                     <div className="Interactive__title__name">
@@ -1391,13 +1428,24 @@ export class ChartContainer extends React.PureComponent {
                                 </div>
                             </div>
                             <div className="chart__option__block" onClick={this.OpenComparePopup.bind(this)}>
-                                <img src={Compare} alt="+"/><span>Compare</span>
+                                <img src={Compare} alt="+"/>
+                                <span>Compare</span>
                             </div>
                             <div className="chart__option__block" onClick={this.OpenIndicatorPopup.bind(this)}>
-                                <img src={IndicatorIcon} alt="+"/><span>Indicator</span>
+                                <img src={IndicatorIcon} alt="+"/>
+                                <span>Indicator</span>
                             </div>
                             <div className="chart__option__block" onClick={this.OpenInteractivePopup.bind(this)}>
-                                <img src={IndicatorIcon} alt="+"/><span>Interactive</span>
+                                <img src={IndicatorIcon} alt="+"/>
+                                <span>Interactive</span>
+                            </div>
+                            <div className="chart__option__block" onClick={this.OpenStockWatchPopup.bind(this)}>
+                                <img src={IndicatorIcon} alt="+"/>
+                                <span>People Also Watch</span>
+                                {this.props.WatchStocks.length > 0 && 
+                                    <StockWatchHero config={this.props.WatchStocks[0]}/>
+                                }
+                                <img id="stock-watch-arrow" width={15} height={15} src={Chevron} alt="^"/>
                             </div>
                         </div>
                         

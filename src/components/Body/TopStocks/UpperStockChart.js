@@ -24,7 +24,7 @@ export class UpperStockChart extends React.PureComponent {
         this.state = {
             chartConfig : null,
             apidata : this.props.apidata,
-            extradata : this.props.extradata,
+            // extradata : this.props.extradata,
         }
 
         this.setUpChart = this.setUpChart.bind(this);
@@ -33,7 +33,7 @@ export class UpperStockChart extends React.PureComponent {
 
     componentDidMount()
     {
-        console.log('---TOP STOCK MOUNTED---');
+        // console.log('---TOP STOCK MOUNTED---');
         this.setUpChart();
     }
 
@@ -54,8 +54,8 @@ export class UpperStockChart extends React.PureComponent {
         let xScaleVal;
         let displayxAccessorVal;
 
-        let chartdata = this.state.apidata.concat(this.state.extradata);
-        // let chartdata = this.state.apidata;
+        // let chartdata = this.state.apidata.concat(this.state.extradata);
+        let chartdata = this.state.apidata;
 
         const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => d.date);
@@ -92,8 +92,8 @@ export class UpperStockChart extends React.PureComponent {
         let xScaleVal;
         let displayxAccessorVal;
 
-        let chartdata = this.props.apidata.concat(this.props.extradata);
-        // let chartdata = this.state.apidata;
+        // let chartdata = this.props.apidata.concat(this.props.extradata);
+        let chartdata = this.state.apidata;
 
         const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => d.date);
@@ -124,7 +124,7 @@ export class UpperStockChart extends React.PureComponent {
 
     render() {
 
-        if(this.state.apidata && this.state.extradata && this.state.chartConfig)
+        if(this.state.apidata && this.state.chartConfig)
         {
 
             const { type, width, height , ratio } = this.props;

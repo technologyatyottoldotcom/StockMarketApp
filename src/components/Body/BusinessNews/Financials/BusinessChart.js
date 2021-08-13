@@ -195,46 +195,41 @@ class BusinessChart extends React.PureComponent {
            {xvalues.length > 0 && 
             
               <div className="bn__stock__financial__chart">
-                <LineChart width={290} height={180} data={data}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                  <XAxis dataKey="date" tick={{fontSize : '10px'}} tickCount={6}/>
-                  {/* <YAxis type="number" domain={['auto','auto']} hide={true}/>                   */}
-                  <Tooltip labelStyle={{fontSize : '9px'}} contentStyle={{fontSize : '10px'}} content={<CustomTooltip fixed={this.props.fixed}/>}/>
-                  <Legend verticalAlign="top" height={26} iconSize={6} iconType="circle" align="left" payload={
-                    xvalues.map(
-                        (item, indx) => ({
-                          id: indx,
-                          type: "circle",
-                          value: item + ' '+this.customLabel(item),
-                          color : chartcolors[indx%2]
-                        })
-                      )
-                  } />
-                  {
-                    xvalues.map((xv,i)=>{
-                      
-                      return (
-                        <YAxis orientation={i%2 === 0 ? 'left' : 'right'} yAxisId={xv} domain={[dataMin => (dataMin - dataMin / 4), dataMax => (dataMax + dataMax / 4)]} type="number" dataKey={xv} stroke="#8884d8" hide={true}/>
-                      )
-                    })
-                  }
-                  {
-                    xvalues.map((xv,i)=>{
-                      
-                      return (
-                          <Line key={i} yAxisId={xv} name={xv} type="monotone" dataKey={xv} stroke={chartcolors[i%2]} strokeWidth={2}/>
-                      )
-                    })
-                  }
-                </LineChart>
-                {/* <LineChart width={290} height={180} data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                  <XAxis dataKey="date" tick={{fontSize : '10px'}}/>
-                  <YAxis yAxisId="left" type="number" dataKey="Net Income" stroke="#8884d8" hide={true}/>
-                  <YAxis yAxisId="right" type="number" dataKey="Revenue" orientation="right" stroke="#8884d8" hide={true}/>
-                  <Line yAxisId="left" name='Net Income' type="monotone" dataKey='Net Income' stroke='#00a0e3' strokeWidth={2}/>
-                  <Line yAxisId="right" name='Revenue' type="monotone" dataKey='Revenue' stroke='#e51a4b' strokeWidth={2}/>
-                  <Tooltip labelStyle={{fontSize : '9px'}} contentStyle={{fontSize : '10px'}} content={<CustomTooltip fixed={this.props.fixed}/>}/>
-                </LineChart> */}
+                <ResponsiveContainer width="80%" height={230}>
+                  <LineChart  data={data}
+                    margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+                    <XAxis dataKey="date" tick={{fontSize : '10px'}} tickCount={6}/>
+                    {/* <YAxis type="number" domain={['auto','auto']} hide={true}/>                   */}
+                    <Tooltip labelStyle={{fontSize : '9px'}} contentStyle={{fontSize : '10px'}} content={<CustomTooltip fixed={this.props.fixed}/>}/>
+                    <Legend verticalAlign="top" height={26} iconSize={6} iconType="circle" align="left" payload={
+                      xvalues.map(
+                          (item, indx) => ({
+                            id: indx,
+                            type: "circle",
+                            value: item + ' '+this.customLabel(item),
+                            color : chartcolors[indx%2]
+                          })
+                        )
+                    } />
+                    {
+                      xvalues.map((xv,i)=>{
+                        
+                        return (
+                          <YAxis orientation={i%2 === 0 ? 'left' : 'right'} yAxisId={xv} domain={[dataMin => (dataMin - dataMin / 4), dataMax => (dataMax + dataMax / 4)]} type="number" dataKey={xv} stroke="#8884d8" hide={true}/>
+                        )
+                      })
+                    }
+                    {
+                      xvalues.map((xv,i)=>{
+                        
+                        return (
+                            <Line key={i} yAxisId={xv} name={xv} type="monotone" dataKey={xv} stroke={chartcolors[i%2]} strokeWidth={2}/>
+                        )
+                      })
+                    }
+                  </LineChart>
+                </ResponsiveContainer>
+                
               </div>
             
            }

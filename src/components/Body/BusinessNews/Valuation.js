@@ -114,7 +114,7 @@ function CustomSlider(props){
         const printText = props.printText || ['Quite High', 'High', 'Inconclusive', 'Low', 'Quite Low'],
         steps = printText.length,
         value = props.ValuationConfidence;
-        console.log('custom',value);
+        // console.log('custom',value);
         // console.log(props);
            
         return (
@@ -312,8 +312,6 @@ class Valuation extends React.PureComponent{
 
         this.setState({
             ValuationFactors : VObj
-        },()=>{
-            console.log(this.state.ValuationFactors);
         });
 
 
@@ -328,7 +326,7 @@ class Valuation extends React.PureComponent{
         const defaultfactors = this.state.defaultfactors;
         const maxFactor = 3;
         const ValFactors = this.state.ValuationFactors;
-        console.log(ValFactors);
+        // console.log(ValFactors);
         let EarningVal = [
             {
                 title: 'Net Profit Growth',
@@ -372,8 +370,6 @@ class Valuation extends React.PureComponent{
 
         this.setState({
             EarningValuation : EarningVal
-        },()=>{
-            console.log(this.state.EarningValuation);
         });
 
         // console.log('Earning Valuation End');
@@ -501,9 +497,8 @@ class Valuation extends React.PureComponent{
             let ThreeY = parseFloat((((PriceBounds[num1]['High']+PriceBounds[num1]['Low'])/2)/Base));
             let FiveY = parseFloat((((PriceBounds[num2]['High']+PriceBounds[num2]['Low'])/2)/Base));
 
-
-            let TYAR = parseFloat(((Math.pow((1+ThreeY),(1/3))-1)*100).toFixed(2));
-            let FYAR = parseFloat(((Math.pow((1+FiveY),(1/3))-1)*100).toFixed(2));
+            let TYAR = parseFloat(((Math.pow((1+ThreeY),(1/num1))-1)*100).toFixed(2));
+            let FYAR = parseFloat(((Math.pow((1+FiveY),(1/num2))-1)*100).toFixed(2));
 
             // console.log(ThreeY,FiveY,TYAR,FYAR);
 
@@ -568,8 +563,6 @@ class Valuation extends React.PureComponent{
         let IRatio = ValFactors['IRDFR'];
         let HBound = Math.round((val*HBoundMFactor*IRatio).toFixed(2));
         let LBound = Math.round((val*LBoundMFactor*IRatio).toFixed(2));
-
-        console.log(IRatio,HBound,LBound);
 
         ValFactors['ROE'] = val;
         ValFactors['EMHB'] = HBound;
@@ -667,7 +660,7 @@ class Valuation extends React.PureComponent{
 
             const defaultfactors = this.state.defaultfactors;
 
-            console.log(defaultfactors);
+            // console.log(defaultfactors);
             
             if(defaultfactors['TTMEPS'] < 0 || defaultfactors['ROETTM'] < 0 || defaultfactors['EPSG'] < 0 || defaultfactors['NPG'] < 0)
             {

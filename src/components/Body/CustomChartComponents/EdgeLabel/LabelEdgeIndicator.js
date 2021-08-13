@@ -32,7 +32,7 @@ export function renderSVG(props) {
 
 		const { rectWidth, rectHeight , rectRadius } = edge.coordinateBase;
 
-		console.log(edge.coordinateBase);
+		// console.log(edge.coordinateBase);
 		
 
 		coordinateBase =

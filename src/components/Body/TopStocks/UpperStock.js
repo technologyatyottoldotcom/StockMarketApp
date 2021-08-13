@@ -225,7 +225,7 @@ export class UpperStock extends React.PureComponent {
         return new Promise((resolve,reject)=>{
             let ws = new WebSocket(this.state.endpoint);
             ws.onopen = ()=>{
-                console.log('connection done');
+                // console.log('connection done');
                 this.setState({
                     ws : ws,
                     FeedConnection : true

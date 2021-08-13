@@ -898,7 +898,7 @@ export class StockChart extends React.PureComponent {
 
                                     {/* console.log(indicatordata); */}
 
-                            return <Chart id={(index+2)} yExtents={accessor} height={chartHeight} origin={(w,h)=>[0,originHeight]} padding={5}>
+                            return <Chart key={index} id={(index+2)} yExtents={accessor} height={chartHeight} origin={(w,h)=>[0,originHeight]} padding={5}>
 
                                 {ChartIndicators(index,indicator,width,height,range,series,title,color,indicatorConfig,yAccessor,TotalCharts,IndicatorOutside,this.props.DeleteIndicatorType,this.props.SwapCharts)}
                                 

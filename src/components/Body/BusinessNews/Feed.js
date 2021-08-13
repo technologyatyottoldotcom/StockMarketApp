@@ -1,11 +1,10 @@
 import React from 'react';
+import Axios from 'axios';
 import '../../../scss/Feed.scss';
 import Pulse from '../../Loader/Pulse';
 import { Popover, Whisper , Dropdown , Loader } from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
 
-
-import Axios from 'axios';
 
 const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;
 
@@ -101,9 +100,6 @@ const SVGLOGOS = {
     } else return null
   }
 }
-
-
-
  
 function shortenLargeNumber(num, digits) {
     var units = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'],
@@ -166,7 +162,6 @@ function CreateBox(props) {
         </>
     )
 }
-
 
 class TwitterFeeds extends React.PureComponent{
     constructor(props){
@@ -517,8 +512,6 @@ render(){
         )  
   }
 }
-
-
 
 function RenderMedia({ data }){
   const Get = (t,i=0)=>Array.isArray(t) ? t[i] : t;
