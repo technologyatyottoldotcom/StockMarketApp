@@ -2,6 +2,8 @@ import React from 'react';
 import AnimatedDigit from '../AnimatedDigit';
 import {readMarketData,setChange} from '../../../exports/FormatData';
 
+const LIVEFEED_BASE_URL = process.env.REACT_APP_LIVEFEED_BASE_URL;
+
 const SVGIMG1 = {
     Star: ({ isFav = false }) => {
         const [hover, setHover] = React.useState(isFav)
@@ -36,7 +38,6 @@ export class CreateSection extends React.PureComponent {
             change : '',
             ws : null,
             FeedConnection : false,
-            endpoint : 'wss://masterswift-beta.mastertrust.co.in/hydrasocket/v2/websocket?access_token=qaoSOB-l4jmwXlxlucY4ZTKWsbecdrBfC7GoHjCRy8E.soJkcdbrMmew-w1C0_KZ2gcQBUPLlPTYNbt9WLJN2g8'
         }
     }
 
@@ -77,7 +78,29 @@ export class CreateSection extends React.PureComponent {
                 {
                     if(this.state.stockData)
                     {
-                        convertedData = readMarketData(data,this.state.stockData['close_price']);
+                        let stockdata = this.state.stockData;
+                        // console.log(stockdata.last_traded_price,stockdata.close_price,stockdata.open_price);
+                        if(stockdata.last_traded_price === stockdata.close_price)
+                        {
+
+                            let compare = stockdata.open_price === 0 ? stockdata.close_price : stockdata.open_price;
+                            const {change_price,change_percentage} = setChange(stockdata.last_traded_price,compare);
+                            // livedata
+
+                            let livedata = stockdata;
+                            livedata['change_price'] = change_price;
+                            livedata['change_percentage'] = change_percentage;
+
+                            convertedData = {
+                                livedata
+                            }
+
+                        }
+                        else
+                        {
+                            // console.log('close');
+                            convertedData = readMarketData(data,this.state.stockData['close_price']);
+                        }
                     }
                     else
                     {
@@ -98,7 +121,9 @@ export class CreateSection extends React.PureComponent {
                     let trade_price = this.state.stockData && this.state.stockData.last_traded_price;
                     let open_price = this.state.stockData && this.state.stockData.open_price;
 
-                    const {change_price,change_percentage} = setChange(trade_price,open_price);
+                    let compare = open_price === 0 ? livedata.close_price : open_price;
+                    
+                    const {change_price,change_percentage} = setChange(trade_price,compare);
 
                     // livedata
                     livedata['change_price'] = change_price;
@@ -112,12 +137,21 @@ export class CreateSection extends React.PureComponent {
                 }
             }
         }
+
+        setInterval(()=>{
+            ws.send(JSON.stringify({
+                "a": "h", 
+                "v": [[exchangecode, stockcode]], 
+                "m": ""
+            }
+            ));
+        },10*1000)
     }
 
     async makeSocketConnection()
     {
         return new Promise((resolve,reject)=>{
-            let ws = new WebSocket(this.state.endpoint);
+            let ws = new WebSocket(LIVEFEED_BASE_URL);
             ws.onopen = ()=>{
                 // console.log('connection done');
                 this.setState({

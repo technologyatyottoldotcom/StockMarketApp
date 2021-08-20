@@ -26,6 +26,8 @@ import 'rsuite/dist/styles/rsuite-default.css';
 
 
 const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;
+const LIVEFEED_BASE_URL = process.env.REACT_APP_LIVEFEED_BASE_URL;
+
 
 
 
@@ -48,20 +50,26 @@ class ScripsBody extends React.PureComponent
             dataLoaded : false,
             bigdataLoaded : false,
             limitFlag : false,
+            StockSettingsOpen : false,
+            settingUpdateFlag : false,
             range : 'D',
-            endpoint : 'wss://masterswift-beta.mastertrust.co.in/hydrasocket/v2/websocket?access_token=qaoSOB-l4jmwXlxlucY4ZTKWsbecdrBfC7GoHjCRy8E.soJkcdbrMmew-w1C0_KZ2gcQBUPLlPTYNbt9WLJN2g8',
             ws : null,
             FeedConnection : false,
             CompareStockConfig : [],
             WatchStocks : [],
             NewCompareStockConfig : {},
             OldCompareStockConfig : {},
+            StockCompareSettings : {},
+            DefaultCompareSettings : {}
         }
 
         this.SnapShotRequest = this.SnapShotRequest.bind(this);
         this.setRange = this.setRange.bind(this);
         this.compareStock = this.compareStock.bind(this);
         this.toggleHide = this.toggleHide.bind(this);
+        this.toggleCompareSettings = this.toggleCompareSettings.bind(this);
+        this.closeCompareSettings = this.closeCompareSettings.bind(this);
+        this.saveCompareSettings = this.saveCompareSettings.bind(this);
         this.removeStock = this.removeStock.bind(this);
         this.closeNews = this.closeNews.bind(this);
         this.toggleZoom = this.toggleZoom.bind(this);
@@ -118,7 +126,7 @@ class ScripsBody extends React.PureComponent
     async makeSocketConnection()
     {
         return new Promise((resolve,reject)=>{
-            let ws = new WebSocket(this.state.endpoint);
+            let ws = new WebSocket(LIVEFEED_BASE_URL);
             ws.onopen = ()=>{
                 console.log('connection done');
                 this.setState({
@@ -140,7 +148,7 @@ class ScripsBody extends React.PureComponent
 
     checkConnection()
     {
-        console.log('connection : ',this.props.stockDetails.stockCode);
+        // console.log('connection : ',this.props.stockDetails.stockCode);
         this.setState({
             stockCode : this.props.stockDetails.stockCode,
             stockSymbol : this.props.stockDetails.stockSymbol
@@ -169,7 +177,7 @@ class ScripsBody extends React.PureComponent
                 "m": "marketdata"}
             ))
         }
-        console.log('subscribe',this.state.stockDetails.stockCode);
+        // console.log('subscribe',this.state.stockDetails.stockCode);
         ws.send(JSON.stringify({
             "a": "subscribe", 
             "v": [[this.state.stockDetails.stockExchange.code, this.state.stockDetails.stockCode]], 
@@ -230,6 +238,14 @@ class ScripsBody extends React.PureComponent
                 }
             }
         }
+
+        setInterval(()=>{
+            ws.send(JSON.stringify({
+                "a": "h", 
+                "v": [[this.state.stockDetails.stockExchange.code, this.state.stockDetails.stockCode]], 
+                "m": ""}
+            ));
+        },10*1000)
 
        
 
@@ -328,16 +344,25 @@ class ScripsBody extends React.PureComponent
                 // let color = getStockColor();
                 let color = getStockColor();
                 let hide = false;
+                let config = {
+                    color : color,
+                    hide : hide,
+                    charttype : 'line',
+                    chartwidth : '2',
+                    priceline : false,
+                    pricelabel : true,
+                    stocklabel : true
+                }
                 this.setState({
                     CompareStockConfig : [...this.state.CompareStockConfig,{
-                        code,name,symbol,stocksymbol,color,company,exchange,hide
+                        code,name,symbol,stocksymbol,color,company,exchange,hide,config
                     }],
                     NewCompareStockConfig : {
-                        code,name,symbol,stocksymbol,color,company,exchange,hide
+                        code,name,symbol,stocksymbol,color,company,exchange,hide,config
                     }
                 },()=>{
-                    console.log(this.state.CompareStockConfig);
-                    console.log(this.state.NewCompareStockConfig);
+                    // console.log(this.state.CompareStockConfig);
+                    // console.log(this.state.NewCompareStockConfig);
                 });
             }
         }
@@ -346,19 +371,23 @@ class ScripsBody extends React.PureComponent
     toggleHide(e,symbol)
     {
 
-        console.log(symbol);
+        // console.log(symbol);
         let CompareStockConfig = this.state.CompareStockConfig;
         let indx = CompareStockConfig.findIndex((c)=> c.symbol === symbol);
 
-        console.log(indx);
+        // console.log(indx);
 
         if(indx !== -1)
         {
             // console.log(indx);
             let TempConfig = [...CompareStockConfig];
-            TempConfig[indx] = {...TempConfig[indx],hide : !TempConfig[indx].hide};
 
-            console.log(TempConfig);
+            let StockConfig = TempConfig[indx];
+            StockConfig['hide'] = !StockConfig['hide'];
+            StockConfig['config']['hide'] = !StockConfig['config']['hide'];
+            TempConfig[indx] = StockConfig;
+
+            // console.log(TempConfig);
 
             this.setState({
                 CompareStockConfig : TempConfig,
@@ -366,21 +395,83 @@ class ScripsBody extends React.PureComponent
         }
     }
 
+    toggleCompareSettings(e,symbol)
+    {
+        let CompareStockConfig = this.state.CompareStockConfig;
+        let indx = CompareStockConfig.findIndex((c)=> c.symbol === symbol);
+
+        if(indx !== -1)
+        {
+            // console.log(indx);
+            let TempConfig = [...CompareStockConfig][indx];
+            this.setState({
+                StockSettingsOpen : true,
+                StockCompareSettings : TempConfig,
+            });
+            $('.app__back__blur').addClass('active');
+        }
+    }
+
+    closeCompareSettings(CompareConfig)
+    {
+
+        let symbol = CompareConfig.symbol;
+        let CompareStockConfig = this.state.CompareStockConfig;
+        let indx = CompareStockConfig.findIndex((c)=> c.symbol === symbol);
+
+        if(indx !== -1)
+        {
+            // console.log(indx);
+            CompareStockConfig[indx] = CompareConfig;
+            
+            this.setState({
+                CompareStockConfig,
+                settingUpdateFlag : !this.state.settingUpdateFlag,
+                StockSettingsOpen : false
+            });
+
+            // console.log(this.state.CompareStockConfig)
+        }
+        $('.app__back__blur').removeClass('active');
+
+    }
+
+    saveCompareSettings(CompareConfig)
+    {
+        let symbol = CompareConfig.symbol;
+        let CompareStockConfig = this.state.CompareStockConfig;
+        let indx = CompareStockConfig.findIndex((c)=> c.symbol === symbol);
+
+        if(indx !== -1)
+        {
+            // console.log(indx);
+            CompareStockConfig[indx] = CompareConfig;
+            
+            this.setState({
+                CompareStockConfig,
+                settingUpdateFlag : !this.state.settingUpdateFlag
+            });
+
+            // console.log(this.state.CompareStockConfig)
+        }
+
+    }
+
     removeStock(e,symbol)
     {
-        console.log(symbol);
+        // console.log(symbol);
 
         let CompareStockConfig = this.state.CompareStockConfig;
         let indx = CompareStockConfig.findIndex((c)=> c.symbol === symbol);
-        console.log(indx);
+        // console.log(indx);
         if(indx !== -1)
         {
             // console.log(indx);
             let OldStock = CompareStockConfig[indx];
             setStockColor(OldStock.color);
             CompareStockConfig.splice(indx,1);
-            console.log('Old Stock : ',OldStock);
-            console.log(CompareStockConfig);
+            // console.log('Old Stock : ',OldStock);
+            // console.log(CompareStockConfig);
 
             this.setState({
                 CompareStockConfig : CompareStockConfig,
@@ -395,8 +486,7 @@ class ScripsBody extends React.PureComponent
             zoom : zoom
         });
     }
-
-    
+   
     
     render()
     {
@@ -475,11 +565,17 @@ class ScripsBody extends React.PureComponent
                             range={this.state.range}
                             compareStock={this.compareStock}
                             toggleHide={this.toggleHide}
+                            toggleCompareSettings={this.toggleCompareSettings}
+                            closeCompareSettings={this.closeCompareSettings}
+                            saveCompareSettings={this.saveCompareSettings}
+                            settingUpdateFlag={this.state.settingUpdateFlag}
                             removeStock={this.removeStock}
                             WatchStocks={this.state.WatchStocks}
                             CompareStockConfig={this.state.CompareStockConfig}
                             NewCompareStockConfig={this.state.NewCompareStockConfig}
                             OldCompareStockConfig={this.state.OldCompareStockConfig}
+                            StockSettingsOpen={this.state.StockSettingsOpen}
+                            StockCompareSettings={this.state.StockCompareSettings}
                             limitFlag={this.state.limitFlag}
                             selectedStock={this.props.selectedStock}
                             toggleZoom={this.toggleZoom}

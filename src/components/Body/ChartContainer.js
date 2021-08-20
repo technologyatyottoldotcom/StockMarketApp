@@ -9,6 +9,8 @@ import ComparePopup from './AppPopups/ComparePopup/ComparePopup';
 import IndicatorPopup from './AppPopups/IndicatorPopup/IndicatorPopup';
 import StockSearchPopup from './AppPopups/StockSearchPopup/StockSearchPopup';
 import StockWatchPopup from './AppPopups/StockWatchPopup/StockWatchPopup';
+import CompareSettingPopup from './AppPopups/CompareSettingPopup/CompareSettingPopup';
+import IndicatorSettingPopup from './AppPopups/IndicatorSettingPopup/IndicatorSettingPopup';
 import StockWatchHero from './AppPopups/StockWatchPopup/StockWatchHero';
 import { Alert } from './CustomChartComponents/CustomAlert/CustomAlert';
 import Zoom from '../../assets/icons/zoom.svg';
@@ -45,6 +47,7 @@ import {convertToUNIX,dateToUNIX} from '../../exports/TimeConverter';
 import Technicals from './BusinessNews/Technicals';
 
 const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;
+
 let updateInterval,bigdatainterval;
 
 export class ChartContainer extends React.PureComponent {
@@ -334,7 +337,7 @@ export class ChartContainer extends React.PureComponent {
                         // console.log(startIndex);
 
                         let futurePoints = getFuturePoints(lastPoint,type);
-                        console.log(futurePoints.length);
+                        // console.log(futurePoints.length);
                         // mergedData = mergedData.concat(futurePoints);
 
 
@@ -548,6 +551,7 @@ export class ChartContainer extends React.PureComponent {
         {
             clearInterval(bigdatainterval);
             let tempDataArray = this.state.bigchartdata;
+            console.log(tempDataArray)
             let filteredData = filterBigData(tempDataArray,type);
             console.log('big data loaded ');
             console.log(filteredData.length);
@@ -950,15 +954,18 @@ export class ChartContainer extends React.PureComponent {
         console.log('INDICATOR TYPE ',type,indicator);
         if(position)
         {
-            if(this.state.TotalCharts <= 3)
+            if(this.state.TotalCharts <= 2)
             {
-                this.setState({
-                    indicatorType : type,
-                    TotalCharts : this.state.TotalCharts+1,
-                    IndicatorOutside : [...this.state.IndicatorOutside,type]
-                },()=>{
-                    console.log(this.state.IndicatorOutside)
-                });
+                if(!this.state.IndicatorOutside.includes(type))
+                {
+                    this.setState({
+                        indicatorType : type,
+                        TotalCharts : this.state.TotalCharts+1,
+                        IndicatorOutside : [...this.state.IndicatorOutside,type]
+                    },()=>{
+                        console.log(this.state.IndicatorOutside)
+                    });
+                }
             }
             else
             {
@@ -967,31 +974,53 @@ export class ChartContainer extends React.PureComponent {
         }
         else
         {
-            this.setState({
-                indicatorType : type,
-                IndicatorInside : [...this.state.IndicatorInside,type]
-            },()=>{
-                console.log(this.state.IndicatorInside)
-            })
+            if(!this.state.IndicatorInside.includes(type))
+            {
+                this.setState({
+                    indicatorType : type,
+                    IndicatorInside : [...this.state.IndicatorInside,type]
+                },()=>{
+                    console.log(this.state.IndicatorInside)
+                })
+            }
         }
     }
 
-    DeleteIndicatorType(type)
+    DeleteIndicatorType(position,type)
     {
-        let IndicatorOutside = this.state.IndicatorOutside;
-        let indx = IndicatorOutside.findIndex((c)=> c === type);
-        // console.log(indx);
 
-        if(indx !== -1)
+        if(position)
         {
-            let OldIndicator = IndicatorOutside[indx];
-            IndicatorOutside.splice(indx,1);
-            console.log(IndicatorOutside);
-            this.setState({
-                OldIndicator,
-                IndicatorOutside,
-                TotalCharts : this.state.TotalCharts-1,
-            });
+            let IndicatorOutside = this.state.IndicatorOutside;
+            let indx = IndicatorOutside.findIndex((c)=> c === type);
+            // console.log(indx);
+
+            if(indx !== -1)
+            {
+                let OldIndicator = IndicatorOutside[indx];
+                IndicatorOutside.splice(indx,1);
+                console.log(IndicatorOutside);
+                this.setState({
+                    OldIndicator,
+                    IndicatorOutside,
+                    TotalCharts : this.state.TotalCharts-1,
+                });
+            }
+        }
+        else
+        {
+            let IndicatorInside = this.state.IndicatorInside;
+            let indx = IndicatorInside.findIndex((c)=> c === type);
+            if(indx !== -1)
+            {
+                let OldIndicator = IndicatorInside[indx];
+                IndicatorInside.splice(indx,1);
+                console.log(IndicatorInside);
+                this.setState({
+                    OldIndicator,
+                    IndicatorInside
+                });
+            }
         }
     }
 
@@ -1301,8 +1330,10 @@ export class ChartContainer extends React.PureComponent {
     render() {
 
         // console.log('Rendering chart...');
-
         // console.log(this.props.data);
+
+        const {StockSettingsOpen,StockCompareSettings} = this.props;
+
         let stockData = this.props.stockData;
 
         let TradePrice = this.convertIntoPriceFormat(stockData.last_traded_price);
@@ -1364,6 +1395,24 @@ export class ChartContainer extends React.PureComponent {
                     selectedStock={this.props.selectedStock}
                 />
 
+                {StockSettingsOpen && 
+                    
+                    <>
+                        <CompareSettingPopup 
+                            zoom={this.state.zoom}
+                            saveCompareSettings={this.props.saveCompareSettings}
+                            closeCompareSettings={this.props.closeCompareSettings}
+                            StockCompareSettings={StockCompareSettings}
+                        />
+                    </>
+                    
+                }
+
+                {this.state.zoom && 
+                    <>
+                        <IndicatorSettingPopup IndicatorName="SMA"/>
+                    </>
+                }
                 
     
                 <div className="Interactive__popup">
@@ -1420,6 +1469,7 @@ export class ChartContainer extends React.PureComponent {
                                     <div data-chart="column" onClick={this.changeChart.bind(this,'column')}><img src={Column} alt="+"/><span>Column</span></div>
                                     <div data-chart="jumpLine" onClick={this.changeChart.bind(this,'jumpLine')}><img src={JumpLine} alt="+"/><span>Jump Line</span></div>
                                     <div data-chart="line" className="active" onClick={this.changeChart.bind(this,'line')}><img src={Line} alt="+"/><span>Line</span></div>
+                                    <div data-chart="stepline" onClick={this.changeChart.bind(this,'stepline')}><img src={Line} alt="+"/><span>Step Line</span></div>
                                     <div data-chart="rangeArea" onClick={this.changeChart.bind(this,'rangeArea')}><img src={Range} alt="+"/><span>Range Area</span></div>
                                     <div data-chart="ohlc" onClick={this.changeChart.bind(this,'ohlc')}><img src={OHLC} alt="+"/><span>OHLC</span></div>
                                     <div data-chart="marker" onClick={this.changeChart.bind(this,'marker')}><img src={Marker} alt="+"/><span>Marker</span></div>
@@ -1559,6 +1609,7 @@ export class ChartContainer extends React.PureComponent {
                                             NewCompareStockConfig={this.props.NewCompareStockConfig}
                                             OldCompareStockConfig={this.props.OldCompareStockConfig}
                                             toggleHide={this.props.toggleHide}
+                                            toggleCompareSettings={this.props.toggleCompareSettings}
                                             removeStock={this.props.removeStock}
                                             IndicatorOutside={this.state.IndicatorOutside}
                                             IndicatorInside={this.state.IndicatorInside}

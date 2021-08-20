@@ -1,0 +1,28 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.custom-checkbox
+{
+    background-color: #ffffff;
+    border: 1px solid #b2b5be;
+    border-radius: 3px;
+    box-sizing: border-box;
+    transition: background-color .35s ease;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.custom-checkbox.checked
+{
+    background-color: #00a0e3;
+    border: none;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}

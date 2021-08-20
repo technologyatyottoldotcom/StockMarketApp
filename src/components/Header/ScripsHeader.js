@@ -8,13 +8,37 @@ import { Alert } from '../Body/CustomChartComponents/CustomAlert/CustomAlert';
 
 const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;;
 
+class HighLightText extends React.PureComponent{
+
+    constructor(props)
+    {
+        super(props);
+    }
+
+    render()
+    {
+        const text = this.props.text;
+        const query = this.props.query;
+        const customClass = this.props.customClass;
+        console.log(customClass)
+        const parts = text.split(new RegExp(`(${query})`, 'gi'));
+        return <span> { parts.map((part, i) => 
+            <span key={i} 
+                  className={part.toLowerCase() === query.toLowerCase() ? `${customClass}` : '' }>
+                { part.toUpperCase() }
+            </span>)
+        } </span>;
+        // return <span>{text}</span>
+    }
+}
+
 
 class StockSuggestion extends React.PureComponent{
 
 
     constructor(props)
     {
-        super(props)
+        super(props);
     }
 
     render()
@@ -30,6 +54,8 @@ class StockSuggestion extends React.PureComponent{
 
         if(!loading)
         {
+
+            const {cursor} = this.props;
             // console.log('CALL SUGGESTION')
 
             if(search.length > 0 && suggestions.length > 0)
@@ -40,10 +66,12 @@ class StockSuggestion extends React.PureComponent{
                             let stocksymbol = s.exchange.exchange === 'NSE' ? s.nse_code : s.bse_code;
                             return <p 
                                 key={s.code} 
-                                onClick={e => {this.props.selectedStock(s);this.props.handleSelection()}}>
-                                    <span>{stocksymbol}</span> 
-                                    <span>{s.company}</span> 
-                                    <span>{s.exchange.exchange}</span>
+                                onClick={e => {this.props.selectedStock(s);this.props.handleSelection()}}
+                                className={cursor === index ? 'active' : ''}
+                                >
+                                <span>{stocksymbol}</span>
+                                <HighLightText text={s.company} query={search} customClass="search__highlight"/>
+                                <span>{s.exchange.exchange}</span>
                             </p>
                         })}
                     </>
@@ -74,10 +102,12 @@ class ScripsHeader extends React.Component
         super(props);
         this.state = {
             search : '',
+            cursor : -1,
             loading : false,
             suggestions : []
         }
         this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleSelection = this.handleSelection.bind(this);
         this.setComponentRef = this.setComponentRef.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -119,6 +149,7 @@ class ScripsHeader extends React.Component
             {
                 this.setState({
                     suggestions : [],
+                    cursor : -1,
                     loading : true,
                 },()=>{
                     this.getSuggestions();
@@ -134,6 +165,20 @@ class ScripsHeader extends React.Component
                 })
             }
         });
+    }
+
+    handleKeyDown(e) {
+        const { cursor , suggestions } = this.state;
+
+        if (e.keyCode === 38 && cursor >= 0) {
+          this.setState( prevState => ({
+            cursor: prevState.cursor - 1
+          }))
+        } else if (e.keyCode === 40 && cursor < suggestions.length - 1) {
+          this.setState( prevState => ({
+            cursor: prevState.cursor + 1
+          }))
+        }
     }
 
     getSuggestions()
@@ -174,10 +219,20 @@ class ScripsHeader extends React.Component
                 <div className="stock__search__icon">
                     <img src={Search} alt=""/>
                 </div>
-                <input placeholder='Search' value={this.state.search} onChange={e => this.handleSearchChange(e)}/>
+                <input placeholder='Search' 
+                    value={this.state.search} 
+                    onChange={e => this.handleSearchChange(e)}
+                    // onKeyDown={e => this.handleKeyDown(e)}
+                />
 
                 <div className="stock__suggestions">
-                    <StockSuggestion search={this.state.search} loading={this.state.loading} suggestions={this.state.suggestions} selectedStock={this.props.selectedStock} handleSelection={this.handleSelection}/>
+                    <StockSuggestion 
+                        search={this.state.search} 
+                        loading={this.state.loading} 
+                        suggestions={this.state.suggestions}
+                        cursor={this.state.cursor} 
+                        selectedStock={this.props.selectedStock} 
+                        handleSelection={this.handleSelection}/>
                 </div>
                 
             </div>

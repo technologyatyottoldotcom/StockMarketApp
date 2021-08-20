@@ -104,7 +104,8 @@ export class PerformanceAnalytics extends React.PureComponent {
                         {curr(heading)}
                     </div>
                     <div style={{ color: color }}>
-                        {curr(change)} {changePer && <span style={{ fontSize: 11, fontWeight: 800 }}>({changePer})</span>}
+                        {curr(change)} 
+                        {changePer && <span style={{ fontSize: 11, fontWeight: 800 }}>{`(${changePer})`}</span>}
                     </div>
                 </div>
             </>

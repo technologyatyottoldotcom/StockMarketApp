@@ -3,6 +3,7 @@ import Axios from 'axios';
 import '../../../scss/Feed.scss';
 import Pulse from '../../Loader/Pulse';
 import { Popover, Whisper , Dropdown , Loader } from 'rsuite';
+import NewsImages from './NewsImages';
 import 'rsuite/dist/styles/rsuite-default.css';
 
 
@@ -513,6 +514,37 @@ render(){
   }
 }
 
+class MediaImage extends React.PureComponent{
+
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+      imageLoadError: true,
+    };
+  }
+
+  render()
+  {
+    const src = this.props.src;
+    const link = this.props.link;
+    return <img 
+            src={src} 
+            alt={link.slice(-12)} 
+            style={{ width: '100%' , borderRadius : '3px' }} 
+            onError={e => { 
+                      if(this.state.imageLoadError) { 
+                          this.setState({
+                              imageLoadError: false
+                          });
+                          // console.log(NewsImages,News1);
+                          e.target.src = NewsImages[Math.floor(Math.random() * (2 - 0 + 1) + 0)];
+                      }
+            }}
+    />
+  }
+}
+
 function RenderMedia({ data }){
   const Get = (t,i=0)=>Array.isArray(t) ? t[i] : t;
   let link = Get(data.link), dTime = createTime(Get(data.pubDate)), source = Get(data.source), sU = Get(source.$.url)
@@ -527,6 +559,11 @@ function RenderMedia({ data }){
            if(desc && desc.length > 200){
              desc = desc.slice(0,200)+'...'
            }
+           if(Array.isArray(img))
+           {
+              img = img[0] ? img[0] : img;
+           }
+           
            set({img:img,desc:desc})
          }
        }
@@ -536,6 +573,9 @@ function RenderMedia({ data }){
     }
 
   const head = Get(data.title) , Source = Get(data.source)._
+    
+  
+  
   return (
     <>
       <div className="col-9">
@@ -560,7 +600,7 @@ function RenderMedia({ data }){
         {
           get.img ? (
             <>
-              <img src={get.img} style={{ width: '100%' , borderRadius : '3px' }} alt={link.slice(-12)} />
+              <MediaImage src={get.img} link={link}/>
             </>
           ) : (
             <>

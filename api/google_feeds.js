@@ -17,6 +17,7 @@ function ReadMetaData($,property){
           }else{res[p] = c}
        }
     })
+    // console.log(res);
    return res
 }
 

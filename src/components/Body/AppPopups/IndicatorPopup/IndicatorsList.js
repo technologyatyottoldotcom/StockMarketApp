@@ -2,27 +2,27 @@ const IndicatorsList = [
     {
         IndicatorName : 'Simple Moving Average (SMA)',
         InfoType:"SMA",
-        Position : 1,
+        Position : 0,
     },
     {
         IndicatorName : 'Weighted Moving Average (WMA)',
         InfoType:"WMA",
-        Position : 1,
+        Position : 0,
     },
     {
         IndicatorName : 'Exponential Moving Average (EMA)',
         InfoType:"EMA",
-        Position : 1,
+        Position : 0,
     },
     {
         IndicatorName : 'Triangular Moving Average (TMA)',
         InfoType:"TMA",
-        Position : 1,
+        Position : 0,
     },
     {
         IndicatorName : 'Bollinger Bands (BBands)',
         InfoType:"BB",
-        Position : 1,
+        Position : 0,
     },
     {
         IndicatorName : 'Moving Average Convergence/Divergence (MACD)',

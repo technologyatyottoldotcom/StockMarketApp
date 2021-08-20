@@ -1,0 +1,90 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.custom-numberbox
+{
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 3px 0.5px rgba(0,0,0,0.10);
+    cursor: pointer;
+    position: relative;
+}
+
+
+.custom-numberbox:hover
+{
+    box-shadow: 0 0 3px 0px rgba(0,0,0,0.20);
+}
+
+.custom-numberbox .custom-numberbox-container
+{
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.custom-numberbox-container .numberbox-input
+{
+    width: 85%;
+    height: 100%;
+}
+
+.custom-numberbox-container .numberbox-input input
+{
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    padding: 0 5px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.custom-numberbox-container .numberbox-arrows
+{
+    width: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background-color: blueviolet; */
+}
+
+.custom-numberbox-container .numberbox-arrows .numberbox-arrow
+{
+    width: 80%;
+    height: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1px 0;
+    border-radius: 1px;
+}
+
+.custom-numberbox-container .numberbox-arrows .numberbox-arrow:hover
+{
+    background-color: #ebebeb;
+}
+
+.custom-numberbox-container .numberbox-arrows .numberbox-arrow img
+{
+    width: 14px;
+    height: 14px;
+}

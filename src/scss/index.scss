@@ -43,26 +43,26 @@
 }
 
 
-// .GlobalScrollBar{
-//   overflow : scroll;
-//   scroll-behavior : smooth;
-//   overflow-wrap : break-word;
-//   color: black;
+.GlobalScrollBar{
+  overflow : scroll;
+  scroll-behavior : smooth;
+  overflow-wrap : break-word;
+  color: black;
 
-//   &::-webkit-scrollbar {
-//       width: 5px;
-//       height: 5px;
-//     }
+  &::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
     
-//   &::-webkit-scrollbar-track {
-//       background: transparent;
-//     }
-//   &::-webkit-scrollbar-thumb {
-//       background: #dbd9d9;
-//       border-radius: 20px;
-//     }
-//   &::-webkit-scrollbar-thumb:hover {
-//       background: #dbd9d9;
-//     }
-// }
+  &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  &::-webkit-scrollbar-thumb {
+      background: #dbd9d9;
+      border-radius: 20px;
+    }
+  &::-webkit-scrollbar-thumb:hover {
+      background: #dbd9d9;
+    }
+}
 

@@ -326,21 +326,31 @@
   align-items: center;
 }
 
-.app__header .stock__search .stock__suggestions p span:nth-child(1)
+.app__header .stock__search .stock__suggestions p.active
+{
+  background-color: #dbd9d9;
+}
+
+.app__header .stock__search .stock__suggestions p span.search__highlight
+{
+  background-color: #009fe33a;
+}
+
+.app__header .stock__search .stock__suggestions p>span:nth-child(1)
 {
   flex : 2;
   font-size: 12px;
   font-weight: 700;
   color: var(--font-primary);
 }
-.app__header .stock__search .stock__suggestions p span:nth-child(2)
+.app__header .stock__search .stock__suggestions p>span:nth-child(2)
 {
   flex : 7;
   font-size: 10px;
   font-weight: 600;
   color: var(--font-primary);
 }
-.app__header .stock__search .stock__suggestions p span:nth-child(3)
+.app__header .stock__search .stock__suggestions p>span:nth-child(3)
 {
   flex : 1;
   font-size: 12px;

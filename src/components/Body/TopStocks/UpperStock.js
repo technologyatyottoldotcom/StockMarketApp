@@ -8,7 +8,8 @@ import {getEndOfDayMinutes,generateMarketDay} from '../../../exports/FutureEntri
 import Spinner from '../../Loader/Spinner';
 import Pulse from '../../Loader/Pulse';
 
-const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;;
+const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;
+const LIVEFEED_BASE_URL = process.env.REACT_APP_LIVEFEED_BASE_URL;
 
 export class UpperStock extends React.PureComponent {
 
@@ -26,7 +27,6 @@ export class UpperStock extends React.PureComponent {
             change : '',
             ws : null,
             FeedConnection : false,
-            endpoint : 'wss://masterswift-beta.mastertrust.co.in/hydrasocket/v2/websocket?access_token=qaoSOB-l4jmwXlxlucY4ZTKWsbecdrBfC7GoHjCRy8E.soJkcdbrMmew-w1C0_KZ2gcQBUPLlPTYNbt9WLJN2g8',
         }
         this.getIndexData = this.getIndexData.bind(this);
         this.updateIndexData = this.updateIndexData.bind(this);
@@ -148,7 +148,6 @@ export class UpperStock extends React.PureComponent {
 
         ws.onmessage = (response)=>{
 
-            // console.log(response.data);
             
             var reader = new FileReader();
             
@@ -163,11 +162,12 @@ export class UpperStock extends React.PureComponent {
                     {
 
                         let stockdata = this.state.stockData;
-                        // console.log(stockdata.last_traded_price,stockdata.close_price);
+                        // console.log(stockdata.last_traded_price,stockdata.close_price,stockdata.open_price);
                         if(stockdata.last_traded_price === stockdata.close_price)
                         {
-                            // console.log('open');
-                            const {change_price,change_percentage} = setChange(stockdata.last_traded_price,stockdata.open_price);
+
+                            let compare = stockdata.open_price === 0 ? stockdata.close_price : stockdata.open_price;
+                            const {change_price,change_percentage} = setChange(stockdata.last_traded_price,compare);
                             // livedata
 
                             let livedata = stockdata;
@@ -203,13 +203,15 @@ export class UpperStock extends React.PureComponent {
                     let livedata = this.state.stockData;
                     let trade_price = this.state.stockData && this.state.stockData.last_traded_price;
                     let open_price = this.state.stockData && this.state.stockData.open_price;
-
-                    const {change_price,change_percentage} = setChange(trade_price,open_price);
-
+                    
+                    let compare = open_price === 0 ? livedata.close_price : open_price;
+                    
+                    const {change_price,change_percentage} = setChange(trade_price,compare);
+                    // console.log(change_price,change_percentage);
+                    
                     // livedata
                     livedata['change_price'] = change_price;
                     livedata['change_percentage'] = change_percentage;
-                    // console.log(change_price,change_percentage);
                     // console.log(livedata);
                     this.setState({
                         stockData : livedata,
@@ -218,12 +220,20 @@ export class UpperStock extends React.PureComponent {
                 }
             }
         }
+
+        setInterval(()=>{
+            ws.send(JSON.stringify({
+                "a": "h", 
+                "v": [[this.props.ExchangeCode, this.props.StockCode]], 
+                "m": ""}
+            ));
+        },10*1000)
     }
 
     async makeSocketConnection()
     {
         return new Promise((resolve,reject)=>{
-            let ws = new WebSocket(this.state.endpoint);
+            let ws = new WebSocket(LIVEFEED_BASE_URL);
             ws.onopen = ()=>{
                 // console.log('connection done');
                 this.setState({

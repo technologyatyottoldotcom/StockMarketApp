@@ -45,7 +45,7 @@ function getData(options)
                     }).then((data)=>{
                         let query = data.query;
                         skip = 1;
-                        console.log(query);
+                        // console.log(query);
                         // console.log(skip);
                         if(query)
                         {

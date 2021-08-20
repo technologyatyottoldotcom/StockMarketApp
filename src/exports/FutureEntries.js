@@ -138,8 +138,8 @@ function getNextMinutes(curr,minutes)
     }
     else if(!EnoughTime.enough && EnoughTime.duration >= 5)
     {
-        console.log('Mixed');
-        console.log(EnoughTime.duration);
+        // console.log('Mixed');
+        // console.log(EnoughTime.duration);
 
         let extra = minutes - EnoughTime.duration;
 

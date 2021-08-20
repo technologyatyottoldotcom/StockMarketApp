@@ -1,9 +1,9 @@
 import {Chart} from 'react-stockcharts';
 import {LineSeries,AreaSeries,BarSeries,CandlestickSeries,ScatterSeries ,OHLCSeries,KagiSeries,RenkoSeries,PointAndFigureSeries, SquareMarker,CircleMarker , BollingerSeries , MACDSeries , RSISeries ,StochasticSeries ,StraightLine ,ElderRaySeries , SARSeries , VolumeProfileSeries} from 'react-stockcharts/lib/series';
-import { curveMonotoneX, curveCardinal } from "d3-shape";
+import { curveMonotoneX, curveCardinal, curveStep } from "d3-shape";
 import { format } from 'd3-format';
 import {XAxis,YAxis} from 'react-stockcharts/lib/axes';
-import { pointAndFigure ,kagi,renko , compare} from "react-stockcharts/lib/indicator";
+import { pointAndFigure ,kagi,renko} from "react-stockcharts/lib/indicator";
 import { tooltipContent } from '../../../exports/ChartProps';
 import LastPointIndicator from '../CustomChartComponents/LastPointEdgeIndicator/LastPointIndicator';
 import LabelEdgeCoordinate from '../CustomChartComponents/EdgeLabel/LabelEdgeCoordinate';
@@ -27,6 +27,13 @@ function getChartType(chartType,chartdata)
         calculatedData = chartdata;
         chartSeries = <>
                         <LineSeries yAccessor ={d =>d.open} strokeWidth={2} stroke="#00a0e3" interpolation={curveCardinal}/>
+                        <LastPointIndicator yAccessor={d => d.open} displayFormat={format(".4s")} radius={4} fill='#00a0e3'/>
+                      </>;     
+    }
+    else if(chartType === 'stepline'){
+        calculatedData = chartdata;
+        chartSeries = <>
+                        <LineSeries yAccessor ={d =>d.open} strokeWidth={2} stroke="#00a0e3" interpolation={curveStep}/>
                         <LastPointIndicator yAccessor={d => d.open} displayFormat={format(".4s")} radius={4} fill='#00a0e3'/>
                       </>;     
     }
@@ -90,6 +97,50 @@ function getChartType(chartType,chartdata)
     }
 
     return [calculatedData,chartSeries];
+}
+
+function getCompareChartType(config,stockconfig,getCompareAccessor)
+{
+    const type = stockconfig.charttype;
+    const width = stockconfig.chartwidth;
+
+    console.log(type,width)
+
+    if(type === 'line')
+    {
+        return <>
+                <LineSeries yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} strokeWidth={width} stroke={stockconfig.color} interpolation={curveMonotoneX}/>
+                <LastPointIndicator yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} displayFormat={format(".2%")} fill={stockconfig.color} radius={5}/>
+        </>
+    }
+    else if(type === 'area')
+    {
+        return <>
+                <AreaSeries yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} strokeWidth={width} stroke={stockconfig.color} fill={stockconfig.color} opacity={0.3} interpolation={curveMonotoneX}/>
+                <LastPointIndicator yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} displayFormat={format(".2%")} fill={stockconfig.color} radius={5}/>
+        </>
+    }
+    else if(type === 'column')
+    {
+        return <>
+                <BarSeries yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} stroke={false} fill={stockconfig.color} opacity={0.9}/>
+            </>
+    }
+    else if(type === 'stepline')
+    {
+        return <>
+            <LineSeries yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} strokeWidth={width} stroke={stockconfig.color} interpolation={curveStep}/>
+            <LastPointIndicator yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} displayFormat={format(".2%")} fill={stockconfig.color} radius={5}/>
+        </>
+    }
+    else
+    {
+        return <>
+            <LineSeries yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} strokeWidth={2} stroke={stockconfig.color} interpolation={curveMonotoneX}/>
+            <LastPointIndicator yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} displayFormat={format(".2%")} fill={stockconfig.color} radius={5}/>
+        </>
+    }
+
 }
 
 function ChartWrapper(range,chartType,closePrice)
@@ -236,103 +287,129 @@ function ChartWrapperZoom(range,lastPoint,stockDetails,chartType,closePrice,tota
     )
 }
 
-function ChartCompareStock(zoom,indx,config,getCompareAccessor,toggleHide,removeStock)
+function ChartCompareStock(zoom,indx,config,getCompareAccessor)
 {
 
-    console.log(config);
-    if(!config.hide)
-    {
-        return (
-            <>
-                                            
-                <LineSeries yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} strokeWidth={2} stroke={config.color} interpolation={curveMonotoneX}/>
-                <LastPointIndicator yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} displayFormat={format(".2%")} fill={config.color} radius={5}/>
+        const stockconfig = config.config && config.config;
+        // console.log(stockconfig);
 
-            </>
-        )
-    }
-}
+        let series = getCompareChartType(config,stockconfig,getCompareAccessor);
 
-function ChartCompareStockTooltip(zoom,indx,config,toggleHide,removeStock)
-{
-    if(zoom)
-    {
-        if(!config.hide)
+
+        if(zoom)
         {
-            return (
+            if(!config.hide)
+            {
+                return (
 
-                <>
-                    <EdgeIndicator 
-                        orient="right"
-                        edgeAt="right"
-                        itemType="last"
-                        yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')}
-                        displayFormat={format(".2%")}
-                        arrowWidth={0}
-                        fill={config.color}
-                        fontSize={11}
-                        rectHeight={18}
-                        strokeWidth={1}
-                        lineOpacity={0}
-                    />
-                    <StockMarker 
-                        edgeAt="right"
-                        orient="left"
-                        itemType="last"
-                        yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')}
-                        displayFormat={format(".2%")}
-                        arrowWidth={0}
-                        fill={config.color}
-                        fontSize={11}
-                        rectHeight={18}
-                        rectWidth={config.symbol.length * 11}
-                        rectRadius={10}
-                        strokeWidth={1}
-                        lineOpacity={0}
-                        labelText={config.symbol}
-                    />
-                    <CompareStockTooltip
-                        yAccessor={d => d[config.symbol+'open']}
-                        yLabel={config.symbol}
-                        yDisplayFormat={format(".2f")}
-                        valueStroke={config.color}
-                        labelFill={config.color}
-                        hide={config.hide}
-                        origin={[10, 25*(indx+4)]}
-                        toggleHide={toggleHide}
-                        removeStock={removeStock}
-                    />
-                </>
-            )
+                    <>
+                        {series}
+                        {stockconfig.pricelabel && 
+                            
+                            <>
+                                <EdgeIndicator 
+                                    orient="right"
+                                    edgeAt="right"
+                                    itemType="last"
+                                    yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')}
+                                    displayFormat={format(".2%")}
+                                    arrowWidth={0}
+                                    fill={stockconfig.color}
+                                    fontSize={11}
+                                    rectHeight={18}
+                                    strokeWidth={1}
+                                    lineOpacity={0}
+                                />
+                            </>
+                            
+                        }
+
+                        {stockconfig.stocklabel && 
+                        
+                            <>
+                                <StockMarker 
+                                    edgeAt="right"
+                                    orient="left"
+                                    itemType="last"
+                                    yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')}
+                                    displayFormat={format(".2%")}
+                                    arrowWidth={0}
+                                    fill={stockconfig.color}
+                                    fontSize={11}
+                                    rectHeight={18}
+                                    rectWidth={config.symbol.length * 11}
+                                    rectRadius={10}
+                                    strokeWidth={1}
+                                    lineOpacity={0}
+                                    labelText={config.symbol}
+                                />
+                            </>
+
+                        }
+
+                        
+                        
+                    </>
+                )
+            }
+            else
+            {
+                return (
+                    <></>
+                )
+            }
         }
         else
         {
-            return (
+            return <>
+                <LineSeries yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} strokeWidth={2} stroke={stockconfig.color} interpolation={curveMonotoneX}/>
+                <LastPointIndicator yAccessor={(d) => getCompareAccessor(d,config.symbol+'open')} displayFormat={format(".2%")} fill={stockconfig.color} radius={5}/>
+            </>
+        }
+}
+
+function ChartCompareStockTooltip(zoom,indx,config,toggleHide,removeStock,toggleCompareSettings)
+{
+    if(!config.hide)
+    {
+        return (
+
+            <>
                 <CompareStockTooltip
                     yAccessor={d => d[config.symbol+'open']}
                     yLabel={config.symbol}
                     yDisplayFormat={format(".2f")}
                     valueStroke={config.color}
                     labelFill={config.color}
-                    origin={[10, 25*(indx+4)]}
                     hide={config.hide}
+                    origin={[10, 25*(indx+4)]}
                     toggleHide={toggleHide}
                     removeStock={removeStock}
-                />  
-            )
-        }
-    } 
-    else
-    {
-        return (
-            <>
-
+                    toggleCompareSettings={toggleCompareSettings}
+                />
             </>
         )
     }
+    else
+    {
+        return (
+            <CompareStockTooltip
+                yAccessor={d => d[config.symbol+'open']}
+                yLabel={config.symbol}
+                yDisplayFormat={format(".2f")}
+                valueStroke={config.color}
+                labelFill={config.color}
+                origin={[10, 25*(indx+4)]}
+                hide={config.hide}
+                toggleHide={toggleHide}
+                removeStock={removeStock}
+            />  
+        )
+    }
+    
 }
 
-function ChartWrapperCompare(zoom,range,stockDetails,CompareStockConfig,toggleHide,removeStock,totalCharts)
+function ChartWrapperCompare(zoom,range,stockDetails,CompareStockConfig,totalCharts)
 {
     return (
         <>
@@ -397,15 +474,10 @@ function ChartWrapperCompare(zoom,range,stockDetails,CompareStockConfig,toggleHi
 
             {CompareStockConfig.map((config,indx)=>{
                 return <>
-                    {ChartCompareStock(zoom,indx,config,getCompareAccessor,toggleHide,removeStock)}
+                    {ChartCompareStock(zoom,indx,config,getCompareAccessor)}
                 </>;
             })}
 
-            {CompareStockConfig.map((config,indx)=>{
-                return <>
-                    {ChartCompareStockTooltip(zoom,indx,config,toggleHide,removeStock)}
-                </>;
-            })}
 
             {zoom && 
                 <><CrossHairCursor /></>
@@ -474,17 +546,77 @@ function ChartIndicators(index,indicator,width,height,range,series,title,color,i
             yDisplayFormat={format(".2f")}
             indicatorConfig={indicatorConfig}
             yAccessor={yAccessor}
+            indicator={indicator}
+            IndicatorPosition={1}
+            DeleteIndicatorType={DeleteIndicatorType}
         />
     </>
 }
 
-function ChartIndicatorInside(indicator,series)
+function ChartIndicatorInside(index,indicator,series,yAccessor,title,color,indicatorConfig,DeleteIndicatorType)
 {
     // console.log(series);
    return <>
      {series}
+     <EdgeIndicator 
+        orient="right"
+        edgeAt="right"
+        itemType="last"
+        yAccessor={yAccessor}
+        displayFormat={format(".2f")}
+        arrowWidth={0}
+        fill={color}
+        fontSize={11}
+        rectHeight={18}
+        strokeWidth={1}
+        lineOpacity={0}
+    />
+    <StockMarker 
+        edgeAt="right"
+        orient="left"
+        itemType="last"
+        yAccessor={yAccessor}
+        displayFormat={format(".2f")}
+        arrowWidth={0}
+        fill={color}
+        fontSize={11}
+        rectHeight={18}
+        rectWidth={title.length * 11}
+        strokeWidth={1}
+        lineOpacity={0}
+        labelText={title}
+    />
+    <IndicatorTooltip 
+        origin={[10, 20*(index+4)]}
+        yDisplayFormat={format(".2f")}
+        indicatorConfig={indicatorConfig}
+        yAccessor={yAccessor}
+        indicator={indicator}
+        IndicatorPosition={0}
+        DeleteIndicatorType={DeleteIndicatorType}
+    />
+    
      {/* <LineSeries yAccessor={d => d.wma}/> */}
    </>
+}
+
+function ChartToolTip(zoom,CompareStockConfig,toggleHide,removeStock,toggleCompareSettings)
+{
+
+    let ToolTipConfig = [];
+    CompareStockConfig.map((config,indx)=>{
+       ToolTipConfig.push({
+           type : 'compare',
+           config : config
+       });
+    });
+
+    let index = 0;
+    return (
+        CompareStockConfig.map((config,indx)=>{
+            return ChartCompareStockTooltip(zoom,index++,config,toggleHide,removeStock,toggleCompareSettings);
+        })
+    )
 }
 
 function getIndicatorData(indicator,chartdata)
@@ -890,11 +1022,18 @@ function getIndicatorExtents(accessor)
     return [accessor + (accessor * (0.12/100)) , accessor - (accessor * (0.12/100))]
 }
 
-function getChartHeight(height,zoom,TotalCharts)
+function getHeroHeight(height,zoom,charts)
 {
     if(zoom)
     {
-        return (height/TotalCharts)-((20+((TotalCharts-1)*10))/(TotalCharts));
+        if(charts > 0)
+        {
+            return ((70*height)/100);
+        }
+        else
+        {
+            return height-20;
+        }
     }
     else
     {
@@ -902,5 +1041,26 @@ function getChartHeight(height,zoom,TotalCharts)
     }
 }
 
+function getChartHeight(height,zoom,charts)
+{
+    let h = ((30*height)/100);
+    let heroHeight = ((70*height)/100);
+    if(charts > 0)
+    {
+        return {
+            height : (h/charts)-((30+((charts-1)*10))/(charts)),
+            origin : heroHeight
+        };
+    }
+    else
+    {
+        return {
+            height : 0,
+            origin : 0
+        };
+    }
+   
+}
 
-export { getChartHeight, getIndicatorData, ChartWrapper, ChartWrapperZoom, ChartWrapperCompare , ChartIndicators , ChartIndicatorInside }
+
+export { getChartHeight, getHeroHeight, getIndicatorData, ChartWrapper, ChartWrapperZoom, ChartWrapperCompare , ChartIndicators , ChartIndicatorInside , ChartToolTip }

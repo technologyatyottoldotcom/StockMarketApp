@@ -41,6 +41,36 @@ function getStockFromISIN(req,res)
 
 }
 
+function getStockFromSymbol(req,res)
+{
+    let symbol = req.params.symbol;
+    conn.query(`SELECT code,exchange_code FROM master_security_list_NSE WHERE symbol = '${symbol}'
+                    UNION
+                SELECT code,exchange_code FROM master_security_list_BSE WHERE symbol= '${symbol}' OR code='${symbol}'`,(error,result)=>{
+                    if(!error && result.length > 0)
+                    {
+                        let row = result[0];
+                        res.send({
+                            error : false,
+                            message : 'success',
+                            stock : {
+                                code : row.code,
+                                exchange : row.exchange_code,
+                            }
+                        });
+                    }
+                    else
+                    {
+                        res.send({
+                            error : true,
+                            message : error.message
+                        });
+                    }    
+                });
+}
+
 Common.get('/StockFromISIN/:isin',getStockFromISIN);
+
+Common.get('/StockFromSymbol/:symbol',getStockFromSymbol);
 
 exports.Common = Common;

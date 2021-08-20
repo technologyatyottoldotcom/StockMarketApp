@@ -20,6 +20,12 @@
 
 }
 
+.react-stockcharts-tooltip,.react-stockcharts-indicator-tooltip
+{
+  pointer-events: all;
+  cursor: pointer;
+}
+
 
 /* recharts components */
 .recharts-legend-item 

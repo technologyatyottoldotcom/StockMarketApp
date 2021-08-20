@@ -4,6 +4,7 @@ import Coin from '../../../assets/icons/coins.svg';
 import BriefCase from '../../../assets/icons/suitcase.svg';
 import ChevronDown from '../../../assets/icons/ChevronDown.svg';
 import "../../../css/Portfolio.css";
+import AnimatedDigit from '../AnimatedDigit';
 import TableRow from './PortfolioComponents/TableRow';
 import { ReCalculateWeight } from '../../../exports/ReCalculateWeight';
 import PerformanceAnalytics from './PortfolioComponents/PerformanceAnalytics';
@@ -20,11 +21,16 @@ class Portfolios extends React.PureComponent {
         super(props);
         this.state = {
             data : [],
+            portfolioWeightArr : [],
             orderArr : [],
             newWeight : [],
+            changeArr : [],
             cashPos : null,
             tradeVolume : 0,
             sum : null,
+            totalReturnToday : '',
+            totalReturnChange : ' ',
+            totalReturnPositive : false,
             isLoaded : false,
             activeElement : 0,
             dataLen : 0,
@@ -33,6 +39,7 @@ class Portfolios extends React.PureComponent {
         this.portfolioHome = this.portfolioHome.bind(this);
         this.performanceAnalyse = this.performanceAnalyse.bind(this);
         this.addTableRow = this.addTableRow.bind(this);
+        this.setIndividualChange = this.setIndividualChange.bind(this);
     }
 
     componentDidMount(){
@@ -43,11 +50,69 @@ class Portfolios extends React.PureComponent {
                 dataLen : response.data.portfolioData.length,
                 orderArr : arr,
                 newWeight : arr,
+                changeArr : new Array(response.data.portfolioData.length).fill(0),
                 cashPos : 13254,
                 sum : response.data.sum,
                 isLoaded : true,
             })
         })
+        .then(()=>{
+
+            let pwa = [];
+            const data = this.state.data;
+            data.forEach((d)=>{
+                pwa.push(parseFloat(d.PortfolioWeight));
+            });
+
+            this.setState({
+                portfolioWeightArr : pwa
+            });
+        })
+    }
+
+    setIndividualChange(index,value)
+    {
+        if(value && value !== undefined)
+        {
+            value = parseFloat(value.split('%')[0]);
+            let changeArr = this.state.changeArr;
+            changeArr[index] = value;
+            this.setState({
+                changeArr : changeArr
+            });
+        }
+
+        this.calculateReturns();
+    }
+
+    calculateReturns()
+    {
+        const changeArr = this.state.changeArr;
+        const pwArr = this.state.portfolioWeightArr;
+        const currValue = this.state.sum.currentValueSum;
+
+        let totalReturns = 0;
+
+        changeArr.forEach((c,indx)=>{
+            if(c && c!== undefined && pwArr[indx] && pwArr[indx]!== undefined)
+            {
+                totalReturns += (c*pwArr[indx]);
+            }
+        });
+
+        totalReturns =parseFloat((totalReturns/100).toFixed(2));
+        let totalChange = ((totalReturns*currValue)/100).toFixed(2);
+        let totalReturnPositive = totalReturns >= 0 ? true : false;
+
+        totalReturns = totalReturns + '%';
+
+        this.setState({
+            totalReturnToday : totalReturns,
+            totalReturnChange : totalChange,
+            totalReturnPositive
+        });
+
+
     }
 
     CashPos({ cashPos, tradeVolume }) {
@@ -81,14 +146,36 @@ class Portfolios extends React.PureComponent {
         )
     }
 
-    CreatePriceCol({ heading, change, changePer, color = "#19E683" }) {
-        const curr = (num) => parseFloat(num).toLocaleString('en-IN', {style: 'currency',currency: 'INR'})
+    CreatePriceCol({ heading, change, changePer, positive }) {
+        const curr = (num) => parseFloat(num).toLocaleString('en-IN', {style: 'currency',currency: 'INR'});
+        let changeAmount = curr(change);
         return (
             <>
                     <p className="portfolio__curr__price">{curr(heading)}</p>
                     <div className="portfolio__change">
-                        <span className="portfolio__change__value">{curr(change)}</span> 
-                        {changePer && <span className="portfolio__change__per">{changePer}</span>}
+                        {changeAmount && <span className="portfolio__change__value" style={{display : 'flex' , color : positive ? '#19E683' : '#e51a4b'}}>
+                            {changeAmount &&
+                                changeAmount.split('').map((n,i) => {
+                                    return <AnimatedDigit 
+                                        digit={n} 
+                                        size={16} 
+                                        key={i}
+                                        digitMargin={0}
+                                    />
+                            })}
+                        </span> }
+                        {changePer && <span className="portfolio__change__per" style={{display : 'flex' , color : positive ? '#19E683' : '#e51a4b'}}>
+                           ({changePer &&
+                                changePer.split('').map((n,i) => {
+                                    return <AnimatedDigit 
+                                        digit={n} 
+                                        size={16} 
+                                        key={i}
+                                        digitMargin={0}
+                                    />
+                            })})
+                        </span>
+                        }
                     </div>
             </>
         )
@@ -103,7 +190,7 @@ class Portfolios extends React.PureComponent {
 
                 return <th key={i} {...v[1]} >{v[0]}</th>
             }
-            else return <th key={i} style={{ padding: 5, borderBottom: v ? '1px solid #e7e7e7' : ''}}>{v}</th>
+            else return <th key={i} style={{ padding :'2px 5px', borderBottom: v ? '1px solid #e7e7e7' : ''}}>{v}</th>
 
         })
     }
@@ -113,7 +200,7 @@ class Portfolios extends React.PureComponent {
             <tr style={{ margin: 15, ...style }}>
                 {
                     td.map((v, i) => {
-                        return <td key={Math.random() + i} style={{ padding: 5 }}>{v}</td>
+                        return <td key={i} style={{ padding: '2px 5px' }}>{v}</td>
                     })
                 }
             </tr>
@@ -207,7 +294,15 @@ class Portfolios extends React.PureComponent {
 
         let table = [];
         data.forEach((row, i) => {
-            table.push(<TableRow key={i} index={i} newWeight={this.state.newWeight[i]} data={row} orderArr={this.state.orderArr} addOrderArr={this.addOrderArr}/>)
+            table.push(<TableRow 
+                        key={i} 
+                        index={i} 
+                        newWeight={this.state.newWeight[i]} 
+                        data={row} 
+                        orderArr={this.state.orderArr} 
+                        addOrderArr={this.addOrderArr}
+                        setIndividualChange={this.setIndividualChange}
+                        />)
         })
 
         return table;
@@ -244,14 +339,17 @@ class Portfolios extends React.PureComponent {
     }
 
 
-
     render() {
-        const {sum, isLoaded, cashPos, tradeVolume, activeElement, insufficientCash} = this.state;
+        const {sum, isLoaded, cashPos, tradeVolume, activeElement, insufficientCash,totalReturnToday,totalReturnChange} = this.state;
  
 
         const curr = (num) => parseFloat(num).toLocaleString('en-IN', {style: 'currency',currency: 'INR'});
         if(!isLoaded){
-            return(<div style={{minHeight: 500, display: 'flex', justifyContent: 'center', alignItems: 'center'}}><Pulse /></div>)
+            return(
+            <div className="portfolio__container loader" >
+                <Pulse />
+                <p>Loading Portfolio...</p>
+            </div>)
         }else{
             if(activeElement == 0)
                 return (
@@ -266,8 +364,9 @@ class Portfolios extends React.PureComponent {
                                     <div className="portfolio__value">
                                         <this.CreatePriceCol
                                             heading={sum.currentValueSum}
-                                            change="+106000000.78"
-                                            changePer="(+.95%)"
+                                            change={totalReturnChange}
+                                            changePer={totalReturnToday}
+                                            positive={this.state.totalReturnPositive}
                                         />
                                     </div>
                                 </div>
@@ -306,7 +405,17 @@ class Portfolios extends React.PureComponent {
                                             <div style={{ fontWeight: 'bold' }}>{curr(sum.costValueSum)}</div>,
                                             <div style={{ fontWeight: 'bold' }}>{curr(sum.currentValueSum)}</div>,
                                             <span style={{ fontWeight: 'bold', color: "#19E683" }}>{sum.totalReturnSum}%</span>,
-                                            <span style={{ fontWeight: 'bold', color: "#19E683" }}>1.2%</span>,
+                                            <span style={{ fontWeight: 'bold', color: "#19E683" , display : 'flex' }}>
+                                                {totalReturnToday &&
+                                                    totalReturnToday.split('').map((n,i) => {
+                                                        return <AnimatedDigit 
+                                                            digit={n} 
+                                                            size={16} 
+                                                            key={i}
+                                                            digitMargin={0}
+                                                        />
+                                                })}
+                                            </span>,
                                             <div style={{ fontWeight: 'bold' }}>100%</div>,
                                             ""
                                         ]} style={{ borderTop: '1px solid #ccc' }} />

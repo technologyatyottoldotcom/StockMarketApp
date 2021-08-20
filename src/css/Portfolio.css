@@ -29,12 +29,29 @@
     height: 100%;
 }
 
+.portfolio__container.loader
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+}
+
+.portfolio__container.loader p
+{
+    font-size: 14px!important;
+    font-weight: 600!important;
+    margin-top: 8px!important;
+    color: var(--font-primary);
+}
+
 .portfolio__container .portfolio__header
 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 5%;
+    padding: 0 10%;
 }
 
 .portfolio__container .portfolio__details
@@ -164,15 +181,15 @@
 
 .portfolio__container .portfolio__search__box .stock__search
 {
-    max-width: 400px;
-    min-width: 350px;
+    max-width: 350px;
+    min-width: 300px;
 }
 
 .portfolio__container .portfolio__table
 {
-    padding: 10px 0px 0px;
+    margin-top: 10px;
     max-height: 70%;
-    font-size: 12px;
+    font-size: 10px;
     display: flex;
     justify-content: center;
 }
@@ -182,6 +199,7 @@
     background-color: var(--white);
     position: sticky;
     top: 0;
+    z-index: 1;
 }
 
 
