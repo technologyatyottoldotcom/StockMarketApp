@@ -200,7 +200,7 @@ class CompareSettingPopup extends React.PureComponent {
                             </div>
                         </div>
                         <div className="compare__setting__checkbox__wrapper">
-                            <div className="compate__setting__checkbox">
+                            <div className="compare__setting__checkbox">
                                 <CustomCheckBox 
                                     width={20} 
                                     height={20} 
@@ -211,7 +211,7 @@ class CompareSettingPopup extends React.PureComponent {
                             <p className="compare__setting__title">Hide Chart</p>
                         </div>
                         <div className="compare__setting__checkbox__wrapper">
-                            <div className="compate__setting__checkbox">
+                            <div className="compare__setting__checkbox">
                                 <CustomCheckBox 
                                     width={20} 
                                     height={20} 
@@ -222,7 +222,7 @@ class CompareSettingPopup extends React.PureComponent {
                             <p className="compare__setting__title">Price Label</p>
                         </div>
                         <div className="compare__setting__checkbox__wrapper">
-                            <div className="compate__setting__checkbox">
+                            <div className="compare__setting__checkbox">
                                 <CustomCheckBox 
                                     width={20} 
                                     height={20} 

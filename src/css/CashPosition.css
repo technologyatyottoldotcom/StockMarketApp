@@ -23,20 +23,7 @@
 }
 
   
-::-webkit-scrollbar {
-    width: 5px;
-  }
-    
-::-webkit-scrollbar-track {
-    background: transparent;
-  }
-::-webkit-scrollbar-thumb {
-    background: #dbd9d9;
-    border-radius: 20px;
-  }
-::-webkit-scrollbar-thumb:hover {
-    background: #dbd9d9;
-  }
+
 
  .cash__position 
 {
@@ -243,6 +230,21 @@
   position: relative;
   height: 82%;
   overflow-y :scroll;
+}
+
+ .cash__position .cp__shares__container ::-webkit-scrollbar {
+  width: 5px;
+}
+  
+ .cash__position .cp__shares__container ::-webkit-scrollbar-track {
+  background: transparent;
+}
+ .cash__position .cp__shares__container ::-webkit-scrollbar-thumb {
+  background: #dbd9d9;
+  border-radius: 20px;
+}
+ .cash__position .cp__shares__container ::-webkit-scrollbar-thumb:hover {
+  background: #dbd9d9;
 }
 
  .cash__position .share__profile 

@@ -36,7 +36,7 @@
     box-shadow: 1px 1px 5px 1px #cccccc;
     border-radius: 3px;
     padding: 10px 15px;
-    display: none;
+    /* display: none; */
 }
 
 .indicator__setting__popup .indicator__setting__header
@@ -90,6 +90,28 @@
 {
     height: 80%;
     padding: 10px 10px;
+    overflow-y: scroll;
+}
+
+/* width */
+.indicator__setting__popup .indicator__setting__container::-webkit-scrollbar {
+    width: 4px!important;
+    display: block!important;
+  }
+  
+  /* Track */
+.indicator__setting__popup .indicator__setting__container::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+  
+  /* Handle */
+.indicator__setting__popup .indicator__setting__container::-webkit-scrollbar-thumb {
+  background: rgb(247, 247, 247);
+}
+  
+  /* Handle on hover */
+.indicator__setting__popup .indicator__setting__container::-webkit-scrollbar-thumb:hover {
+  background: rgb(238, 238, 238)!important;
 }
 
 .indicator__setting__container .indicator__setting__block

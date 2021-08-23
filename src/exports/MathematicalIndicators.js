@@ -1,6 +1,10 @@
 import { ema, wma, sma, tma , bollingerBand , macd , rsi , atr , stochasticOscillator , forceIndex, elderRay , elderImpulse , sar , change , compare} from "react-stockcharts/lib/indicator";
 import {LineSeries,AreaSeries,BarSeries,CandlestickSeries,ScatterSeries ,OHLCSeries,KagiSeries,RenkoSeries,PointAndFigureSeries, SquareMarker,CircleMarker , BollingerSeries , MACDSeries , RSISeries ,StochasticSeries ,StraightLine ,ElderRaySeries , SARSeries , VolumeProfileSeries} from 'react-stockcharts/lib/series';
+import { IndicatorConfig,getIndicatorConfig } from "./IndicatorConfig";
 
+
+const SMAConfig = getIndicatorConfig('SMA');
+console.log(SMAConfig)
 
 const SMA = sma()
         .options({windowSize : 20 , sourcePath: "close"})
@@ -31,6 +35,7 @@ const TMA = tma()
         .stroke('#f1c40f');
 
 const BB = bollingerBand()
+        .options({windowSize : 20 , sourcePath: "close"})
         .skipUndefined(true)
 		.merge((d, c) => {d.bb = c;})
         .accessor(d => d.bb);

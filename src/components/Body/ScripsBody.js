@@ -51,7 +51,7 @@ class ScripsBody extends React.PureComponent
             bigdataLoaded : false,
             limitFlag : false,
             StockSettingsOpen : false,
-            settingUpdateFlag : false,
+            compareSettingUpdateFlag : false,
             range : 'D',
             ws : null,
             FeedConnection : false,
@@ -60,7 +60,8 @@ class ScripsBody extends React.PureComponent
             NewCompareStockConfig : {},
             OldCompareStockConfig : {},
             StockCompareSettings : {},
-            DefaultCompareSettings : {}
+            DefaultCompareSettings : {},
+            
         }
 
         this.SnapShotRequest = this.SnapShotRequest.bind(this);
@@ -412,6 +413,8 @@ class ScripsBody extends React.PureComponent
         }
     }
 
+    
+
     closeCompareSettings(CompareConfig)
     {
 
@@ -426,7 +429,7 @@ class ScripsBody extends React.PureComponent
             
             this.setState({
                 CompareStockConfig,
-                settingUpdateFlag : !this.state.settingUpdateFlag,
+                compareSettingUpdateFlag : !this.state.compareSettingUpdateFlag,
                 StockSettingsOpen : false
             });
 
@@ -449,13 +452,15 @@ class ScripsBody extends React.PureComponent
             
             this.setState({
                 CompareStockConfig,
-                settingUpdateFlag : !this.state.settingUpdateFlag
+                compareSettingUpdateFlag : !this.state.compareSettingUpdateFlag
             });
 
             // console.log(this.state.CompareStockConfig)
         }
 
     }
+
+   
 
     removeStock(e,symbol)
     {
@@ -568,7 +573,7 @@ class ScripsBody extends React.PureComponent
                             toggleCompareSettings={this.toggleCompareSettings}
                             closeCompareSettings={this.closeCompareSettings}
                             saveCompareSettings={this.saveCompareSettings}
-                            settingUpdateFlag={this.state.settingUpdateFlag}
+                            compareSettingUpdateFlag={this.state.compareSettingUpdateFlag}
                             removeStock={this.removeStock}
                             WatchStocks={this.state.WatchStocks}
                             CompareStockConfig={this.state.CompareStockConfig}

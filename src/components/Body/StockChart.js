@@ -23,7 +23,7 @@ import LastPointIndicator from './CustomChartComponents/LastPointEdgeIndicator/L
 import {getChartHeight,getHeroHeight,getIndicatorData,ChartWrapper,ChartWrapperZoom,ChartWrapperCompare,ChartIndicators,ChartIndicatorInside,ChartToolTip} from './Charts/ChartFunctions';
 import { splitAdjustment } from '../../exports/SplitAdjustment';
 import { CrossHairCursor,MouseCoordinateX, MouseCoordinateY ,PriceCoordinate, EdgeIndicator } from "react-stockcharts/lib/coordinates";
-import IndicatorOptions from './CustomChartComponents/IndicatorOptions/IndicatorOptions';
+import CustomLine from './CustomChartComponents/CustomInteractives/CustomLine';
 
 
 function getMaxUndefined(calculators) {
@@ -54,6 +54,7 @@ export class StockChart extends React.PureComponent {
         this.updateHead = this.updateHead.bind(this);
         this.setUpChart = this.setUpChart.bind(this);
         this.handleDownloadMore = this.handleDownloadMore.bind(this);
+        this.wrapCanvas = this.wrapCanvas.bind(this);
 
 
 
@@ -393,6 +394,11 @@ export class StockChart extends React.PureComponent {
         console.log('Drawing Done....',this.state);
     }
 
+    // onInteractiveSelect(type)
+    // {
+
+    // }
+
     onKeyPress(e) {
 		const keyCode = e.which;
 		// console.log(keyCode);
@@ -591,7 +597,6 @@ export class StockChart extends React.PureComponent {
 
         return [calculatedData,chartSeries];
     }
-
     
     getYExtents(range,zoom,open,high,low,lastPoint)
     {
@@ -632,7 +637,7 @@ export class StockChart extends React.PureComponent {
         let arr = Object.values(compare);
         if(arr.length > 0)
         {
-            return [Math.max(...arr)+0.004,Math.min(...arr)-0.004];
+            return [Math.max(...arr)+0.010,Math.min(...arr)-0.010];
         }
         return compare;
     }
@@ -689,6 +694,11 @@ export class StockChart extends React.PureComponent {
         
     }
 
+    wrapCanvas()
+    {
+        this.canvas.cancelDrag();
+    }
+
     
     render() {
 
@@ -738,7 +748,7 @@ export class StockChart extends React.PureComponent {
             const compareCalculator = compare()
             .options({
                 basePath: "open",
-                mainKeys: [],
+                mainKeys: ["high", "low", "close"],
                 compareKeys: ["open", ...CompareCodes],
             })
             .accessor(d => d.compare)
@@ -796,7 +806,7 @@ export class StockChart extends React.PureComponent {
 
                         {!zoom && <>
                             {CompareStockConfig.length > 0 ? 
-                                (ChartWrapperCompare(zoom,range,this.props.stockDetails,CompareStockConfig,this.props.TotalCharts))
+                                (ChartWrapperCompare(zoom,range,chartType,this.props.stockDetails,CompareStockConfig,this.props.TotalCharts))
                                 :
                                 (ChartWrapper(range,chartType,this.props.closePrice))
                             }
@@ -805,7 +815,7 @@ export class StockChart extends React.PureComponent {
                         {zoom && <>
                             {
                                 CompareStockConfig.length > 0 ? 
-                                (ChartWrapperCompare(zoom,range,this.props.stockDetails,CompareStockConfig,this.props.TotalCharts))
+                                (ChartWrapperCompare(zoom,range,chartType,this.props.stockDetails,CompareStockConfig,this.props.TotalCharts))
                                 :
 
                                 (ChartWrapperZoom(range,this.state.lastPoint,this.props.stockDetails,chartType,this.props.closePrice,this.props.TotalCharts))
@@ -821,15 +831,19 @@ export class StockChart extends React.PureComponent {
 
                         {zoom && <>
                             {IndicatorInside.map((indicator,index)=>{
-                                const [indicatordata,yAccessor,series,title,accessor,color,indicatorConfig] = getIndicatorData(indicator,data);
-                                return ChartIndicatorInside(index,indicator,series,yAccessor,title,color,indicatorConfig,this.props.DeleteIndicatorType)
+                                const [indicatordata,yAccessor,series,title,accessor,color,indicatorConfig,indicatorSettings] = getIndicatorData(indicator,data);
+                                return ChartIndicatorInside(index,indicator,series,yAccessor,title,color,indicatorConfig,indicatorSettings,this.props.DeleteIndicatorType,this.props.toggleIndicatorSettings)
                             })}
                         </>}
 
                         {zoom && 
 
+                           
+
                             <>
-                                <TrendLine
+
+                                {/* <CustomLine wrapCanvas={this.wrapCanvas}/> */}
+                                {/* <TrendLine
                                         ref={this.saveInteractiveNodes("Trendline", 1)}
                                         enabled={this.state.enableTrendLine}
                                         type={trendLineType}
@@ -845,9 +859,9 @@ export class StockChart extends React.PureComponent {
                                         hoverText={{
                                             text : 'Select'
                                         }}
-                                /> 
+                                />  */}
 
-                                <EquidistantChannel
+                                {/* <EquidistantChannel
                                     ref={this.saveInteractiveNodes("EquidistantChannel", 1)}
                                     enabled={this.state.enableChannel}
                                     onStart={() => console.log("START")}
@@ -895,7 +909,7 @@ export class StockChart extends React.PureComponent {
                                     currentPositionStrokeWidth={4}
                                     currentPositionRadius={5}
                                     appearance= {GannFanAppearance}
-                                /> 
+                                />  */}
 
                             </>
                         }
@@ -904,7 +918,7 @@ export class StockChart extends React.PureComponent {
 
                     {zoom &&
                         IndicatorOutside.map((indicator,index)=>{
-                            const [indicatordata,yAccessor,series,title,accessor,color,indicatorConfig] = getIndicatorData(indicator,data);
+                            const [indicatordata,yAccessor,series,title,accessor,color,indicatorConfig,indicatorSettings] = getIndicatorData(indicator,data);
 
                             let chartConfig = getChartHeight(height,zoom,IndicatorOutside.length);
                             let chartHeight = chartConfig.height;
@@ -914,7 +928,7 @@ export class StockChart extends React.PureComponent {
 
                             return <Chart key={index} id={(index+2)} yExtents={accessor} height={chartHeight} origin={(w,h)=>[0,originHeight]} padding={5}>
 
-                                {ChartIndicators(index,indicator,width,height,range,series,title,color,indicatorConfig,yAccessor,TotalCharts,IndicatorOutside,this.props.DeleteIndicatorType,this.props.SwapCharts)}
+                                {ChartIndicators(index,indicator,width,height,range,series,title,color,indicatorConfig,indicatorSettings,yAccessor,TotalCharts,IndicatorOutside,this.props.DeleteIndicatorType,this.props.toggleIndicatorSettings,this.props.SwapCharts)}
                                 
                             </Chart>
                         })

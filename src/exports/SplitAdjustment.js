@@ -89,3 +89,35 @@ export function splitAdjustment(data)
     return splitFactor(data,prices);
 }
 
+export function splitAdjustmentArray(data)
+{
+    let prices = [];
+    // console.log(prices.length);
+    // console.log(data.length);
+
+    let converteddata = [];
+    data.forEach((d,indx)=>{
+        let dobj = {};
+        dobj['date'] = new Date(d[0]); 
+        dobj['open'] = parseFloat(d[1]);
+        dobj['high'] = parseFloat(d[2]);
+        dobj['low'] = parseFloat(d[3]);
+        dobj['close'] = parseFloat(d[4]);
+        dobj['volume'] = parseFloat(d[5]);
+
+        converteddata.push(dobj);
+
+    });
+
+    converteddata.forEach((d)=>{
+        if(d.open)
+        {
+            prices.push(d);
+        }
+    });
+
+    // console.log(prices);
+
+    return splitFactor(converteddata,prices);
+}
+

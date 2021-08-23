@@ -4,7 +4,6 @@ import ScripsMenu from './ScripsMenu';
 import BrandLogo from '../../assets/icons/yottol.png';
 import Search from '../../assets/icons/search.svg';
 import Pulse from '../Loader/Pulse';
-import { Alert } from '../Body/CustomChartComponents/CustomAlert/CustomAlert';
 
 const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;;
 
@@ -55,7 +54,6 @@ class StockSuggestion extends React.PureComponent{
         if(!loading)
         {
 
-            const {cursor} = this.props;
             // console.log('CALL SUGGESTION')
 
             if(search.length > 0 && suggestions.length > 0)
@@ -67,7 +65,6 @@ class StockSuggestion extends React.PureComponent{
                             return <p 
                                 key={s.code} 
                                 onClick={e => {this.props.selectedStock(s);this.props.handleSelection()}}
-                                className={cursor === index ? 'active' : ''}
                                 >
                                 <span>{stocksymbol}</span>
                                 <HighLightText text={s.company} query={search} customClass="search__highlight"/>
@@ -102,12 +99,10 @@ class ScripsHeader extends React.Component
         super(props);
         this.state = {
             search : '',
-            cursor : -1,
             loading : false,
             suggestions : []
         }
         this.handleSearchChange = this.handleSearchChange.bind(this);
-        this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleSelection = this.handleSelection.bind(this);
         this.setComponentRef = this.setComponentRef.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -149,7 +144,6 @@ class ScripsHeader extends React.Component
             {
                 this.setState({
                     suggestions : [],
-                    cursor : -1,
                     loading : true,
                 },()=>{
                     this.getSuggestions();
@@ -167,19 +161,7 @@ class ScripsHeader extends React.Component
         });
     }
 
-    handleKeyDown(e) {
-        const { cursor , suggestions } = this.state;
-
-        if (e.keyCode === 38 && cursor >= 0) {
-          this.setState( prevState => ({
-            cursor: prevState.cursor - 1
-          }))
-        } else if (e.keyCode === 40 && cursor < suggestions.length - 1) {
-          this.setState( prevState => ({
-            cursor: prevState.cursor + 1
-          }))
-        }
-    }
+    
 
     getSuggestions()
     {
@@ -222,7 +204,6 @@ class ScripsHeader extends React.Component
                 <input placeholder='Search' 
                     value={this.state.search} 
                     onChange={e => this.handleSearchChange(e)}
-                    // onKeyDown={e => this.handleKeyDown(e)}
                 />
 
                 <div className="stock__suggestions">
@@ -230,7 +211,6 @@ class ScripsHeader extends React.Component
                         search={this.state.search} 
                         loading={this.state.loading} 
                         suggestions={this.state.suggestions}
-                        cursor={this.state.cursor} 
                         selectedStock={this.props.selectedStock} 
                         handleSelection={this.handleSelection}/>
                 </div>

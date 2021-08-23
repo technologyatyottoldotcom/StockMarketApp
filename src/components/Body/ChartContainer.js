@@ -44,6 +44,7 @@ import Pulse from '../Loader/Pulse';
 import {getCandleDuration} from '../../exports/MessageStructure';
 import {getFuturePoints,getStartPointIndex,filterBigData} from '../../exports/FutureEntries';
 import {convertToUNIX,dateToUNIX} from '../../exports/TimeConverter';
+import { splitAdjustmentArray } from '../../exports/SplitAdjustment';
 import Technicals from './BusinessNews/Technicals';
 
 const REQUEST_BASE_URL = process.env.REACT_APP_REQUEST_BASE_URL;
@@ -66,6 +67,9 @@ export class ChartContainer extends React.PureComponent {
         this.removeCompareData = this.removeCompareData.bind(this);
         this.DeleteIndicatorType = this.DeleteIndicatorType.bind(this);
         this.SwapCharts = this.SwapCharts.bind(this);
+        this.saveIndicatorSettings = this.saveIndicatorSettings.bind(this);
+        this.toggleIndicatorSettings = this.toggleIndicatorSettings.bind(this);
+        this.closeIndicatorSettings = this.closeIndicatorSettings.bind(this);
         this.state = {
             isLoaded : false,
             dataLoaded : false,
@@ -80,6 +84,8 @@ export class ChartContainer extends React.PureComponent {
             comparedataLoaded : true,
             bigcomparedataLoaded : true,
             RemoveFlag : false,
+            IndicatorSettingOpen : false,
+            indicatorSettingUpdateFlag : false,
             chartType : 'line',
             chartdata : [],
             TotalCharts : 1,
@@ -89,6 +95,7 @@ export class ChartContainer extends React.PureComponent {
             OldIndicator : {},
             indicatorInfoType : '',
             indicatorType : 'none',
+            IndicatorSettingName : '',
             chartWidth : 0,
             chartHeight : 0,
             zoom : false,
@@ -205,14 +212,18 @@ export class ChartContainer extends React.PureComponent {
                 // console.log(stockArray);
                 let tempDataArray = [];
                 // console.log(stockArray);
-                stockArray.forEach(d =>{
+
+                let converteddata = splitAdjustmentArray(stockArray);
+                // console.log(converteddata);
+                
+                converteddata.forEach(d =>{
                     let dobj = {
-                        date : new Date(d[0]),
-                        open : parseFloat(d[1]),
-                        high : parseFloat(d[2]),
-                        low : parseFloat(d[3]),
-                        close : parseFloat(d[4]),
-                        volume : parseInt(d[5])
+                        date : new Date(d['date']),
+                        open : parseFloat(d['open']),
+                        high : parseFloat(d['high']),
+                        low : parseFloat(d['low']),
+                        close : parseFloat(d['close']),
+                        volume : parseInt(d['volume'])
                     }
 
                     tempDataArray.push(dobj);
@@ -475,7 +486,7 @@ export class ChartContainer extends React.PureComponent {
 
         let startUNIX = convertToUNIX(type);
 
-        console.log(startUNIX,type,ct,dd);
+        // console.log(startUNIX,type,ct,dd);
 
         let exchange = this.props.stockDetails.stockExchange.exchange;
         let code;
@@ -511,14 +522,18 @@ export class ChartContainer extends React.PureComponent {
                 // console.log(stockArray);
                 let tempDataArray = [];
                 // console.log(stockArray);
-                stockArray.forEach(d =>{
+
+                let converteddata = splitAdjustmentArray(stockArray);
+
+
+                converteddata.forEach(d =>{
                     let dobj = {
-                        date : new Date(d[0]),
-                        open : parseFloat(d[1]),
-                        high : parseFloat(d[2]),
-                        low : parseFloat(d[3]),
-                        close : parseFloat(d[4]),
-                        volume : parseInt(d[5])
+                        date : new Date(d['date']),
+                        open : parseFloat(d['open']),
+                        high : parseFloat(d['high']),
+                        low : parseFloat(d['low']),
+                        close : parseFloat(d['close']),
+                        volume : parseInt(d['volume'])
                     }
 
                     // console.log(d,dobj);
@@ -603,17 +618,21 @@ export class ChartContainer extends React.PureComponent {
                 let indx = chartdata.length - 1;
                 let dobj = {};
                 // console.log(stockArray);
-                stockArray.reverse().forEach(d =>{
+
+                let converteddata = splitAdjustmentArray(stockArray);
+                // console.log(converteddata);
+
+                converteddata.reverse().forEach(d =>{
 
                     // let csd = this.state.chartdata[indx].csd;
                     // console.log(csd);
                     dobj = {};
                     // dobj['code'] = code; 
-                    dobj[code+'open'] = parseFloat(d[1]);
-                    dobj[code+'high'] = parseFloat(d[2]);
-                    dobj[code+'low'] = parseFloat(d[3]);
-                    dobj[code+'close'] = parseFloat(d[4]);
-                    dobj[code+'volume'] = parseFloat(d[5]);
+                    dobj[code+'open'] = parseFloat(d['open']);
+                    dobj[code+'high'] = parseFloat(d['high']);
+                    dobj[code+'low'] = parseFloat(d['low']);
+                    dobj[code+'close'] = parseFloat(d['close']);
+                    dobj[code+'volume'] = parseFloat(d['volume']);
 
                     // csd.push(dobj);
 
@@ -676,17 +695,19 @@ export class ChartContainer extends React.PureComponent {
                 let indx = bigchartdata.length - 1;
                 let dobj = {};
                 // console.log(stockArray);
-                stockArray.reverse().forEach(d =>{
+                let converteddata = splitAdjustmentArray(stockArray);
+
+                converteddata.reverse().forEach(d =>{
 
                     // let csd = this.state.chartdata[indx].csd;
                     // console.log(csd);
                     dobj = {};
                     // dobj['code'] = code; 
-                    dobj[code+'open'] = parseFloat(d[1]);
-                    dobj[code+'high'] = parseFloat(d[2]);
-                    dobj[code+'low'] = parseFloat(d[3]);
-                    dobj[code+'close'] = parseFloat(d[4]);
-                    dobj[code+'volume'] = parseFloat(d[5]);
+                    dobj[code+'open'] = parseFloat(d['open']);
+                    dobj[code+'high'] = parseFloat(d['high']);
+                    dobj[code+'low'] = parseFloat(d['low']);
+                    dobj[code+'close'] = parseFloat(d['close']);
+                    dobj[code+'volume'] = parseFloat(d['volume']);
 
                     // csd.push(dobj);
 
@@ -718,7 +739,6 @@ export class ChartContainer extends React.PureComponent {
     async loadCompareData()
     {
 
-        
         let CompareStockConfig = this.props.CompareStockConfig;
         if(CompareStockConfig.length > 0)
         {
@@ -728,15 +748,15 @@ export class ChartContainer extends React.PureComponent {
             console.log('ADD WITH COMPARE DATA'); 
             const type = this.state.range;
             const {candle,duration,mixed} = getCandleDuration(type);
-            console.log(candle,duration,mixed);
+            // console.log(candle,duration,mixed);
             let startUNIX = convertToUNIX(type);
-            console.log(startUNIX);
+            // console.log(startUNIX);
 
             const Stocks = this.props.CompareStockConfig;
 
             const requests = Stocks.map( s=> axios.get(`${REQUEST_BASE_URL}/stockdata?ct=${candle}&starttime=${startUNIX}&dd=${duration}&exchange=NSE&token=${s.code}&code=${s.symbol}&mixed=${mixed}&type=${type}`).catch(err => null))
 
-            console.log(requests);
+            // console.log(requests);
 
             let chartdata = this.state.chartdata;
             let lastPoint;
@@ -756,15 +776,18 @@ export class ChartContainer extends React.PureComponent {
 
                     let indx = chartdata.length - 1;
 
-                    stockArray.reverse().forEach((d,i) =>{
+                    let converteddata = splitAdjustmentArray(stockArray);
+                    // console.log(converteddata);
+
+                    converteddata.reverse().forEach((d,i) =>{
 
                             let dobj = {};
-                            dobj[code+'date'] = new Date(d[0]); 
-                            dobj[code+'open'] = parseFloat(d[1]);
-                            dobj[code+'high'] = parseFloat(d[2]);
-                            dobj[code+'low'] = parseFloat(d[3]);
-                            dobj[code+'close'] = parseFloat(d[4]);
-                            dobj[code+'volume'] = parseFloat(d[5]);
+                            dobj[code+'date'] = new Date(d['date']); 
+                            dobj[code+'open'] = parseFloat(d['open']);
+                            dobj[code+'high'] = parseFloat(d['high']);
+                            dobj[code+'low'] = parseFloat(d['low']);
+                            dobj[code+'close'] = parseFloat(d['close']);
+                            dobj[code+'volume'] = parseFloat(d['volume']);
                             
                             chartdata[indx] = {...chartdata[indx],...dobj};
                             indx-=1;
@@ -1280,6 +1303,36 @@ export class ChartContainer extends React.PureComponent {
 
     }
 
+    toggleIndicatorSettings(e,indicator)
+    {
+        const {IndicatorInside,IndicatorOutside} = this.state;
+
+        if(IndicatorInside.includes(indicator) || IndicatorOutside.includes(indicator))
+        {
+            this.setState({
+                IndicatorSettingName : indicator,
+                IndicatorSettingOpen : true
+            });
+            $('.app__back__blur').addClass('active');
+        }
+    }
+
+    closeIndicatorSettings()
+    {
+        this.setState({
+            IndicatorSettingName : '',
+            IndicatorSettingOpen : false
+        });
+        $('.app__back__blur').removeClass('active');
+    }
+
+    saveIndicatorSettings()
+    {
+        this.setState({
+            indicatorSettingUpdateFlag : !this.state.indicatorSettingUpdateFlag
+        })
+    }
+
     wrapPopups(popup,open)
     {
         const PopupArray = ['Compare__popup','Interactive__popup','Indicator__popup','Stock__popup','Stock__watch__popup'];
@@ -1333,6 +1386,8 @@ export class ChartContainer extends React.PureComponent {
         // console.log(this.props.data);
 
         const {StockSettingsOpen,StockCompareSettings} = this.props;
+
+        const {IndicatorSettingOpen} = this.state;
 
         let stockData = this.props.stockData;
 
@@ -1408,11 +1463,18 @@ export class ChartContainer extends React.PureComponent {
                     
                 }
 
-                {this.state.zoom && 
+                {IndicatorSettingOpen && 
                     <>
-                        <IndicatorSettingPopup IndicatorName="SMA"/>
+                        <IndicatorSettingPopup 
+                            IndicatorName={this.state.IndicatorSettingName}
+                            indicatorSettingUpdateFlag={this.state.indicatorSettingUpdateFlag}
+                            saveIndicatorSettings={this.saveIndicatorSettings}
+                            closeIndicatorSettings={this.closeIndicatorSettings}
+                        />
                     </>
                 }
+
+                
                 
     
                 <div className="Interactive__popup">
@@ -1614,6 +1676,7 @@ export class ChartContainer extends React.PureComponent {
                                             IndicatorOutside={this.state.IndicatorOutside}
                                             IndicatorInside={this.state.IndicatorInside}
                                             OldIndicator={this.state.OldIndicator}
+                                            toggleIndicatorSettings={this.toggleIndicatorSettings}
                                             DeleteIndicatorType={this.DeleteIndicatorType}
                                             SwapCharts={this.SwapCharts}
                                             RemoveFlag={this.state.RemoveFlag}

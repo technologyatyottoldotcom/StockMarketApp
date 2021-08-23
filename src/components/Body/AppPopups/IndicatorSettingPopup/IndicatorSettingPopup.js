@@ -1,5 +1,5 @@
 import React from 'react';
-import {IndicatorConfig} from '../../../../exports/IndicatorConfig';
+import {IndicatorConfig,setIndicator,setIndicatorConfig} from '../../../../exports/IndicatorConfig';
 import CustomSelect from '../../CustomChartComponents/CustomSelect/CustomSelect';
 import CustomCheckBox from '../../CustomChartComponents/CustomCheckBox/CustomCheckBox';
 import CustomColorPicker from '../../CustomChartComponents/CustomColorPicker/CustomColorPicker';
@@ -16,6 +16,7 @@ export class IndicatorSettingPopup extends React.PureComponent {
         this.state = {
             IndicatorName : this.props.IndicatorName,
             IndicatorOptions : {},
+            DefaultIndicatorOptions : {},
             OptionsLoaded : false
         }
 
@@ -30,20 +31,20 @@ export class IndicatorSettingPopup extends React.PureComponent {
     getTypeIndex(type)
     {
 
-        console.log(type)
-        if(type === 'line')
+        type = type.split(' ').join('').toLowerCase();
+        if(type === 'linechart')
         {
             return 0;
         }
-        else if(type === 'area')
+        else if(type === 'areachart')
         {
             return 1;
         }
-        else if(type === 'column')
+        else if(type === 'barchart')
         {
             return 2;
         }
-        else if(type === 'stepline')
+        else if(type === 'steplinechart')
         {
             return 3;
         }
@@ -66,6 +67,7 @@ export class IndicatorSettingPopup extends React.PureComponent {
 
         this.setState({
             IndicatorOptions : IndicatorOptions,
+            DefaultIndicatorOptions : JSON.parse(JSON.stringify(IndicatorOptions)),
             OptionsLoaded : true
         })
     }
@@ -75,6 +77,8 @@ export class IndicatorSettingPopup extends React.PureComponent {
 
         if(this.state.IndicatorOptions)
         {
+
+            // console.log(this.state.IndicatorOptions,this.state.DefaultIndicatorOptions)
             const {config} = this.state.IndicatorOptions;
             
             return config.map((c,indx)=>{
@@ -87,7 +91,7 @@ export class IndicatorSettingPopup extends React.PureComponent {
                                     width={20} 
                                     height={20} 
                                     isChecked={c.value}
-                                    onChangeValue={()=> {}}
+                                    onChangeValue={(value)=> {setIndicatorConfig(this.state.IndicatorName,c.configname,value); this.props.saveIndicatorSettings()}}
                                 />
                             </div>
                             <p className="indicator__setting__title">{c.label}</p>
@@ -105,7 +109,7 @@ export class IndicatorSettingPopup extends React.PureComponent {
                                     height={35} 
                                     size={25}
                                     defaultColor={c.value}
-                                    onColorChange={()=> {}}    
+                                    onColorChange={(color)=> {setIndicatorConfig(this.state.IndicatorName,c.configname,color); this.props.saveIndicatorSettings()}}    
                                 />
                             </div>
                         </div>
@@ -121,7 +125,7 @@ export class IndicatorSettingPopup extends React.PureComponent {
                                     width={180} 
                                     height={35} 
                                     defaultvalue={c.value}
-                                    onChangeValue={()=> {}}
+                                    onChangeValue={(value)=> {setIndicatorConfig(this.state.IndicatorName,c.configname,value); this.props.saveIndicatorSettings()}}
                                 />
                             </div>
                         </div>
@@ -137,7 +141,7 @@ export class IndicatorSettingPopup extends React.PureComponent {
                                     width={180} 
                                     height={35} 
                                     defaultIndex={this.getTypeIndex(c.value)}
-                                    onTypeChange={()=> {}}
+                                    onTypeChange={(type)=> {setIndicatorConfig(this.state.IndicatorName,c.configname,type); this.props.saveIndicatorSettings()}}
                                     options={c.options}/>
                             </div>
                         </div>
@@ -152,10 +156,15 @@ export class IndicatorSettingPopup extends React.PureComponent {
 
     }   
 
+    saveIndicator(indicator,indicatorOptions)
+    {
+        setIndicator(indicator,indicatorOptions);
+    }
+
     render() {
 
-        const {IndicatorOptions,OptionsLoaded} = this.state;
-        console.log(IndicatorOptions)
+        const {IndicatorName,DefaultIndicatorOptions,IndicatorOptions,OptionsLoaded} = this.state;
+        // console.log(IndicatorOptions)
 
         if(OptionsLoaded)
         {
@@ -164,17 +173,16 @@ export class IndicatorSettingPopup extends React.PureComponent {
                         <div className="indicator__setting__header">
                             <p className="indicator__code">{IndicatorOptions.title}</p>
                             <p className="indicator__name">{IndicatorOptions.name}</p>
-                            <span className="indicator__setting__close">
+                            <span className="indicator__setting__close" onClick={()=> {this.props.closeIndicatorSettings()} }>
                                 <img src={CrossIcon} alt="X"/>
                             </span>
                         </div>
                         <div className="indicator__setting__container">
-                            
                             {this.createContainer()}
                         </div>
                         <div className="indicator__setting__footer">
-                            <button type="button" >Cancel</button>
-                            <button type="button">Apply</button>
+                            <button type="button" onClick={()=> {this.saveIndicator(IndicatorName,DefaultIndicatorOptions);this.props.closeIndicatorSettings()}}>Cancel</button>
+                            <button type="button" onClick={()=> {this.props.closeIndicatorSettings()}}>Apply</button>
                         </div>
                 </div>
             )

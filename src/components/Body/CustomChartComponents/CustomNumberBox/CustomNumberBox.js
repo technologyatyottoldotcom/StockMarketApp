@@ -19,23 +19,27 @@ class CustomNumberBox extends React.PureComponent {
 
     handleUpDown(up)
     {
-        let value = up ? this.state.value + 1 : this.state.value - 1;
+        let value = up ? parseInt(this.state.value) + 1 : parseInt(this.state.value) - 1;
 
         this.setState({
             value
+        },()=>{
+            this.props.onChangeValue(this.state.value);
         });
 
-        this.props.onChangeValue(this.state.value);
+        
     }
 
     handleChange(e)
     {
-        let value = e.target.value.replace(/[^0-9]*/g,'');
+        let value = parseInt(e.target.value.replace(/[^0-9]*/g,''));
         this.setState({
             value : value
+        },()=>{
+            this.props.onChangeValue(this.state.value);
         });
 
-        this.props.onChangeValue(this.state.value);
+        
     }
 
     render() {

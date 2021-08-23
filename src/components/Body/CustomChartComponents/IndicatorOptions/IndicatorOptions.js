@@ -34,7 +34,7 @@ export class IndicatorOptions extends Component {
 		const origin = functor(originProp);
 		const [x, y] = origin(width, height);
 
-        let sux = showdown ? 0 : 35;
+        let sux = showdown ? 0 : 30;
         let srx = showdown && showup ? 0 : 35;
 
         let wd = showup && showdown ? 95 : 60;
@@ -50,11 +50,11 @@ export class IndicatorOptions extends Component {
                 {showup && 
                     <>
                         <g onClick={e => SwapCharts('up',index)}>
-                            <svg x={sux} y={0} width={30} height={30} fill={this.state.upColor} onMouseOver={()=>{this.setState({upColor : '#404040'})}} onMouseLeave={()=>{this.setState({upColor : '#95a5a6'})}}>
-                                <rect y="0.0222168" width="25" height="25" rx="3" fill="#F0F0F0"/>
-                                <path d="M12.8031 6.02498C13.3692 6.02346 13.8269 6.48112 13.8254 7.04721L13.7944 18.5168C13.7929 19.0828 13.3327 19.543 12.7666 19.5445V19.5445C12.2005 19.5461 11.7429 19.0884 11.7444 18.5223L11.7754 7.05275C11.7769 6.48666 12.237 6.02651 12.8031 6.02498V6.02498Z" />
-                                <rect width="6.68231" height="2.05" rx="1.025" transform="matrix(-0.707107 0.707107 -0.710915 -0.703278 13.9253 7.0979)" />
-                                <rect width="6.68231" height="2.05" rx="1.025" transform="matrix(-0.707107 -0.707107 0.703278 -0.710915 16.4678 11.8386)" />
+                            <svg x={sux} y={0} width={20} height={20} fill={this.state.upColor} onMouseOver={()=>{this.setState({upColor : '#404040'})}} onMouseLeave={()=>{this.setState({upColor : '#95a5a6'})}}>
+                                <rect y="0.0222168" width="20" height="20" rx="3" fill="#F0F0F0"/>
+                                <path d="M10.2425 4.82448C10.6954 4.82326 11.0615 5.18939 11.0603 5.64226L11.0355 14.8179C11.0343 15.2708 10.6662 15.6389 10.2133 15.6401V15.6401C9.76043 15.6413 9.3943 15.2752 9.39552 14.8223L9.42029 5.64669C9.42151 5.19382 9.78963 4.8257 10.2425 4.82448V4.82448Z" />
+                                <rect width="5.34584" height="1.64" rx="0.82" transform="matrix(-0.707107 0.707107 -0.710915 -0.703278 11.1401 5.68286)" />
+                                <rect width="5.34584" height="1.64" rx="0.82" transform="matrix(-0.707107 -0.707107 0.703278 -0.710915 13.1743 9.47534)" />
                             </svg>
                         </g>
                     </>
@@ -62,20 +62,20 @@ export class IndicatorOptions extends Component {
                 {showdown && 
                     <>
                         <g onClick={e => SwapCharts('down',index)}>
-                            <svg x={35} y={0} width={30} height={30} fill={this.state.downColor} onMouseOver={()=>{this.setState({downColor : '#404040'})}} onMouseLeave={()=>{this.setState({downColor : '#95a5a6'})}}>
-                                <rect width="25" height="25" rx="3" fill="#F0F0F0"/>
-                                <path d="M12.7662 19.5221C12.2001 19.5237 11.7424 19.066 11.744 18.4999L11.7749 7.03036C11.7765 6.46427 12.2366 6.00412 12.8027 6.0026V6.0026C13.3688 6.00107 13.8265 6.45874 13.8249 7.02483L13.794 18.4944C13.7924 19.0605 13.3323 19.5206 12.7662 19.5221V19.5221Z" />
-                                <rect width="6.68231" height="2.05" rx="1.025" transform="matrix(0.707107 -0.707107 0.710915 0.703278 11.644 18.4492)" />
-                                <rect width="6.68231" height="2.05" rx="1.025" transform="matrix(0.707107 0.707107 -0.703278 0.710915 9.10156 13.7085)" />
+                            <svg x={30} y={0} width={20} height={20} fill={this.state.downColor} onMouseOver={()=>{this.setState({downColor : '#404040'})}} onMouseLeave={()=>{this.setState({downColor : '#95a5a6'})}}>
+                                <rect width="20" height="20" rx="3" fill="#F0F0F0"/>
+                                <path d="M10.2131 15.6177C9.76019 15.6189 9.39406 15.2527 9.39528 14.7999L9.42005 5.62424C9.42128 5.17137 9.78939 4.80325 10.2423 4.80203V4.80203C10.6951 4.80081 11.0613 5.16694 11.06 5.61981L11.0353 14.7954C11.0341 15.2483 10.6659 15.6164 10.2131 15.6177V15.6177Z"/>
+                                <rect width="5.34584" height="1.64" rx="0.82" transform="matrix(0.707107 -0.707107 0.710915 0.703278 9.31543 14.7595)" />
+                                <rect width="5.34584" height="1.64" rx="0.82" transform="matrix(0.707107 0.707107 -0.703278 0.710915 7.28125 10.9668)" />
                             </svg>
                         </g>
                     </>
                 }
-                <g onClick={e => DeleteIndicatorType(indicator)}>
-                    <svg x={70} y={0} width={30} height={30} fill={this.state.closeColor} onMouseOver={()=>{this.setState({closeColor : '#404040'})}} onMouseLeave={()=>{this.setState({closeColor : '#95a5a6'})}}>
-                        <rect width="25" height="25" rx="3" fill="#F0F0F0"/>
-                        <rect width="17.285" height="2.05" rx="1.025" transform="matrix(0.705195 0.709013 -0.705195 0.709013 7.4458 5)" />
-                        <rect width="17.285" height="2.05" rx="1.025" transform="matrix(0.705195 -0.709013 0.705195 0.709013 6 17.2554)" />
+                <g onClick={e => DeleteIndicatorType(1,indicator)}>
+                    <svg x={60} y={0} width={20} height={20} fill={this.state.closeColor} onMouseOver={()=>{this.setState({closeColor : '#404040'})}} onMouseLeave={()=>{this.setState({closeColor : '#95a5a6'})}}>
+                        <rect width="20" height="20" rx="3" fill="#F0F0F0"/>
+                        <rect width="13.828" height="1.64" rx="0.82" transform="matrix(0.705195 0.709013 -0.705195 0.709013 5.95703 4)" />
+                        <rect width="13.828" height="1.64" rx="0.82" transform="matrix(0.705195 -0.709013 0.705195 0.709013 4.80029 13.8042)" />
                     </svg>
                 </g>
             </g>
