@@ -11,6 +11,7 @@ const TrendLineAppearance = {
     edgeFill : edgeFillColor,
     edgeStrokeWidth: 0.5,
     edgeStroke: "#000000",
+    strokeDasharray : 'Solid',
     r : 5
 }
 

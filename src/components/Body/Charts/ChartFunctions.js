@@ -455,6 +455,26 @@ function ChartCompareStockTooltip(zoom,indx,config,toggleHide,removeStock,toggle
     
 }
 
+function ChartIndicatorStockTooltip(index,indicatorConfig,yAccessor,indicator,indicatorSettings,DeleteIndicatorType,toggleIndicatorSettings)
+{
+    return (
+        <>
+            <IndicatorTooltip 
+                origin={[10, 25*(index+4)]}
+                yDisplayFormat={format(".2f")}
+                indicatorConfig={indicatorConfig}
+                yAccessor={yAccessor}
+                indicator={indicator}
+                IndicatorPosition={0}
+                labelFill={indicatorSettings.stroke}
+                hide={false}
+                DeleteIndicatorType={DeleteIndicatorType}
+                toggleIndicatorSettings={toggleIndicatorSettings}
+            />
+        </>
+    )
+}
+
 function ChartWrapperCompare(zoom,range,chartType,stockDetails,CompareStockConfig,totalCharts)
 {
 
@@ -641,10 +661,14 @@ function ChartIndicators(index,indicator,width,height,range,series,title,color,i
     }
 }
 
-function ChartIndicatorInside(index,indicator,series,yAccessor,title,color,indicatorConfig,indicatorSettings,DeleteIndicatorType,toggleIndicatorSettings)
+function ChartIndicatorInside(series,yAccessor,tooltipAccessor,title,indicatorSettings)
 {
     // console.log(series);
     // console.log(indicatorSettings);
+    let displayFormat = tooltipAccessor === '' ? format(".2f") : format(".2%");
+    tooltipAccessor = tooltipAccessor === '' ? yAccessor : tooltipAccessor;
+
+    // console.log(tooltipAccessor)
 
    if(!indicatorSettings.hide)
    {
@@ -655,8 +679,8 @@ function ChartIndicatorInside(index,indicator,series,yAccessor,title,color,indic
                     orient="right"
                     edgeAt="right"
                     itemType="last"
-                    yAccessor={yAccessor}
-                    displayFormat={format(".2f")}
+                    yAccessor={tooltipAccessor}
+                    displayFormat={displayFormat}
                     arrowWidth={0}
                     fill={indicatorSettings.stroke}
                     fontSize={11}
@@ -671,8 +695,8 @@ function ChartIndicatorInside(index,indicator,series,yAccessor,title,color,indic
                     edgeAt="right"
                     orient="left"
                     itemType="last"
-                    yAccessor={yAccessor}
-                    displayFormat={format(".2f")}
+                    yAccessor={tooltipAccessor}
+                    displayFormat={displayFormat}
                     arrowWidth={0}
                     fill={indicatorSettings.stroke}
                     fontSize={11}
@@ -684,63 +708,42 @@ function ChartIndicatorInside(index,indicator,series,yAccessor,title,color,indic
                 />
             
             }
-            <IndicatorTooltip 
-                origin={[10, 20*(index+4)]}
-                yDisplayFormat={format(".2f")}
-                indicatorConfig={indicatorConfig}
-                yAccessor={yAccessor}
-                indicator={indicator}
-                IndicatorPosition={0}
-                labelFill={indicatorSettings.stroke}
-                hide={false}
-                DeleteIndicatorType={DeleteIndicatorType}
-                toggleIndicatorSettings={toggleIndicatorSettings}
-            />
             
     </>
    }
-   else
-   {
-       return <>
-           <IndicatorTooltip 
-                origin={[10, 20*(index+4)]}
-                yDisplayFormat={format(".2f")}
-                indicatorConfig={indicatorConfig}
-                yAccessor={yAccessor}
-                indicator={indicator}
-                IndicatorPosition={0}
-                labelFill={indicatorSettings.stroke}
-                hide={true}
-                DeleteIndicatorType={DeleteIndicatorType}
-                toggleIndicatorSettings={toggleIndicatorSettings}
-            />
-       </>
-   }
+
 }
 
-function ChartToolTip(zoom,CompareStockConfig,toggleHide,removeStock,toggleCompareSettings)
+function ChartToolTip(data,zoom,CompareStockConfig,IndicatorInside,toggleHide,removeStock,toggleCompareSettings,DeleteIndicatorType,toggleIndicatorSettings)
 {
-
-    let ToolTipConfig = [];
-    CompareStockConfig.map((config,indx)=>{
-       ToolTipConfig.push({
-           type : 'compare',
-           config : config
-       });
-    });
-
     let index = 0;
     return (
-        CompareStockConfig.map((config,indx)=>{
-            return ChartCompareStockTooltip(zoom,index++,config,toggleHide,removeStock,toggleCompareSettings);
-        })
+       <>
+            {CompareStockConfig.map((config,indx)=>{
+                return ChartCompareStockTooltip(zoom,index++,config,toggleHide,removeStock,toggleCompareSettings);
+            })
+            }
+            {IndicatorInside.map((indicator,indx)=>{
+                if(CompareStockConfig.length >0)
+                {
+                    const [indicatordata,yAccessor,tooltipAccessor,series,title,accessor,color,indicatorConfig,indicatorSettings] = getCompareIndicatorData(indicator,data);
+                    return ChartIndicatorStockTooltip(index++,indicatorConfig,yAccessor,indicator,indicatorSettings,DeleteIndicatorType,toggleIndicatorSettings)
+                }
+                else
+                {
+                    const [indicatordata,yAccessor,tooltipAccessor,series,title,accessor,color,indicatorConfig,indicatorSettings] = getIndicatorData(indicator,data);
+                    return ChartIndicatorStockTooltip(index++,indicatorConfig,yAccessor,indicator,indicatorSettings,DeleteIndicatorType,toggleIndicatorSettings)
+                }
+            })}
+       </>
+       
     )
 }
 
 function getIndicatorData(indicator,chartdata)
 {
     let tempData,yAccessor,indicatorSeries,chartIndicatorY,indicatorTitle,indicatorColor,indicatorConfig,indicatorSettings;
-
+    let tooltipAccessor = '';
     if(indicator === 'SMA')
     {
         // console.log(SMA);
@@ -1166,7 +1169,123 @@ function getIndicatorData(indicator,chartdata)
     //     indicatorSeries = <VolumeProfileSeries fill='#000000'/>;
     // }
 
-    return [tempData,yAccessor,indicatorSeries,indicatorTitle,chartIndicatorY,indicatorColor,indicatorConfig,indicatorSettings];
+    return [tempData,yAccessor,tooltipAccessor,indicatorSeries,indicatorTitle,chartIndicatorY,indicatorColor,indicatorConfig,indicatorSettings];
+}
+
+function getCompareIndicatorData(indicator,chartdata)
+{
+    let tempData,yAccessor,tooltipAccessor,indicatorSeries,chartIndicatorY,indicatorTitle,indicatorColor,indicatorConfig,indicatorSettings;
+
+    if(indicator === 'SMA')
+    {
+        // console.log(SMA);
+        const config = getIndicatorConfig("SMA");
+        SMA.options().windowSize = config.windowsize;
+        tempData = SMA(chartdata);
+        yAccessor = d => d.sma;
+        tooltipAccessor = d => d.compare && d.compare.sma;
+        chartIndicatorY = (d) => getIndicatorExtents(d.sma);
+        indicatorTitle = 'SMA';
+        indicatorSeries =  getIndicatorChartType(config.charttype,d => d.compare.sma,config.stroke)
+        indicatorColor = config.stroke;
+        indicatorConfig = [{
+            'title' : 'SMA',
+            'accessor' : yAccessor,
+            'color' : config.stroke,
+        }];
+        indicatorSettings = {...config};
+        
+    }
+    else if(indicator === 'WMA')
+    {
+        const config = getIndicatorConfig("WMA");
+        WMA.options().windowSize = config.windowsize;
+        tempData = WMA(chartdata);
+        yAccessor = d => d.wma;
+        tooltipAccessor = d => d.compare && d.compare.wma;
+        chartIndicatorY = (d) => getIndicatorExtents(d.wma);
+        indicatorTitle = 'WMA';
+        indicatorSeries =  getIndicatorChartType(config.charttype,d => d.compare.wma,config.stroke)
+        indicatorColor = config.stroke;
+        indicatorConfig = [{
+            'title' : 'WMA',
+            'accessor' : yAccessor,
+            'color' : config.stroke,
+        }];
+        indicatorSettings = {...config};
+    }
+    else if(indicator === 'EMA')
+    {
+        const config = getIndicatorConfig("EMA");
+        EMA.options().windowSize = config.windowsize;
+        tempData = EMA(chartdata);
+        yAccessor = d => d.ema;
+        tooltipAccessor = d => d.compare && d.compare.ema;
+        chartIndicatorY = (d) => getIndicatorExtents(d.ema);
+        indicatorTitle = 'EMA';
+        indicatorSeries = getIndicatorChartType(config.charttype,d => d.compare.ema,config.stroke);
+        indicatorColor = config.stroke;
+        indicatorConfig = [{
+            'title' : 'EMA',
+            'accessor' : yAccessor,
+            'color' : config.stroke
+        }];
+        indicatorSettings = {...config};
+    }
+    else if(indicator === 'TMA')
+    {
+        const config = getIndicatorConfig("TMA");
+        TMA.options().windowSize = config.windowsize;
+        tempData = TMA(chartdata);
+        yAccessor = d => d.tma;
+        tooltipAccessor = d => d.compare && d.compare.tma;
+        chartIndicatorY = (d) => getIndicatorExtents(d.tma);
+        indicatorTitle = 'TMA';
+        indicatorSeries = getIndicatorChartType(config.charttype,d => d.compare.tma,config.stroke);
+        indicatorColor = config.stroke;
+        indicatorConfig = [{
+            'title' : 'TMA',
+            'accessor' : yAccessor,
+            'color' : config.stroke
+        }];
+        indicatorSettings = {...config};
+    }
+    else if(indicator === 'BB')
+    {
+        const config = getIndicatorConfig("BB");
+        BB.options().windowSize = config.windowsize;
+        tempData = BB(chartdata);
+        yAccessor = (d) => d.bb && d.bb.middle;
+        chartIndicatorY = (d) => d.compare.bb;
+        indicatorTitle = 'BB';
+        indicatorSeries =  <BollingerSeries 
+                                yAccessor={d => d.compare.bb} 
+                                stroke={{top : config.topstroke , middle : config.middlestroke , bottom : config.bottomstroke}} 
+                                fill={config.fillcolor}
+                                opacity={0.15} 
+                            />;
+        indicatorColor = '#2e86de';
+        indicatorConfig = [
+            {
+                'title' : 'BB (T)',
+                'accessor' : (d) => d.bb && d.bb.top,
+                'color' : config.topstroke
+            },
+            {
+                'title' : 'BB (M)',
+                'accessor' : (d) => d.bb && d.bb.middle,
+                'color' : config.middlestroke
+            },
+            {
+                'title' : 'BB (B)',
+                'accessor' : (d) => d.bb && d.bb.bottom,
+                'color' : config.bottomstroke
+            }
+        ];
+        indicatorSettings = {...config};
+    }
+
+    return [tempData,yAccessor,tooltipAccessor,indicatorSeries,indicatorTitle,chartIndicatorY,indicatorColor,indicatorConfig,indicatorSettings];
 }
 
 function getIndicatorChartType(type,accessor,stroke)
@@ -1210,6 +1329,7 @@ function getIndicatorChartType(type,accessor,stroke)
 
 function getCompareAccessor(d, s)
 {
+    console.log(d,s);
     return d.compare[s]
 }
 
@@ -1259,4 +1379,4 @@ function getChartHeight(height,zoom,charts)
 }
 
 
-export { getChartHeight, getHeroHeight, getIndicatorData, ChartWrapper, ChartWrapperZoom, ChartWrapperCompare , ChartIndicators , ChartIndicatorInside , ChartToolTip }
+export { getChartHeight, getHeroHeight, getIndicatorData,getCompareIndicatorData, ChartWrapper, ChartWrapperZoom, ChartWrapperCompare , ChartIndicators , ChartIndicatorInside , ChartToolTip }

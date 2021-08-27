@@ -1,5 +1,5 @@
 import React from 'react';
-import TrendLine from 'react-stockcharts/lib/interactive/TrendLine';
+import {TrendLine,DrawingObjectSelector} from 'react-stockcharts/lib/interactive/TrendLine';
 import {saveInteractiveNodes,getInteractiveNodes} from '../../../../exports/InteractiveUtils';
 
 class CustomLine extends React.PureComponent {
@@ -24,7 +24,7 @@ class CustomLine extends React.PureComponent {
     onDrawCompleteChart(trends)
     {
         console.log(trends);
-        trends[trends.length - 1]['selected'] = false;
+        // trends[trends.length - 1]['selected'] = false;
         trends[trends.length - 1]['id'] = `L${trends.length - 1}`;
         this.setState({
             enabled : false,
@@ -39,7 +39,7 @@ class CustomLine extends React.PureComponent {
         //     this.setState({
         //         enabled : true,
         //     });
-        // },10000)
+        // },3000)
     }
 
     onLineSelect(trends)
@@ -70,7 +70,9 @@ class CustomLine extends React.PureComponent {
                     hoverText={{
                         text : 'Select'
                     }}
-                /> 
+                />
+
+                
                 
             </>
         )

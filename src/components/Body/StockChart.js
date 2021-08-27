@@ -10,9 +10,9 @@ import {LineSeries,AreaSeries,BarSeries,CandlestickSeries,ScatterSeries ,OHLCSer
 import { pointAndFigure ,kagi,renko , compare} from "react-stockcharts/lib/indicator";
 import { discontinuousTimeScaleProvider , discontinuousTimeScaleProviderBuilder } from "react-stockcharts/lib/scale";
 import {fitWidth} from 'react-stockcharts/lib/helper';
-import { TrendLine,EquidistantChannel,StandardDeviationChannel ,FibonacciRetracement ,GannFan} from "react-stockcharts/lib/interactive";
+import {TrendLine,EquidistantChannel,StandardDeviationChannel ,FibonacciRetracement ,GannFan,DrawingObjectSelector} from "react-stockcharts/lib/interactive";
 import {TrendLineAppearance,EquidistantChannelAppearance,StandardDeviationChannelAppearance,FibRetAppearance,GannFanAppearance} from '../../exports/InteractiveAppearance';
-import { last ,toObject , rightDomainBasedZoomAnchor , lastVisibleItemBasedZoomAnchor } from "react-stockcharts/lib/utils/zoomBehavior";
+import { toObject } from "react-stockcharts/lib/utils";
 import {lastValidVisibleItemBasedZoomAnchor} from './CustomChartComponents/ZoomBehaviour/zoomBehaviour';
 import { timeFormat } from 'd3-time-format';
 import {saveInteractiveNodes, getInteractiveNodes} from "../../exports/InteractiveUtils";
@@ -20,10 +20,10 @@ import { HoverTooltip } from "./CustomChartComponents/HoverTooltip/HoverTooltip"
 import {getXCoordinateProps, getYCoordinateProps, getXAxisProps, getYAxisProps , tooltipContent } from '../../exports/ChartProps';
 import {getMaxArray,CalculateIndicatorData} from '../../exports/MathematicalIndicators';
 import LastPointIndicator from './CustomChartComponents/LastPointEdgeIndicator/LastPointIndicator';
-import {getChartHeight,getHeroHeight,getIndicatorData,ChartWrapper,ChartWrapperZoom,ChartWrapperCompare,ChartIndicators,ChartIndicatorInside,ChartToolTip} from './Charts/ChartFunctions';
+import {getChartHeight,getHeroHeight,getIndicatorData,getCompareIndicatorData,ChartWrapper,ChartWrapperZoom,ChartWrapperCompare,ChartIndicators,ChartIndicatorInside,ChartToolTip} from './Charts/ChartFunctions';
 import { splitAdjustment } from '../../exports/SplitAdjustment';
 import { CrossHairCursor,MouseCoordinateX, MouseCoordinateY ,PriceCoordinate, EdgeIndicator } from "react-stockcharts/lib/coordinates";
-import CustomLine from './CustomChartComponents/CustomInteractives/CustomLine';
+import InteractiveSettingPopup from './AppPopups/InteractiveSettingPopup/InteractiveSettingPopup';
 
 
 function getMaxUndefined(calculators) {
@@ -44,7 +44,6 @@ export class StockChart extends React.PureComponent {
     constructor(props)
     {
         super(props);
-        this.onKeyPress = this.onKeyPress.bind(this);
         this.handleSelection = this.handleSelection.bind(this);
         this.saveInteractiveNodes = saveInteractiveNodes.bind(this);
         this.getInteractiveNodes = getInteractiveNodes.bind(this);
@@ -55,8 +54,9 @@ export class StockChart extends React.PureComponent {
         this.setUpChart = this.setUpChart.bind(this);
         this.handleDownloadMore = this.handleDownloadMore.bind(this);
         this.wrapCanvas = this.wrapCanvas.bind(this);
-
-
+        this.saveSelectedInteractive = this.saveSelectedInteractive.bind(this);
+        this.deleteSelectedInteractive = this.deleteSelectedInteractive.bind(this);
+        this.setInteractiveStatus = this.setInteractiveStatus.bind(this);
 
         this.state = {
             data : null,
@@ -67,16 +67,23 @@ export class StockChart extends React.PureComponent {
             apidata : this.props.chartProps.chartdata,
             extradata : this.props.chartProps.extradata,
             chartdata : null,
-            enableTrendLine : false,
-            enableChannel : false,
-            enableSDChannel : false,
-            enableFibRet : false,
-            enableGannFan : false,
-            trends : [],
-            channel : [],
-            SDchannel : [],
-            FibRet : [],
-            GannFan : [],
+            interactiveData : {
+                trends : [],
+                channels : [],
+                sdchannel : [],
+                retracements : [],
+                fans : [],
+            },
+            interactiveStatus : {
+                trends : false,
+                channels : false,
+                sdchannel : false,
+                retracements : false,
+                fans : false,
+            },
+            selectedInteractive : {},
+            isSelected : false,
+            interactiveFlag : false,
             chartProps : this.props.chartProps,
         };
     }
@@ -87,8 +94,6 @@ export class StockChart extends React.PureComponent {
     
     componentDidMount() {
         console.log('Stock Chart Mounted...');
-        // console.log('MOUNT');
-        document.addEventListener("keyup", this.onKeyPress);
         this.setUpChart(); 
     }
 
@@ -114,16 +119,17 @@ export class StockChart extends React.PureComponent {
             console.log('Indicator Added');
             this.updateChart();
         }
+        else if(this.props.interFlag !== prevProps.interFlag)
+        {
+            console.log('Update Interactives');
+            this.setInteractiveStatus(this.props.interactiveType);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
         this.updateChart();
     }
     
-    componentWillUnmount() {
-		document.removeEventListener("keyup", this.onKeyPress);
-    }
-
     setUpChart()
     {
 
@@ -341,184 +347,332 @@ export class StockChart extends React.PureComponent {
         
     }
 
-    handleSelection(interactives) {
-		const state = toObject(interactives, each => {
-			return [
-                'trends',
-				each.objects,
-			];
-		});
-        this.setState(state);
-        // console.log(this.state);
-    }
-
-    onDrawCompleteChart(trends)
+    setInteractiveStatus(type)
     {
-        console.log(trends);
-        console.log(this.props.interactiveType);
-        if(this.props.interactiveType === 'line')
+        console.log(type)
+        type = type.toLowerCase();
+        if(type === 'line')
         {
             this.setState({
-                enableTrendLine: false,
-                trends : trends
+                interactiveStatus : {
+                    trends : true,
+                    channels : false,
+                    sdchannel : false,
+                    retracements : false,
+                    fans : false,   
+                }
             });
         }
-        else if(this.props.interactiveType === 'channel')
+        else if(type === 'channel')
         {
             this.setState({
-                enableChannel: false,
-                channel : trends
+                interactiveStatus : {
+                    trends : false,
+                    channels : true,
+                    sdchannel : false,
+                    retracements : false,
+                    fans : false,   
+                }
             });
         }
-        else if(this.props.interactiveType === 'SDchannel')
+        else if(type === 'sdchannel')
         {
             this.setState({
-                enableSDChannel: false,
-                SDchannel : trends
+                interactiveStatus : {
+                    trends : false,
+                    channels : false,
+                    sdchannel : true,
+                    retracements : false,
+                    fans : false,   
+                }
             });
         }
-        else if(this.props.interactiveType === 'FibRet')
+        else if(type === 'retracements')
         {
             this.setState({
-                enableFibRet: false,
-                FibRet : trends
+                interactiveStatus : {
+                    trends : false,
+                    channels : false,
+                    sdchannel : false,
+                    retracements : true,
+                    fans : false,   
+                }
             });
         }
-        else if(this.props.interactiveType === 'GannFan')
+        else if(type === 'fans')
         {
             this.setState({
-                enableGannFan: false,
-                GannFan : trends
+                interactiveStatus : {
+                    trends : false,
+                    channels : false,
+                    sdchannel : false,
+                    retracements : false,
+                    fans : true,   
+                }
             });
         }
-        console.log('Drawing Done....',this.state);
-    }
-
-    // onInteractiveSelect(type)
-    // {
-
-    // }
-
-    onKeyPress(e) {
-		const keyCode = e.which;
-		// console.log(keyCode);
-        // console.log(this.canvas);
-		switch (keyCode) {
-		case 46: { // DEL
-
-			const trends = this.state.trends
-                .filter(each => !each.selected);
-            
-            const channel = this.state.channel
-                .filter(each => !each.selected);
-        
-            const SDchannel = this.state.SDchannel
-                .filter(each => !each.selected);
-                
-            const FibRet = this.state.FibRet
-                .filter(each => !each.selected);
-            
-            const GannFan = this.state.GannFan
-				.filter(each => !each.selected);
-
-			this.canvas.cancelDrag();
-			this.setState({
-                trends,
-                channel,
-                SDchannel,
-                FibRet,
-                GannFan
-            });
-			break;
-		}
-        case 27: { // ESC
-            
-            // console.log(this.TrendLine_1);
-			// this.node_1.terminate();
-			// this.node_3.terminate();
-			this.canvas.cancelDrag();
-			this.setState({
+        else
+        {
+            this.setState({
                 enableTrendLine: false,
                 enableChannel : false,
                 enableSDChannel : false,
-                enableFibRet : false,
-                enableGannFan : false
-			});
-			break;
-		}
-		case 68:   // D - Draw trendline
-        case 69: { // E - Enable trendline
-
-            // console.log(this.props);
-            
-            if(this.props.interactiveType === 'line')
-            {
-                console.log('LINE')
-                this.setState({
-                    enableTrendLine: true,
-                    enableChannel : false,
-                    enableSDChannel : false,
-                    enableFibRet : false,
-                    enableGannFan : false
-                });
-            }
-            else if(this.props.interactiveType === 'channel')
-            {
-                this.setState({
-                    enableTrendLine: false,
-                    enableChannel : true,
-                    enableSDChannel : false,
-                    enableFibRet : false,
-                    enableGannFan : false
-                });
-            }
-            else if(this.props.interactiveType === 'SDchannel')
-            {
-                this.setState({
-                    enableTrendLine: false,
-                    enableChannel : false,
-                    enableSDChannel : true,
-                    enableFibRet : false,
-                    enableGannFan : false
-                });
-            }
-            else if(this.props.interactiveType === 'FibRet')
-            {
-                this.setState({
-                    enableTrendLine: false,
-                    enableChannel : false,
-                    enableSDChannel : false,
-                    enableFibRet : true,
-                    enableGannFan : false
-                });
-            }
-            else if(this.props.interactiveType === 'GannFan')
-            {
-                this.setState({
-                    enableTrendLine: false,
-                    enableChannel : false,
-                    enableSDChannel : false,
-                    enableFibRet : false,
-                    enableGannFan : true
-                });
-            }
-            else
-            {
-                this.setState({
-                    enableTrendLine: false,
-                    enableChannel : false,
-                    enableSDChannel : false,
-                    enableFibRet : false,
-                    enableGannFan : false
-                });
-            }
+                enableretracements : false,
+                enablefans : false
+            });
+        }
 			
-			break;
+    }
+
+    getInteractiveType(type)
+    {
+        type = type && type !== ''?type.split(' ').join('').toLowerCase() : '';
+
+        if(type === '')
+        {
+            return ''
         }
-        default : {
-            break;
+        else if(type === 'trendline')
+        {
+            return 'trends'
         }
-	    }
+        else if(type === 'equidistantchannel')
+        {
+            return 'channels'
+        }
+        else if(type === 'standarddeviationchannel')
+        {
+            return 'sdchannel'
+        }
+        else if(type === 'fibonacciretracement')
+        {
+            return 'retracements'
+        }
+        else if(type === 'gannfan')
+        {
+            return 'fans'
+        }
+    }
+
+    handleSelection(interactives) {
+
+        // console.log(interactives)
+        const state = toObject(interactives, each => {
+            return [
+                this.getInteractiveType(each.type),
+                each.objects,
+            ];
+        });
+
+        // console.log(state)
+        this.setState({
+            interactiveData : {
+                ...this.state.interactiveData,
+                ...state
+            }
+        },()=>{
+            this.getSelectedInteractive(state);
+            // console.log(this.state.interactiveData)
+        });
+    }
+
+    findSelected(config)
+    {
+        let selecteditem = {};
+
+        for(var key of Object.keys(config))
+        {
+            const items = config[key];
+            const selected = items.find(i => i.selected === true);
+
+            if(selected)
+            {
+                selecteditem = {
+                    config : selected,
+                    type : key
+                };
+                break;
+            }
+        }
+
+        // console.log(selecteditem);
+        return selecteditem;
+
+    }
+
+    getSelectedInteractive(config)
+    {
+        const selecteditem = this.findSelected(config);
+
+        // console.log(selecteditem)
+
+        if(selecteditem && selecteditem.config)
+        {
+            this.setState({
+                isSelected : true,
+                selectedInteractive : selecteditem.config,
+                selectedtype : selecteditem.type,
+                interactiveFlag : !this.state.interactiveFlag,
+            });
+        }
+        else
+        {
+            this.setState({
+                isSelected : false,
+            });
+        }
+        // config = config[type];
+        // if(config && config.length > 0)
+        // {
+        //     const selected = config.find(c=> c.selected === true);
+
+        //     // console.log(selected);
+
+        //     if(selected)
+        //     {
+        //         this.setState({
+        //             isSelected : true,
+        //             selectedInteractive : selected,
+        //             interactiveFlag : !this.state.interactiveFlag,
+        //         },()=>{
+        //             console.log(this.state.isSelected,this.state.selectedInteractive)
+        //         });
+        //     }
+        //     else
+        //     {
+        //         this.setState({
+        //             isSelected : false,
+        //         });
+        //     }
+        // }
+    }
+
+    saveSelectedInteractive(config)
+    {
+        // console.log(config)
+        const selectedtype = this.state.selectedtype;
+
+        const items = this.state.interactiveData[this.state.selectedtype];
+        // console.log(items);
+
+        const selected = items.findIndex(t => t.selected === true);
+        // console.log(selected)
+        if(selected >= 0)
+        {
+            // console.log(items[selected]);
+            items[selected]['appearance'] = config['appearance'];
+            // console.log(items,items[selected]);
+            this.setState({
+                interactiveData : {
+                    ...this.state.interactiveData,
+                    selectedtype : items
+                },
+            })
+        }
+    }
+
+    deleteSelectedInteractive(selectedtype)
+    {
+        // console.log(selectedtype);
+        const items = this.state.interactiveData[selectedtype];
+        if(items.length > 0)
+        {
+            const selectedindx = items.findIndex(i=> i.selected === true);
+            // console.log(selectedindx);
+            if(selectedindx >= 0)
+            {
+                items.splice(selectedindx,1);
+                this.setState({
+                    isSelected : false,
+                    selectedInteractive : {},
+                    selectedtype : '',
+                    interactiveFlag : !this.state.interactiveFlag,
+                    interactiveData : {
+                        ...this.state.interactiveData,
+                        selectedindx : items
+                    }
+                })
+            }
+        }
+    }
+
+    onDrawCompleteChart(trends,type)
+    {
+        // console.log(trends,type);
+        // console.log(this.props.interactiveType);
+        const {interactiveData,interactiveStatus} = this.state;
+        if(type === 'trends')
+        {
+
+            this.setState({
+                interactiveData : {
+                    ...interactiveData,
+                    trends : trends
+                },
+                interactiveStatus : {
+                    ...interactiveStatus,
+                    trends : false
+                },
+                
+            })
+        }
+        else if(type === 'channels')
+        {
+            this.setState({
+                interactiveData : {
+                    ...interactiveData,
+                    channels : trends
+                },
+                interactiveStatus : {
+                    ...interactiveStatus,
+                    channels : false
+                },
+                
+            })
+        }
+        else if(type === 'sdchannel')
+        {
+            this.setState({
+                interactiveData : {
+                    ...interactiveData,
+                    sdchannel : trends
+                },
+                interactiveStatus : {
+                    ...interactiveStatus,
+                    sdchannel : false
+                },
+                
+            })
+        }
+        else if(type === 'retracements')
+        {
+            this.setState({
+                interactiveData : {
+                    ...interactiveData,
+                    retracements : trends
+                },
+                interactiveStatus : {
+                    ...interactiveStatus,
+                    retracements : false
+                },
+                
+            })
+        }
+        else if(type === 'fans')
+        {
+            this.setState({
+                interactiveData : {
+                    ...interactiveData,
+                    fans : trends
+                },
+                interactiveStatus : {
+                    ...interactiveStatus,
+                    fans : false
+                },
+                
+            });
+        }
+        
     }
 
     getChartType(chartType,chartdata)
@@ -699,6 +853,7 @@ export class StockChart extends React.PureComponent {
         this.canvas.cancelDrag();
     }
 
+
     
     render() {
 
@@ -709,7 +864,11 @@ export class StockChart extends React.PureComponent {
 
             let { data, xScale, xAccessor, displayXAccessor } = this.state;
 
+            const {interactiveData , interactiveStatus} = this.state;
+
             // console.log(data);
+
+            // console.log(IndicatorInside);
 
             let margin,padding;
 
@@ -743,6 +902,10 @@ export class StockChart extends React.PureComponent {
                 CompareCodes.push(c.symbol+'open')
             });
 
+            IndicatorInside.forEach((i)=>{
+                CompareCodes.push(i.toLowerCase())
+            })
+
             // console.log(CompareCodes);
 
             const compareCalculator = compare()
@@ -774,7 +937,8 @@ export class StockChart extends React.PureComponent {
             // console.log(data);
 
             return (
-                <div>
+                <>
+                    <div>
                     <ChartCanvas 
                         ref={node => this.saveCanvas(node)}
                         width={width} 
@@ -806,7 +970,13 @@ export class StockChart extends React.PureComponent {
 
                         {!zoom && <>
                             {CompareStockConfig.length > 0 ? 
-                                (ChartWrapperCompare(zoom,range,chartType,this.props.stockDetails,CompareStockConfig,this.props.TotalCharts))
+                                <>
+                                {ChartWrapperCompare(zoom,range,chartType,this.props.stockDetails,CompareStockConfig,this.props.TotalCharts)}
+                                {IndicatorInside.map((indicator,index)=>{
+                                        const [indicatordata,yAccessor,tooltipAccessor,series,title,accessor,color,indicatorConfig,indicatorSettings] = getCompareIndicatorData(indicator,data);
+                                        return ChartIndicatorInside(series,yAccessor,tooltipAccessor,title,indicatorSettings)
+                                    })} 
+                                </>
                                 :
                                 (ChartWrapper(range,chartType,this.props.closePrice))
                             }
@@ -815,9 +985,14 @@ export class StockChart extends React.PureComponent {
                         {zoom && <>
                             {
                                 CompareStockConfig.length > 0 ? 
-                                (ChartWrapperCompare(zoom,range,chartType,this.props.stockDetails,CompareStockConfig,this.props.TotalCharts))
+                                <>
+                                    {ChartWrapperCompare(zoom,range,chartType,this.props.stockDetails,CompareStockConfig,this.props.TotalCharts)}
+                                    {IndicatorInside.map((indicator,index)=>{
+                                        const [indicatordata,yAccessor,tooltipAccessor,series,title,accessor,color,indicatorConfig,indicatorSettings] = getCompareIndicatorData(indicator,data);
+                                        return ChartIndicatorInside(series,yAccessor,tooltipAccessor,title,indicatorSettings)
+                                    })}
+                                </>
                                 :
-
                                 (ChartWrapperZoom(range,this.state.lastPoint,this.props.stockDetails,chartType,this.props.closePrice,this.props.TotalCharts))
                                 
                             }
@@ -826,51 +1001,46 @@ export class StockChart extends React.PureComponent {
                         </>}
 
                         {zoom && <>
-                            {ChartToolTip(zoom,CompareStockConfig,this.props.toggleHide,this.props.removeStock,this.props.toggleCompareSettings)}
+                            {ChartToolTip(data,zoom,CompareStockConfig,IndicatorInside,this.props.toggleHide,this.props.removeStock,this.props.toggleCompareSettings,this.props.DeleteIndicatorType,this.props.toggleIndicatorSettings)}
                         </>}
 
-                        {zoom && <>
+                        {zoom && CompareStockConfig.length ===0 && <>
                             {IndicatorInside.map((indicator,index)=>{
-                                const [indicatordata,yAccessor,series,title,accessor,color,indicatorConfig,indicatorSettings] = getIndicatorData(indicator,data);
-                                return ChartIndicatorInside(index,indicator,series,yAccessor,title,color,indicatorConfig,indicatorSettings,this.props.DeleteIndicatorType,this.props.toggleIndicatorSettings)
+                                const [indicatordata,yAccessor,tooltipAccessor,series,title,accessor,color,indicatorConfig,indicatorSettings] = getIndicatorData(indicator,data);
+                                return ChartIndicatorInside(series,yAccessor,tooltipAccessor,title,indicatorSettings)
                             })}
                         </>}
 
                         {zoom && 
 
-                           
-
                             <>
 
-                                {/* <CustomLine wrapCanvas={this.wrapCanvas}/> */}
-                                {/* <TrendLine
+                                <TrendLine
                                         ref={this.saveInteractiveNodes("Trendline", 1)}
-                                        enabled={this.state.enableTrendLine}
+                                        enabled={interactiveStatus.trends}
                                         type={trendLineType}
                                         snap={false}
                                         snapTo={d => [d.high, d.low]}
                                         onStart={() => console.log("START")}
-                                        onComplete={this.onDrawCompleteChart}
-                                        trends={this.state.trends}
-                                        currentPositionStroke='#f1c40f'
-                                        currentPositionStrokeWidth={4}
+                                        onComplete={d => this.onDrawCompleteChart(d,'trends')}
+                                        trends={interactiveData.trends}
+                                        currentPositionStrokeWidth={2}
                                         currentPositionRadius={5}
-                                        appearance={TrendLineAppearance}
                                         hoverText={{
-                                            text : 'Select'
+                                            enable : false
                                         }}
-                                />  */}
+                                        
+                                /> 
 
-                                {/* <EquidistantChannel
+                                <EquidistantChannel
                                     ref={this.saveInteractiveNodes("EquidistantChannel", 1)}
-                                    enabled={this.state.enableChannel}
+                                    enabled={interactiveStatus.channels}
                                     onStart={() => console.log("START")}
-                                    onComplete={this.onDrawCompleteChart}
-                                    channels={this.state.channel}
+                                    onComplete={d => this.onDrawCompleteChart(d,'channels')}
+                                    channels={interactiveData.channels}
                                     currentPositionStroke='#f1c40f'
                                     currentPositionStrokeWidth={4}
                                     currentPositionRadius={5}
-                                    appearance={EquidistantChannelAppearance}
                                     hoverText={{
                                         text : 'Select',
                                         bgHeight: 'auto',
@@ -880,37 +1050,38 @@ export class StockChart extends React.PureComponent {
 
                                 <StandardDeviationChannel
                                     ref={this.saveInteractiveNodes("StandardDeviationChannel", 1)}
-                                    enabled={this.state.enableSDChannel}
+                                    enabled={interactiveStatus.sdchannel}
                                     onStart={() => console.log("START")}
-                                    onComplete={this.onDrawCompleteChart}
-                                    channels={this.state.SDchannel}
+                                    onComplete={d => this.onDrawCompleteChart(d,'sdchannel')}
+                                    channels={interactiveData.sdchannel}
                                     currentPositionStroke='#f1c40f'
                                     currentPositionStrokeWidth={4}
                                     currentPositionRadius={5}
-                                    appearance={StandardDeviationChannelAppearance}
                                 />
+
                                 <FibonacciRetracement
                                     ref={this.saveInteractiveNodes("FibonacciRetracement", 1)}
-                                    enabled={this.state.enableFibRet}
-                                    retracements={this.state.FibRet}
-                                    onComplete={this.onDrawCompleteChart}
+                                    enabled={interactiveStatus.retracements}
+                                    retracements={interactiveData.retracements}
+                                    onComplete={d => this.onDrawCompleteChart(d,'retracements')}
                                     currentPositionStroke='#f1c40f'
                                     currentPositionStrokeWidth={4}
                                     currentPositionRadius={5}
-                                    appearance= {FibRetAppearance}
                                 />
+
                                 <GannFan
                                     ref={this.saveInteractiveNodes("GannFan", 1)}
-                                    enabled={this.state.enableGannFan}
+                                    enabled={interactiveStatus.fans}
                                     onStart={() => console.log("START")}
-                                    onComplete={this.onDrawCompleteChart}
-                                    fans={this.state.GannFan}
+                                    onComplete={d => this.onDrawCompleteChart(d,'fans')}
+                                    fans={interactiveData.fans}
                                     currentPositionStroke='#f1c40f'
                                     currentPositionStrokeWidth={4}
                                     currentPositionRadius={5}
                                     appearance= {GannFanAppearance}
-                                />  */}
+                                />
 
+                            
                             </>
                         }
 
@@ -918,7 +1089,7 @@ export class StockChart extends React.PureComponent {
 
                     {zoom &&
                         IndicatorOutside.map((indicator,index)=>{
-                            const [indicatordata,yAccessor,series,title,accessor,color,indicatorConfig,indicatorSettings] = getIndicatorData(indicator,data);
+                            const [indicatordata,yAccessor,tooltipAccessor,series,title,accessor,color,indicatorConfig,indicatorSettings] = getIndicatorData(indicator,data);
 
                             let chartConfig = getChartHeight(height,zoom,IndicatorOutside.length);
                             let chartHeight = chartConfig.height;
@@ -934,9 +1105,38 @@ export class StockChart extends React.PureComponent {
                         })
                     }
 
+                    <DrawingObjectSelector
+                        enabled={
+                                !interactiveStatus.trends && 
+                                !interactiveStatus.channels &&
+                                !interactiveStatus.sdchannel &&
+                                !interactiveStatus.retracements &&
+                                !interactiveStatus.fans
+                            }
+                        getInteractiveNodes={this.getInteractiveNodes}
+                        drawingObjectMap={{
+                            Trendline: "trends",
+                            EquidistantChannel: "channels",
+                            StandardDeviationChannel : "channels",
+                            FibonacciRetracement : "retracements",
+                            GannFan : "fans"
+                        }}
+                        onSelect={this.handleSelection}
+				    /> 
 
                 </ChartCanvas>
                 </div>
+                <div>
+                    <InteractiveSettingPopup 
+                        isSelected={this.state.isSelected} 
+                        selectedInteractive={this.state.selectedInteractive}
+                        selectedtype={this.state.selectedtype}
+                        saveInteractive={this.saveSelectedInteractive}
+                        deleteInteractive={this.deleteSelectedInteractive}
+                        interactiveFlag={this.state.interactiveFlag}
+                    />
+                </div>
+                </>
             )
         }
         else

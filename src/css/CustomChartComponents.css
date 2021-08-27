@@ -47,6 +47,14 @@
   margin-bottom: 5px!important;
 }
 
+/*interactive setting popup */
+.react-stockcharts-indicator-setting
+{
+  filter: drop-shadow(0px 0px 3px rgba(0,0,0,0.1));
+  pointer-events: all;
+  cursor: pointer;
+}
+
 
 
 /*rsuite components*/
@@ -60,3 +68,5 @@
   top: auto!important;
   bottom: -8px!important;
 }
+
+

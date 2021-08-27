@@ -101,8 +101,9 @@ export class ChartContainer extends React.PureComponent {
             zoom : false,
             range : this.props.range,
             chartTypeIcon : Line,
-            interactiveType : 'line',
-            trendLineType : 'none',
+            interactiveType : '',
+            trendLineType : '',
+            interFlag : false
             
         }
     }
@@ -1191,9 +1192,10 @@ export class ChartContainer extends React.PureComponent {
         this.setState({
             interactiveType : Itype,
             trendLineType : Stype,
-            interactiveOpen : false
+            interactiveOpen : false,
+            interFlag : !this.state.interFlag
         });
-        $('.Interactive__popup').removeClass('active');
+        this.CloseInteractivePopup();
     }
 
     OpenZoomMode()
@@ -1497,19 +1499,19 @@ export class ChartContainer extends React.PureComponent {
                             <p>Channel</p>
                             <div>
                                 <Interactive IImage={LineSegment} Name="Trend Channel" Itype="channel" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
-                                <Interactive IImage={LineSegment} Name="Standard Deviation Channel" Itype="SDchannel" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
+                                <Interactive IImage={LineSegment} Name="Standard Deviation Channel" Itype="sdchannel" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
                             </div>
                         </div>
                         <div className="Interactive__option__block">
                             <p>Retracement</p>
                             <div>
-                                <Interactive IImage={FibRet} Name="Fibonacci Retracement" Itype="FibRet" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
+                                <Interactive IImage={FibRet} Name="Fibonacci Retracement" Itype="retracements" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
                             </div>
                         </div>
                         <div className="Interactive__option__block">
                             <p>Fan</p>
                             <div>
-                                <Interactive IImage={GannFan} Name="Gann Fan" Itype="GannFan" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
+                                <Interactive IImage={GannFan} Name="Gann Fan" Itype="fans" Stype="" changeInteractive={this.changeInteractiveType.bind(this)}/>
                             </div>
                         </div>
                     </div> 
@@ -1665,6 +1667,7 @@ export class ChartContainer extends React.PureComponent {
                                             TotalSwapCharts={this.state.TotalSwapCharts}
                                             trendLineType={this.state.trendLineType} 
                                             interactiveType={this.state.interactiveType}
+                                            interFlag={this.state.interFlag}
                                             chartProps={this.state.chartProps}
                                             stockDetails={this.props.stockDetails}
                                             CompareStockConfig={this.props.CompareStockConfig}

@@ -22,7 +22,7 @@ const IndicatorsList = [
     {
         IndicatorName : 'Bollinger Bands (BBands)',
         InfoType:"BB",
-        Position : 0,
+        Position : 1,
     },
     {
         IndicatorName : 'Moving Average Convergence/Divergence (MACD)',

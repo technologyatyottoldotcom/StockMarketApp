@@ -1,10 +1,9 @@
 import { ema, wma, sma, tma , bollingerBand , macd , rsi , atr , stochasticOscillator , forceIndex, elderRay , elderImpulse , sar , change , compare} from "react-stockcharts/lib/indicator";
 import {LineSeries,AreaSeries,BarSeries,CandlestickSeries,ScatterSeries ,OHLCSeries,KagiSeries,RenkoSeries,PointAndFigureSeries, SquareMarker,CircleMarker , BollingerSeries , MACDSeries , RSISeries ,StochasticSeries ,StraightLine ,ElderRaySeries , SARSeries , VolumeProfileSeries} from 'react-stockcharts/lib/series';
-import { IndicatorConfig,getIndicatorConfig } from "./IndicatorConfig";
 
 
-const SMAConfig = getIndicatorConfig('SMA');
-console.log(SMAConfig)
+// const SMAConfig = getIndicatorConfig('SMA');
+// console.log(SMAConfig)
 
 const SMA = sma()
         .options({windowSize : 20 , sourcePath: "close"})

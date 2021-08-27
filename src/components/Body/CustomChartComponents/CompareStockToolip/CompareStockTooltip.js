@@ -156,6 +156,7 @@ export class CompareStockTooltip extends Component {
             );
         }
 	}
+    
 	render() {
 		return <GenericChartComponent
 			clip={true}
