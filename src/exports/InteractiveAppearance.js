@@ -74,7 +74,7 @@ const GannFanAppearance = {
         "#ffffff",
     ],
     fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
-    fontSize: 12,
+    fontSize: 14,
     fontFill: "#000000",
 }
 

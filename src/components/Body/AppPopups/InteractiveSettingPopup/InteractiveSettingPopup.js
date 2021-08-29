@@ -178,7 +178,7 @@ export class InteractiveSettingPopup extends Component {
             else if(l.type === 'delete')
             {
                 return <div className="interactive_setting__block" onClick={()=> this.props.deleteInteractive(this.state.selectedtype)}>
-                    <img width={24} src={DeleteIcon} alt="X"/>
+                    <img width={20} src={DeleteIcon} alt="X"/>
                 </div>
             }
         });

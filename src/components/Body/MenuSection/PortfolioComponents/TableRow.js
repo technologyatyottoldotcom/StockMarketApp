@@ -119,28 +119,25 @@ class TableRow extends React.PureComponent {
                     else
                     {
                         convertedData = readMarketData(data,-1);
+                        let stockdata = convertedData.livedata;
+
+                        if(stockdata.last_traded_price === stockdata.close_price)
+                        {
+                            let compare = stockdata.open_price === 0 ? stockdata.close_price : stockdata.open_price;
+                            // console.log(compare)
+                            const {change_price,change_percentage} = setChange(stockdata.last_traded_price,compare);
+
+                            let livedata = stockdata;
+                            livedata['change_price'] = change_price;
+                            livedata['change_percentage'] = change_percentage;
+
+                            convertedData = {
+                                livedata
+                            }
+                        }
                     }
     
                     let livedata = convertedData.livedata;
-                    change_per = livedata.change_percentage;
-                    this.setState({
-                        stockData : livedata
-                    });
-                }
-                else
-                {
-                    // console.log('---GET FROM DATABASE---');
-                    let livedata = this.state.stockData;
-                    let trade_price = this.state.stockData && this.state.stockData.last_traded_price;
-                    let open_price = this.state.stockData && this.state.stockData.open_price;
-
-                    const {change_price,change_percentage} = setChange(trade_price,open_price);
-
-                    // livedata
-                    livedata['change_price'] = change_price;
-                    livedata['change_percentage'] = change_percentage;
-                    // console.log(change_price,change_percentage);
-                    // console.log(livedata);
                     change_per = livedata.change_percentage;
                     this.setState({
                         stockData : livedata

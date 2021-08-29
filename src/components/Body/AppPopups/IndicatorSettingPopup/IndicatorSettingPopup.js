@@ -1,6 +1,7 @@
 import React from 'react';
 import {IndicatorConfig,setIndicator,setIndicatorConfig} from '../../../../exports/IndicatorConfig';
 import CustomSelect from '../../CustomChartComponents/CustomSelect/CustomSelect';
+import CustomWidthSelect from '../../CustomChartComponents/CustomWidthSelect/CustomWidthSelect';
 import CustomCheckBox from '../../CustomChartComponents/CustomCheckBox/CustomCheckBox';
 import CustomColorPicker from '../../CustomChartComponents/CustomColorPicker/CustomColorPicker';
 import CustomNumberBox from '../../CustomChartComponents/CustomNumberBox/CustomNumberBox';
@@ -143,6 +144,22 @@ export class IndicatorSettingPopup extends React.PureComponent {
                                     defaultIndex={this.getTypeIndex(c.value)}
                                     onTypeChange={(type)=> {setIndicatorConfig(this.state.IndicatorName,c.configname,type); this.props.saveIndicatorSettings()}}
                                     options={c.options}/>
+                            </div>
+                        </div>
+                    )
+                }
+                else if (c.type === 'dropdownwidth') {
+                    return (
+                        <div className="indicator__setting__block">
+                            <p className="indicator__setting__title">{c.label}</p>
+                            <div className="indicator__setting__item">
+                                <CustomWidthSelect
+                                    width={180}
+                                    height={35}
+                                    title={c.value}
+                                    defaultIndex={c.value}
+                                    onTypeChange={(type) => { setIndicatorConfig(this.state.IndicatorName, c.configname, type); this.props.saveIndicatorSettings() }}
+                                    options={['1', '2', '4', '5']} />
                             </div>
                         </div>
                     )

@@ -69,8 +69,37 @@ function getStockFromSymbol(req,res)
                 });
 }
 
+function LatestPriceIndex(req,res)
+{
+    const symbol = req.params.symbol;
+    let close;
+    conn.query(`SELECT * FROM IndexData_NSE_BSE WHERE Symbol = '${symbol}' ORDER BY Date DESC LIMIT 2`,(err,result)=>{
+        if(!err)
+        {
+            result.forEach((row)=>{
+                close = row['Close'];
+            });
+
+            res.send({
+                status : 'success',
+                close : parseFloat(close)
+            })
+        }
+        else
+        {
+            res.send({
+                status : 'error'
+            })
+        }
+    });
+
+    
+}
+
 Common.get('/StockFromISIN/:isin',getStockFromISIN);
 
 Common.get('/StockFromSymbol/:symbol',getStockFromSymbol);
+
+Common.get('/LatestPriceIndex/:symbol',LatestPriceIndex);
 
 exports.Common = Common;

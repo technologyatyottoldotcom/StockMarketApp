@@ -24,6 +24,12 @@ let IndicatorConfig = [
                 value : '#1dd1a1'
             },
             {
+                configname: 'strokewidth',
+                label: 'Line Width',
+                type: 'dropdownwidth',
+                value: '1'
+            },
+            {
                 configname : 'hide',
                 label : 'Hide Indicator',
                 type : 'checkbox',
@@ -67,6 +73,12 @@ let IndicatorConfig = [
                 label : 'Color',
                 type : 'colorpicker',
                 value : '#ee5253'
+            },
+            {
+                configname: 'strokewidth',
+                label: 'Line Width',
+                type: 'dropdownwidth',
+                value: '1'
             },
             {
                 configname : 'hide',
@@ -114,6 +126,12 @@ let IndicatorConfig = [
                 value : '#ff9f43'
             },
             {
+                configname: 'strokewidth',
+                label: 'Line Width',
+                type: 'dropdownwidth',
+                value: '1'
+            },
+            {
                 configname : 'hide',
                 label : 'Hide Indicator',
                 type : 'checkbox',
@@ -159,6 +177,12 @@ let IndicatorConfig = [
                 value : '#f1c40f'
             },
             {
+                configname: 'strokewidth',
+                label: 'Line Width',
+                type: 'dropdownwidth',
+                value: '1'
+            },
+            {
                 configname : 'hide',
                 label : 'Hide Indicator',
                 type : 'checkbox',
@@ -193,25 +217,25 @@ let IndicatorConfig = [
                 configname : 'topstroke',
                 label : 'Top Stroke',
                 type : 'colorpicker',
-                value : '#0097e6'
+                value : '#00a0e3'
             },
             {
                 configname : 'middlestroke',
                 label : 'Middle Stroke',
                 type : 'colorpicker',
-                value : '#2e86de'
+                value : '#2ea0e3'
             },
             {
                 configname : 'bottomstroke',
                 label : 'Bottom Stroke',
                 type : 'colorpicker',
-                value : '#0097e6'
+                value : '#00a0e3'
             },
             {
                 configname : 'fillcolor',
                 label : 'Fill Color',
                 type : 'colorpicker',
-                value : '#48dbfb'
+                value : '#00a0e3'
             },
             {
                 configname : 'hide',
@@ -566,13 +590,13 @@ let IndicatorConfig = [
                 configname : 'stroke',
                 label : 'Color',
                 type : 'colorpicker',
-                value : '#2e86de'
+                value : '#00a0e3'
             },
             {
                 configname : 'fillcolor',
                 label : 'Fill Color',
                 type : 'colorpicker',
-                value : '#48dbfb'
+                value : '#00a0e3'
             },
             {
                 configname : 'hide',

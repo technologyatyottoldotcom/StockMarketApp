@@ -212,27 +212,24 @@ class ScripsBody extends React.PureComponent
                     else
                     {
                         convertedData = readMarketData(data,-1);
+                        let stockdata = convertedData.livedata;
+
+                        if (stockdata.last_traded_price === stockdata.close_price) {
+                            let compare = stockdata.open_price === 0 ? stockdata.close_price : stockdata.open_price;
+                            // console.log(compare)
+                            const { change_price, change_percentage } = setChange(stockdata.last_traded_price, compare);
+
+                            let livedata = stockdata;
+                            livedata['change_price'] = change_price;
+                            livedata['change_percentage'] = change_percentage;
+
+                            convertedData = {
+                                livedata
+                            }
+                        }
                     }
-    
+
                     let livedata = convertedData.livedata;
-                    this.setState({
-                        stockData : livedata
-                    });
-                }
-                else
-                {
-                    // console.log('---GET FROM DATABASE---');
-                    let livedata = this.state.stockData;
-                    let trade_price = this.state.stockData && this.state.stockData.last_traded_price;
-                    let open_price = this.state.stockData && this.state.stockData.open_price;
-
-                    const {change_price,change_percentage} = setChange(trade_price,open_price);
-
-                    // livedata
-                    livedata['change_price'] = change_price;
-                    livedata['change_percentage'] = change_percentage;
-                    // console.log(change_price,change_percentage);
-                    // console.log(livedata);
                     this.setState({
                         stockData : livedata
                     });
@@ -506,7 +503,7 @@ class ScripsBody extends React.PureComponent
             return <div className="app__body">
 
                 <div className="app__body__top">
-                    <TopStocks />
+                    {/* <TopStocks /> */}
                 </div>
                 <div className="app__body__bottom">
                     <div className="business__news__section">
@@ -586,7 +583,7 @@ class ScripsBody extends React.PureComponent
                             toggleZoom={this.toggleZoom}
 
                         />
-                        <StocksToWatch
+                        {/* <StocksToWatch
                             WatchStocks={this.state.WatchStocks}
                             stockISIN={this.state.stockDetails.stockISIN} 
                             stockIndustry={this.state.stockDetails.stockIndustry}
@@ -597,7 +594,7 @@ class ScripsBody extends React.PureComponent
                             stockData={this.state.stockData} 
                             snapdata={this.state.snapdata}
                             lastPoint={this.state.lastPoint}
-                        />
+                        /> */}
                     </div>
                     <div className="app__body__right">
                         <CashPosition />

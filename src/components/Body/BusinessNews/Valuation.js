@@ -494,8 +494,8 @@ class Valuation extends React.PureComponent{
         let num2 = 5;
         if(typeof Base  === 'number')
         {
-            let ThreeY = parseFloat((((PriceBounds[num1]['High']+PriceBounds[num1]['Low'])/2)/Base));
-            let FiveY = parseFloat((((PriceBounds[num2]['High']+PriceBounds[num2]['Low'])/2)/Base));
+            let ThreeY = parseFloat((((PriceBounds[num1]['High']+PriceBounds[num1]['Low'])/2)/Base) - 1);
+            let FiveY = parseFloat((((PriceBounds[num2]['High']+PriceBounds[num2]['Low'])/2)/Base) - 1);
 
             let TYAR = parseFloat(((Math.pow((1+ThreeY),(1/num1))-1)*100).toFixed(2));
             let FYAR = parseFloat(((Math.pow((1+FiveY),(1/num2))-1)*100).toFixed(2));
@@ -702,12 +702,12 @@ class Valuation extends React.PureComponent{
 
                                 <div className="stock__annual__returns">
                                     <p className="card__title">Annual Returns</p>
-                                    <div className="annual__returns">
-                                        <p>3 year potential Upside/ Downside</p>
+                                    <div className={this.state.ThreeYearReturn >= 0 ? "annual__returns positive" : "annual__returns negative"}>
+                                        <p>3 year potential {this.state.ThreeYearReturn >= 0 ? 'Upside' : 'Downside'}</p>
                                         <span>{this.state.ThreeYearReturn}%</span>
                                     </div>
-                                    <div className="annual__returns">
-                                        <p>5 year potential Upside/ Downside</p>
+                                    <div className={this.state.FiveYearReturn >= 0 ? "annual__returns positive" : "annual__returns negative"}>
+                                        <p>5 year potential {this.state.FiveYearReturn >= 0 ? 'Upside' : 'Downside'}</p>
                                         <span>{this.state.FiveYearReturn}%</span>
                                     </div>
                                 </div>

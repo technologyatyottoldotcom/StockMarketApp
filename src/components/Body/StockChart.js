@@ -1042,9 +1042,7 @@ export class StockChart extends React.PureComponent {
                                     currentPositionStrokeWidth={4}
                                     currentPositionRadius={5}
                                     hoverText={{
-                                        text : 'Select',
-                                        bgHeight: 'auto',
-                                        bgWidth: 'auto'
+                                        enable: false
                                     }}
                                 />
 
@@ -1057,6 +1055,9 @@ export class StockChart extends React.PureComponent {
                                     currentPositionStroke='#f1c40f'
                                     currentPositionStrokeWidth={4}
                                     currentPositionRadius={5}
+                                        hoverText={{
+                                            enable: false
+                                        }}
                                 />
 
                                 <FibonacciRetracement
@@ -1067,6 +1068,9 @@ export class StockChart extends React.PureComponent {
                                     currentPositionStroke='#f1c40f'
                                     currentPositionStrokeWidth={4}
                                     currentPositionRadius={5}
+                                        hoverText={{
+                                            enable: false
+                                        }}
                                 />
 
                                 <GannFan
@@ -1075,10 +1079,12 @@ export class StockChart extends React.PureComponent {
                                     onStart={() => console.log("START")}
                                     onComplete={d => this.onDrawCompleteChart(d,'fans')}
                                     fans={interactiveData.fans}
-                                    currentPositionStroke='#f1c40f'
+                                    currentPositionStroke='#00a0e3'
                                     currentPositionStrokeWidth={4}
                                     currentPositionRadius={5}
+                                    currentPositionOpacity={1}
                                     appearance= {GannFanAppearance}
+
                                 />
 
                             

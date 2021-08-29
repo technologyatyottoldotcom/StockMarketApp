@@ -21,6 +21,7 @@ export class UpperStock extends React.PureComponent {
             isLoading : true,
             apidata : null,
             extradata : null,
+            dbclose : 0,
             chartWidth : 0,
             chartHeight : 0,
             stockData : '',
@@ -31,18 +32,43 @@ export class UpperStock extends React.PureComponent {
         this.getIndexData = this.getIndexData.bind(this);
         this.updateIndexData = this.updateIndexData.bind(this);
         this.feedLiveData = this.feedLiveData.bind(this);
+        this.getDBClose = this.getDBClose.bind(this);
         
     }
 
     componentDidMount()
     {
-        this.makeSocketConnection()
+        this.getDBClose()
         .then(()=>{
-            this.checkConnection();
+            this.makeSocketConnection()
+            .then(()=>{
+                this.checkConnection();
+            });
         });
         this.setInitialSize();
         this.getIndexData();
         
+    }
+
+    async getDBClose()
+    {
+        return new Promise((resolve,reject)=>{
+            Axios.get(`${REQUEST_BASE_URL}/LatestPriceIndex/${this.props.Symbol}`)
+            .then((res)=>{
+                let data = res.data;
+                if(data.status === 'success')
+                {
+                    this.setState({
+                        dbclose : data.close
+                    });
+                    resolve(data);
+                }
+            })
+            .catch((err)=>{
+                // console.log(err);
+                reject(err);
+            });
+        })
     }
 
     setInitialSize()
@@ -167,6 +193,7 @@ export class UpperStock extends React.PureComponent {
                         {
 
                             let compare = stockdata.open_price === 0 ? stockdata.close_price : stockdata.open_price;
+                            // console.log(compare)
                             const {change_price,change_percentage} = setChange(stockdata.last_traded_price,compare);
                             // livedata
 
@@ -188,30 +215,26 @@ export class UpperStock extends React.PureComponent {
                     else
                     {
                         convertedData = readMarketData(data,-1);
+
+                        // console.log(convertedData);
+                        let stockdata = convertedData.livedata;
+                        const dbclose = this.state.dbclose;
+
+                        if(dbclose)
+                        {
+                            const {change_price,change_percentage} = setChange(stockdata.last_traded_price,dbclose);
+
+                            let livedata = stockdata;
+                            livedata['change_price'] = change_price;
+                            livedata['change_percentage'] = change_percentage;
+
+                            convertedData = {
+                                livedata
+                            }
+                        }
                     }
     
                     let livedata = convertedData.livedata;
-                    // console.log(livedata);
-                    this.setState({
-                        stockData : livedata,
-                        change : livedata.change_percentage
-                    });
-                }
-                else
-                {
-                    // console.log('---GET FROM DATABASE---');
-                    let livedata = this.state.stockData;
-                    let trade_price = this.state.stockData && this.state.stockData.last_traded_price;
-                    let open_price = this.state.stockData && this.state.stockData.open_price;
-                    
-                    let compare = open_price === 0 ? livedata.close_price : open_price;
-                    
-                    const {change_price,change_percentage} = setChange(trade_price,compare);
-                    // console.log(change_price,change_percentage);
-                    
-                    // livedata
-                    livedata['change_price'] = change_price;
-                    livedata['change_percentage'] = change_percentage;
                     // console.log(livedata);
                     this.setState({
                         stockData : livedata,

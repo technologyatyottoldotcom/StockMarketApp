@@ -157,9 +157,24 @@ input[type='range']::-webkit-slider-runnable-track
         {
             display: inline-block;
             margin-left: 6px;
-            color: var(--main-green);
+            font-weight: 700;
         }
 
+    }
+
+    .annual__returns.positive
+    {
+        span
+        {
+            color: var(--main-green);
+        }
+    }
+    .annual__returns.negative
+    {
+        span
+        {
+            color: var(--main-red);
+        }
     }
 }
 

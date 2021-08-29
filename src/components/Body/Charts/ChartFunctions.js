@@ -467,7 +467,7 @@ function ChartIndicatorStockTooltip(index,indicatorConfig,yAccessor,indicator,in
                 indicator={indicator}
                 IndicatorPosition={0}
                 labelFill={indicatorSettings.stroke}
-                hide={false}
+                hide={indicatorSettings.hide}
                 DeleteIndicatorType={DeleteIndicatorType}
                 toggleIndicatorSettings={toggleIndicatorSettings}
             />
@@ -567,7 +567,7 @@ function ChartIndicators(index,indicator,width,height,range,series,title,color,i
         <IndicatorOptions
             index={index} 
             indicator={indicator}
-            origin={[width - 170,5]}
+                origin={[width - 155, 5]}
             showup={index === 0 ? false : true}
             showdown={index === IndicatorOutside.length - 1 ? false : true}
             DeleteIndicatorType={DeleteIndicatorType}
@@ -753,7 +753,7 @@ function getIndicatorData(indicator,chartdata)
         yAccessor = (d) => d.sma;
         chartIndicatorY = (d) => getIndicatorExtents(d.sma);
         indicatorTitle = 'SMA';
-        indicatorSeries =  getIndicatorChartType(config.charttype,SMA.accessor(),config.stroke)
+        indicatorSeries = getIndicatorChartType(config.charttype, SMA.accessor(), config)
         indicatorColor = config.stroke;
         indicatorConfig = [{
             'title' : 'SMA',
@@ -771,7 +771,7 @@ function getIndicatorData(indicator,chartdata)
         yAccessor = (d) => d.wma;
         chartIndicatorY = (d) => getIndicatorExtents(d.wma);
         indicatorTitle = 'WMA';
-        indicatorSeries =  getIndicatorChartType(config.charttype,WMA.accessor(),config.stroke)
+        indicatorSeries = getIndicatorChartType(config.charttype, WMA.accessor(), config)
         indicatorColor = config.stroke;
         indicatorConfig = [{
             'title' : 'WMA',
@@ -788,7 +788,7 @@ function getIndicatorData(indicator,chartdata)
         yAccessor = (d) => d.ema;
         chartIndicatorY = (d) => getIndicatorExtents(d.ema);
         indicatorTitle = 'EMA';
-        indicatorSeries = getIndicatorChartType(config.charttype,EMA.accessor(),config.stroke);
+        indicatorSeries = getIndicatorChartType(config.charttype, EMA.accessor(), config);
         indicatorColor = config.stroke;
         indicatorConfig = [{
             'title' : 'EMA',
@@ -805,7 +805,7 @@ function getIndicatorData(indicator,chartdata)
         yAccessor = (d) => d.tma;
         chartIndicatorY = (d) => getIndicatorExtents(d.tma);
         indicatorTitle = 'TMA';
-        indicatorSeries = getIndicatorChartType(config.charttype,TMA.accessor(),config.stroke);
+        indicatorSeries = getIndicatorChartType(config.charttype, TMA.accessor(), config);
         indicatorColor = config.stroke;
         indicatorConfig = [{
             'title' : 'TMA',
@@ -828,7 +828,7 @@ function getIndicatorData(indicator,chartdata)
                                 fill={config.fillcolor}
                                 opacity={0.15} 
                             />;
-        indicatorColor = '#2e86de';
+        indicatorColor = '#00a0e3';
         indicatorConfig = [
             {
                 'title' : 'BB (T)',
@@ -925,7 +925,7 @@ function getIndicatorData(indicator,chartdata)
         yAccessor = (d) => d.atr;
         chartIndicatorY = (d) => getIndicatorExtents(d.atr);
         indicatorTitle = 'ATR';
-        indicatorSeries = getIndicatorChartType(config.charttype,atrCalculator.accessor(),config.stroke);
+        indicatorSeries = getIndicatorChartType(config.charttype, atrCalculator.accessor(), config);
         indicatorColor = config.stroke;
         indicatorConfig = [
             {
@@ -1036,7 +1036,7 @@ function getIndicatorData(indicator,chartdata)
             <AreaSeries 
                 baseAt={scale => scale(0)} 
                 yAccessor={fiEMA.accessor()} fill={config.fillcolor} stroke={config.stroke} 
-                opacity={1}  
+                opacity={0.3}  
                 strokeWidth={2}
                 interpolation={curveMonotoneX}  
             />
@@ -1186,7 +1186,7 @@ function getCompareIndicatorData(indicator,chartdata)
         tooltipAccessor = d => d.compare && d.compare.sma;
         chartIndicatorY = (d) => getIndicatorExtents(d.sma);
         indicatorTitle = 'SMA';
-        indicatorSeries =  getIndicatorChartType(config.charttype,d => d.compare.sma,config.stroke)
+        indicatorSeries = getIndicatorChartType(config.charttype, d => d.compare.sma, config)
         indicatorColor = config.stroke;
         indicatorConfig = [{
             'title' : 'SMA',
@@ -1205,7 +1205,7 @@ function getCompareIndicatorData(indicator,chartdata)
         tooltipAccessor = d => d.compare && d.compare.wma;
         chartIndicatorY = (d) => getIndicatorExtents(d.wma);
         indicatorTitle = 'WMA';
-        indicatorSeries =  getIndicatorChartType(config.charttype,d => d.compare.wma,config.stroke)
+        indicatorSeries = getIndicatorChartType(config.charttype, d => d.compare.wma, config)
         indicatorColor = config.stroke;
         indicatorConfig = [{
             'title' : 'WMA',
@@ -1223,7 +1223,7 @@ function getCompareIndicatorData(indicator,chartdata)
         tooltipAccessor = d => d.compare && d.compare.ema;
         chartIndicatorY = (d) => getIndicatorExtents(d.ema);
         indicatorTitle = 'EMA';
-        indicatorSeries = getIndicatorChartType(config.charttype,d => d.compare.ema,config.stroke);
+        indicatorSeries = getIndicatorChartType(config.charttype, d => d.compare.ema, config);
         indicatorColor = config.stroke;
         indicatorConfig = [{
             'title' : 'EMA',
@@ -1241,7 +1241,7 @@ function getCompareIndicatorData(indicator,chartdata)
         tooltipAccessor = d => d.compare && d.compare.tma;
         chartIndicatorY = (d) => getIndicatorExtents(d.tma);
         indicatorTitle = 'TMA';
-        indicatorSeries = getIndicatorChartType(config.charttype,d => d.compare.tma,config.stroke);
+        indicatorSeries = getIndicatorChartType(config.charttype, d => d.compare.tma, config);
         indicatorColor = config.stroke;
         indicatorConfig = [{
             'title' : 'TMA',
@@ -1288,41 +1288,41 @@ function getCompareIndicatorData(indicator,chartdata)
     return [tempData,yAccessor,tooltipAccessor,indicatorSeries,indicatorTitle,chartIndicatorY,indicatorColor,indicatorConfig,indicatorSettings];
 }
 
-function getIndicatorChartType(type,accessor,stroke)
+function getIndicatorChartType(type, accessor, config)
 {
     type = type.split(' ').join('').toLowerCase();
     if(type === 'linechart')
     {
         return <>
-            <LineSeries yAccessor={accessor} stroke={stroke} strokeWidth={2} interpolation={curveMonotoneX}/>
-            <LastPointIndicator yAccessor={accessor} displayFormat={format(".2s")} radius={4} fill={stroke}/>
+            <LineSeries yAccessor={accessor} stroke={config.stroke} strokeWidth={config.strokewidth} interpolation={curveMonotoneX} />
+            <LastPointIndicator yAccessor={accessor} displayFormat={format(".2s")} radius={5} fill={config.stroke} />
         </>
     }
     else if(type === 'areachart')
     {
         return <>
-            <AreaSeries yAccessor={accessor} stroke={stroke} strokeWidth={2} fill={stroke} opacity={0.3} interpolation={curveMonotoneX}/>
-            <LastPointIndicator yAccessor={accessor} displayFormat={format(".2s")} radius={4} fill={stroke}/>
+            <AreaSeries yAccessor={accessor} stroke={config.stroke} strokeWidth={config.strokewidth} fill={config.stroke} opacity={0.3} interpolation={curveMonotoneX} />
+            <LastPointIndicator yAccessor={accessor} displayFormat={format(".2s")} radius={5} fill={config.stroke} />
         </>
     }
     else if(type === 'barchart')
     {
         return <>
-            <BarSeries yAccessor={accessor} stroke={stroke} fill={stroke} opacity={0.3}/>
+            <BarSeries yAccessor={accessor} stroke={config.stroke} fill={config.stroke} opacity={0.3} />
         </>
     }
     else if(type === 'steplinechart')
     {
         return <>
-            <LineSeries yAccessor={accessor} stroke={stroke} strokeWidth={2} interpolation={curveStep}/>
-            <LastPointIndicator yAccessor={accessor} displayFormat={format(".2s")} radius={4} fill={stroke}/>
+            <LineSeries yAccessor={accessor} stroke={config.stroke} strokeWidth={config.strokewidth} interpolation={curveStep} />
+            <LastPointIndicator yAccessor={accessor} displayFormat={format(".2s")} radius={5} fill={config.stroke} />
         </>
     }
     else
     {
         return <>
-            <LineSeries yAccessor={accessor} stroke={stroke} strokeWidth={2} interpolation={curveMonotoneX}/>
-            <LastPointIndicator yAccessor={accessor} displayFormat={format(".2s")} radius={4} fill={stroke}/>
+            <LineSeries yAccessor={accessor} stroke={config.stroke} strokeWidth={config.strokewidth} interpolation={curveMonotoneX} />
+            <LastPointIndicator yAccessor={accessor} displayFormat={format(".2s")} radius={5} fill={config.stroke} />
         </> 
     }
 }
