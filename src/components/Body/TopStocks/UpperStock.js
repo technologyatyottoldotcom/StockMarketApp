@@ -50,10 +50,37 @@ export class UpperStock extends React.PureComponent {
         
     }
 
+    componentDidUpdate(prevProps)
+    {
+
+        if(this.props.index !== prevProps.index)
+        {
+            console.log('UPDATE ORDER ',this.props.order);
+            if(this.state.ws)
+            {
+                this.state.ws.send(JSON.stringify({
+                    "a": "unsubscribe", 
+                    "v": [[prevProps.exchangecode, prevProps.code]], 
+                    "m": "marketdata"}
+                ));
+            }
+            this.setState({
+                isLoading : true,
+                stockData : false,
+            });
+            this.getDBClose()
+            .then(()=>{
+                this.checkConnection();
+            });
+            this.setInitialSize();
+            this.getIndexData();
+        }
+    }
+
     async getDBClose()
     {
         return new Promise((resolve,reject)=>{
-            Axios.get(`${REQUEST_BASE_URL}/LatestPriceIndex/${this.props.Symbol}`)
+            Axios.get(`${REQUEST_BASE_URL}/LatestPriceIndex/${this.props.index}`)
             .then((res)=>{
                 let data = res.data;
                 if(data.status === 'success')
@@ -61,6 +88,7 @@ export class UpperStock extends React.PureComponent {
                     this.setState({
                         dbclose : data.close
                     });
+                    // console.log(this.props.index,data.close)
                     resolve(data);
                 }
             })
@@ -83,7 +111,7 @@ export class UpperStock extends React.PureComponent {
 
     getIndexData()
     {
-        Axios.get(`${REQUEST_BASE_URL}/indexdata/${this.props.Symbol}`)
+        Axios.get(`${REQUEST_BASE_URL}/indexdata/${this.props.index}`)
         .then((data)=>{
             let stockArray = data.data.chartdata;
 
@@ -112,7 +140,7 @@ export class UpperStock extends React.PureComponent {
                 }
             });
 
-            // console.log(tempDataArray);
+            // console.log(this.props.index,tempDataArray);
 
             this.setState({
                 isLoading : false,
@@ -131,7 +159,7 @@ export class UpperStock extends React.PureComponent {
     {
         setInterval(()=>{
 
-            Axios.get(`${REQUEST_BASE_URL}/indexdata/${this.props.Symbol}`)
+            Axios.get(`${REQUEST_BASE_URL}/indexdata/${this.props.index}`)
             .then((data)=>{
                 let stockArray = data.data.chartdata;
 
@@ -166,9 +194,11 @@ export class UpperStock extends React.PureComponent {
 
     feedLiveData(ws)
     {
+
+        // console.log('SUBSCRIBE TO ',this.props.index,this.props.code)
         ws.send(JSON.stringify({
             "a": "subscribe", 
-            "v": [[this.props.ExchangeCode, this.props.StockCode]], 
+            "v": [[this.props.exchangecode, this.props.code]], 
             "m": "marketdata"}
         ));
 
@@ -181,7 +211,7 @@ export class UpperStock extends React.PureComponent {
             let convertedData;
             reader.onloadend = (event) => {
                 let data = new Uint8Array(reader.result);
-                // console.log(response.data.size)
+                // console.log(response.data.size);
                 if(response.data.size >= 86)
                 {
                     if(this.state.stockData)
@@ -191,7 +221,6 @@ export class UpperStock extends React.PureComponent {
                         // console.log(stockdata.last_traded_price,stockdata.close_price,stockdata.open_price);
                         if(stockdata.last_traded_price === stockdata.close_price)
                         {
-
                             let compare = stockdata.open_price === 0 ? stockdata.close_price : stockdata.open_price;
                             // console.log(compare)
                             const {change_price,change_percentage} = setChange(stockdata.last_traded_price,compare);
@@ -214,6 +243,8 @@ export class UpperStock extends React.PureComponent {
                     }
                     else
                     {
+                        
+                        
                         convertedData = readMarketData(data,-1);
 
                         // console.log(convertedData);
@@ -222,6 +253,7 @@ export class UpperStock extends React.PureComponent {
 
                         if(dbclose)
                         {
+                            
                             const {change_price,change_percentage} = setChange(stockdata.last_traded_price,dbclose);
 
                             let livedata = stockdata;
@@ -236,6 +268,10 @@ export class UpperStock extends React.PureComponent {
     
                     let livedata = convertedData.livedata;
                     // console.log(livedata);
+                    // if(this.props.code === 26000 || this.props.code === 1)
+                    // {
+                    //     console.log(this.props.code,livedata.last_traded_price);
+                    // }
                     this.setState({
                         stockData : livedata,
                         change : livedata.change_percentage
@@ -247,7 +283,7 @@ export class UpperStock extends React.PureComponent {
         setInterval(()=>{
             ws.send(JSON.stringify({
                 "a": "h", 
-                "v": [[this.props.ExchangeCode, this.props.StockCode]], 
+                "v": [[this.props.exchangecode, this.props.code]], 
                 "m": ""}
             ));
         },10*1000)
@@ -303,7 +339,8 @@ export class UpperStock extends React.PureComponent {
 
     render() {
 
-        const {Name,Symbol} = this.props;
+        // console.log('RENDER UPPERSTOCK')
+        const {name} = this.props;
         let stockData = this.state.stockData;
 
         // console.log(stockData);
@@ -312,17 +349,20 @@ export class UpperStock extends React.PureComponent {
 
         let priceClass = change_price >= 0 ? 'positive' : 'negative';
 
+        // console.log(TradePrice,change_price);
+
+        // console.log(this.props.order,name,TradePrice)
+
 
         return (
             this.state.isLoading ? 
             <div className="upper__stock loader">
-                {/* <Spinner size={20}/> */}
                 <Pulse />
             </div>
             :
             <div className="upper__stock">
                 <div className="upper__stock__info">
-                    <p className="upper__stock__name">{Name}</p>
+                    <p className="upper__stock__name">{name}</p>
                     <div className="upper__stock__value">
                         <div className={priceClass+' stock__performance__amount'} style={{display : 'flex'}}>
                             {TradePrice &&
@@ -345,7 +385,6 @@ export class UpperStock extends React.PureComponent {
                                         key={i}
                                     />
                             })}
-                            {/* {stockData.change_price} */}
                         </div>
                     </div>
                 </div>

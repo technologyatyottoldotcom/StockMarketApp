@@ -197,10 +197,7 @@ class ScripsBody extends React.PureComponent
             let convertedData;
             reader.onloadend = (event) => {
                 let data = new Uint8Array(reader.result);
-                // console.log(data);
-
-               
-               
+                // console.log(data)
 
                 //get price change
                 if(response.data.size >= 86)

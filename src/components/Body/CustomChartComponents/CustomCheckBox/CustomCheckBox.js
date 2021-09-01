@@ -25,14 +25,14 @@ export class CustomCheckBox extends React.PureComponent {
 
     render() {
 
-        const {width,height} = this.props;
+        const {width,height,disabled} = this.props;
         const {isChecked} = this.state;
 
         return (
             <div 
-                className={isChecked ? "custom-checkbox checked" : "custom-checkbox"} 
-                style={{width : width , height : height}}
-                onClick={()=>{this.toggleCheckBox()}}            >
+                className={isChecked ? "custom-checkbox checked" : disabled ? "custom-checkbox disabled" : "custom-checkbox"} 
+                style={{width : width , height : height }}
+                onClick={disabled ? ()=> {} : ()=>{this.toggleCheckBox()}}            >
                 {isChecked ? 
                     
                     <img src={Done} alt="" width={width - 4} height={height- 4}/>

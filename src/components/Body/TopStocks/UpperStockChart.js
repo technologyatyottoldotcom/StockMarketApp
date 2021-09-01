@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {ChartCanvas,Chart} from 'react-stockcharts';
-import { curveCardinal } from "d3-shape";
+import { curveCardinal,curveMonotoneX } from "d3-shape";
 import {AreaSeries,LineSeries,StraightLine} from 'react-stockcharts/lib/series';
 import {XAxis,YAxis} from 'react-stockcharts/lib/axes';
 import { format } from 'd3-format';
@@ -87,6 +87,7 @@ export class UpperStockChart extends React.PureComponent {
     updateChart()
     {
 
+        // console.log('UPDATE CHART',this.props.apidata)
         let dataVal;
         let xAccessorVal;
         let xScaleVal;
@@ -172,7 +173,7 @@ export class UpperStockChart extends React.PureComponent {
                             yAccessor={d => d.open} 
                             strokeWidth={1} 
                             stroke={this.props.status === 'positive' ? "#19E683" : "#e51a4b"} 
-                            interpolation={curveCardinal}
+                            interpolation={curveMonotoneX}
                         />
                         {/* <LastPointIndicator yAccessor={d => d.open} displayFormat={format(".4s")} radius={2} fill={this.props.status === 'positive' ? "#00b894" : "#e51a4b"}/> */}
                         <StraightLine strokeDasharray="ShortDash" strokeWidth={1} stroke={this.props.status === 'positive' ? "#19E683" : "#e51a4b"} opacity={1} yValue={openPrice}/>

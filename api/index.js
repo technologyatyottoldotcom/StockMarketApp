@@ -1,6 +1,7 @@
 //imports
 const express = require('express') , cors = require('cors');
 const app = express();
+var bodyParser = require('body-parser')
 app.use(cors());
 const { conn } = require('../server/connection');
 const { Twitter } = require("./twitter");
@@ -17,6 +18,8 @@ const { Common } = require('./Common/');
 
 //middlewares & apis
 
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 app.use(Twitter);
 app.use(GoogleFeeds);
 app.use(BusinessNews);

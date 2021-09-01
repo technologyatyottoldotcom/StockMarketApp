@@ -96,10 +96,100 @@ function LatestPriceIndex(req,res)
     
 }
 
+function IndicesList(req,res)
+{
+    const pan = req.params.pan;
+    conn.query(`SELECT * FROM frontend_user_indices WHERE pan="${pan}"`,(err,result)=>{
+        if(!err)
+        {
+            res.send({
+                status : 'success',
+                data : result
+            })
+        }
+        else
+        {
+            console.log(err);
+            res.send({
+                status : 'failure'
+            })
+        }
+    })
+}
+
+function SaveUserIndices(req,res)
+{
+
+
+    async function updateIndexOrder(pan,dataarray)
+    {
+        const promises = dataarray.map((data)=>{
+            return new Promise((resolve,reject)=>{
+                let index = data.index;
+                let order = data.order;
+            
+                console.log(index,order);
+            
+                conn.query('UPDATE frontend_user_indices SET `index`="'+index+'" WHERE pan="'+pan+'" AND orderno="'+order+'"',(err,result)=>{
+                    if(!err)
+                    {
+                        resolve('success');
+                    }
+                    else
+                    {
+                        reject(err.message);
+                    }
+                });
+            })
+        });
+
+        return await Promise.all(promises).then(()=>{
+            return true;
+        }).catch(()=>{
+            return false
+        });
+
+    }
+
+    const pan = req.params.pan;
+    const dataarray = req.body.indexlist;
+
+    updateIndexOrder(pan,dataarray).then((response)=>{
+
+        console.log(response);
+        if(response){
+            res.json({
+                pan,
+                status : 'success'
+            });
+        }
+        else
+        {
+            res.json({
+                pan,
+                status : 'failure',
+                err : 'Database Error'
+            });
+        }
+    }).catch((err)=>{
+        res.json({
+            pan,
+            status : 'failure',
+            err : err.message
+        });
+    })
+
+    
+}
+
 Common.get('/StockFromISIN/:isin',getStockFromISIN);
 
 Common.get('/StockFromSymbol/:symbol',getStockFromSymbol);
 
 Common.get('/LatestPriceIndex/:symbol',LatestPriceIndex);
+
+Common.get('/IndicesList/:pan',IndicesList);
+
+Common.post('/SaveUserIndices/:pan',SaveUserIndices);
 
 exports.Common = Common;
