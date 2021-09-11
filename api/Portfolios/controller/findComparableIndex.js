@@ -1,4 +1,4 @@
-const {convertDate, increaseDate} = require('./conversionOfDate');
+const {convertDate, increaseDate} = require('../../Common/conversionOfDate');
 
 module.exports = async function findComparableIndex(compareTo, conn, allDates, diffDays){
 

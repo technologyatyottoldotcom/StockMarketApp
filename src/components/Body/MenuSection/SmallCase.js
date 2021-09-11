@@ -1,5 +1,4 @@
 import React from 'react';
-import {QuoteNav} from '../BusinessNews/QuoteNav';
 import Theme from '../../../assets/icons/theme.svg';
 import SearchIcon from '../../../assets/icons/search.svg';
 import Chess from '../../../assets/icons/chess.svg';
@@ -8,172 +7,223 @@ import BalanceBall from '../../../assets/icons/balance-ball.svg';
 import SettingsGears from '../../../assets/icons/settings-gears.svg';
 import ChevronDown from '../../../assets/icons/ChevronDown.svg';
 import Objective from '../../../assets/icons/objective.svg';
+import SmallCaseStrategy from './SmallCaseComponents/SmallCaseStrategy';
+import "../../../css/MenuSection/SmallCase.css";
 
 class SmallCase extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            field: 'macroeconomic'
+            field: 'macroeconomic',
+            active: null,
         }
         this.TopSection = this.TopSection.bind(this)
-        this.CrTable = this.CrTable.bind(this)
-        this.CrNews = this.CrNews.bind(this)
-        this.CrIcon = this.CrIcon.bind(this)
-        this.CrRow = this.CrRow.bind(this)
-        this.CrSecRow = this.CrSecRow.bind(this)
+        this.StrategyCard = this.StrategyCard.bind(this);
     }
+
     TopSection() {
-        return <div className="row" style={{ fontSize: 13 }}>
-            <div className="col-3">
-                <div style={{ marginTop: 5 }}>
+
+        return <>
+            <div className="smallcase__header">
+                <div className="smallcase__title">
                     <img src={Theme} alt="Research" width={20} />
-                    <span style={{ fontWeight: 'bold', fontSize: 13, marginLeft: 10 }}>SmallCase Investing</span>
-
+                    <span>SmallCase Investing</span>
                 </div>
-
-                <div className="input-icons" style={{ marginTop: 15 }}>
-                    <img src={SearchIcon} alt="Research" className="icon" width={20} style={{ color: '#ccc' }} />
-                    <input type="text" className="input-field" placeholder="Search" style={{ width: 250 }} />
-                </div>
-
-            </div>
-            <div className="col">
-                <div style={{ textAlign: 'right', lineHeight: .1, float: 'right' }}>
-                    <div style={{ marginRight: 60, marginTop: 5 }}>
-                        <QuoteNav onClick={(i, e) => { this.setState({ field: e.target.innerText?.toLowerCase()?.replace(/ /g, '') }) }} activeClassName="ResearchStocks-active-nav" className="ResearchStocks-nav" style={{ margin: 10, marginRight: 0, padding: 0, listStyleType: 'none', fontWeight: 'bold' }}>
-                            <div active={1} style={{ marginRight: 10 }}>MacroEconomic</div>
-                            <div style={{ marginRight: 10 }}>Industry</div>
-                            <div style={{ marginRight: 10 }}>Stocks</div>
-                            <div style={{ marginRight: 10 }}>Others</div>
-                        </QuoteNav>
+                <div className="smallcase__menu">
+                    <div className="smallcase__stratergy__button" onClick={()=> this.setState({active : 'Strategy'})}>
+                        SmallCase Strategy  
                     </div>
                 </div>
             </div>
-        </div>
-    }
-
-    CrTable({ headings = [], data = [] }) {
-        return <>
-            <div className="row" style={{ fontSize: 11 }}>
-                {headings.map((v, i) => {
-                    return <div className="col" key={1 + Math.random() + 3}>{v}</div>
-                })}
-            </div>
-            <div className="row" style={{ fontWeight: 'bold' }}>
-                {data.map((v, i) => {
-                    return <div className="col" key={1 + Math.random() + 3}>{v}</div>
-                })}
+            <div className="smallcase__search__wrapper">
+                <div className="smallcase__search__box">
+                    <img src={SearchIcon} alt="Q" width={20}  />
+                    <input type="text" className="input-field" placeholder="Search" />
+                </div>
             </div>
         </>
     }
 
-    CrNews({ heading, news }) {
-        return <div>
-            {heading && <div style={{ fontWeight: 'bold', fontSize: 14 }}>{heading}</div>}
-            {news && <div>{news}</div>}
-        </div>
-    }
-
-    CrIcon({ icon, text, textInline }) {
-        return (
-            <div style={{ fontWeight: 'bold' }}>
-                {!textInline ? <>
-                    {icon && <img src={icon} alt={text} width={20} />}
-                    <div>{text}</div>
-                </>
-                    :
-                    <div style={{ display: 'flex' }}>
-                        {icon && <img src={icon} alt={text} width={20} />}
-                        <div style={{ fontWeight: 'bold', marginLeft: 10, alignSelf: 'flex-end' }}>
-                            {text}
-                        </div>
+    StrategyCard({heading , news , data = []})
+    {
+        return <>
+            <div className="smallcase__strategy__card">
+                <div className="strategy__info">
+                    <div className="strategy__icon__box">
+                        <img src={Chess} alt=""/>
+                        <span>Startegy</span>
                     </div>
-
-                }
+                    <div className="strategy__headings__box">
+                        <p className="strategy__heading">{heading}</p>
+                        <p className="strategy__news">{news}</p>
+                    </div>
+                </div>
+                <div className="strategy__data">
+                    <div className="strategy__icon__box">
+                        <img src={Analysis} alt=""/>
+                        <span>Back Test Results</span>
+                    </div>
+                    <div className="strategy__data__table">
+                       {data.map((d,i)=>{
+                           return <>
+                                <div>
+                                    <p className="title">{d.title}</p>
+                                    <p className="value">{d.value}</p>
+                                </div>
+                                
+                           </>
+                       })}
+                    </div>
+                </div>
+                <div className="strategy__options">
+                    <p>Details</p>
+                    <div className="strategy__buy__button">
+                        Buy This Strategy
+                    </div>
+                </div>
             </div>
-        )
+        </>
     }
 
-    CrRow({ col1, col2 }) {
-        return <div className="row" style={{ marginTop: 15 }}>
-            <div className="col-4">{col1}</div>
-            <div className="col" >{col2}</div>
-        </div>
-    }
-
-    CrSecRow({ head, text }) {
-        return <div style={{ marginTop: 15 }}>
-            <div>{head}</div>
-            <div>{text}</div>
-        </div>
-    }
 
     render() {
+
+        if(this.state.active === 'Strategy')    
+            return(<SmallCaseStrategy smallCaseHome={()=> this.setState({active : null})}/>)
+
         return (
             <>
-                <div className="container" style={{ width: 800, fontSize: 13, color: 'black' }}>
+
+                <div className="smallcase__container">
                     <this.TopSection />
-                    <div className="row" style={{ marginTop: 30 }}>
-                        <div className="col-6 GlobalScrollBar" style={{ maxHeight: 400 , marginRight : 30 }}>
-                            <this.CrRow
-                                col1={<this.CrIcon icon={Chess} text="Strategy" />}
-                                col2={<this.CrNews
-                                    heading="Nifty 50 Minimum Variance Strategy"
-                                    news="A minimum Variance portfolio is an investing method that help your maximize returns and minimize risk. This involves diversifying your investments." />}
+                    <div className="smallcase__body">
+                        <div className="smallcase__strategy__wrapper">
+                            <this.StrategyCard 
+                                heading="Nifty 50 Minimum Variance Strategy"
+                                news="A minimum Variance portfolio is an investing method that help your maximize returns and minimize risk. This involves diversifying your investments."
+                                data={[
+                                    {
+                                        title : 'Annual Returns',
+                                        value : '15.63%'
+                                    },
+                                    {
+                                        title : 'Annual Risk',
+                                        value : '16.36%'
+                                    },
+                                    {
+                                        title : 'Sharpe Ratio',
+                                        value : '0.83'
+                                    }
+                                ]}
                             />
-                            <this.CrRow
-                                col1={<this.CrIcon icon={Analysis} text="Back Test Results " />}
-                                col2={<this.CrTable
-                                    headings={['Annual Returns', 'Annual Risk', 'Sharpe Ratio']}
-                                    data={['15.63%', '16.36%', '0.83']}
-                                />}
+                            <this.StrategyCard 
+                                heading="Nifty 50 Minimum Variance Strategy"
+                                news="A minimum Variance portfolio is an investing method that help your maximize returns and minimize risk. This involves diversifying your investments."
+                                data={[
+                                    {
+                                        title : 'Annual Returns',
+                                        value : '15.63%'
+                                    },
+                                    {
+                                        title : 'Annual Risk',
+                                        value : '16.36%'
+                                    },
+                                    {
+                                        title : 'Sharpe Ratio',
+                                        value : '0.83'
+                                    }
+                                ]}
                             />
-
-                            <div className="row" style={{ fontWeight: 'bold', paddingTop: 30, paddingBottom: 55 }}>
-                                <div className="col" style={{ color: '#00a0e3' }}>Details</div>
-                                <div className="col" style={{ textAlign: 'right', marginRight: 25 }}>Buy This Strategy</div>
-                            </div>
-
-                            <this.CrRow
-                                col1={<this.CrIcon icon={Chess} text="Strategy" />}
-                                col2={<this.CrNews
-                                    heading="Nifty 50 Minimum Variance Strategy"
-                                    news="A minimum Variance portfolio is an investing method that help your maximize returns and minimize risk. This involves diversifying your investments." />}
+                            <this.StrategyCard 
+                                heading="Nifty 50 Minimum Variance Strategy"
+                                news="A minimum Variance portfolio is an investing method that help your maximize returns and minimize risk. This involves diversifying your investments."
+                                data={[
+                                    {
+                                        title : 'Annual Returns',
+                                        value : '15.63%'
+                                    },
+                                    {
+                                        title : 'Annual Risk',
+                                        value : '16.36%'
+                                    },
+                                    {
+                                        title : 'Sharpe Ratio',
+                                        value : '0.83'
+                                    }
+                                ]}
                             />
-                            <this.CrRow
-                                col1={<this.CrIcon icon={Analysis} text="Back Test Results " />}
-                                col2={<this.CrTable
-                                    headings={['Annual Returns', 'Annual Risk', 'Sharpe Ratio']}
-                                    data={['15.63%', '16.36%', '0.83']}
-                                />}
-                            />
-
+                            <this.StrategyCard 
+                                heading="Nifty 50 Minimum Variance Strategy"
+                                news="A minimum Variance portfolio is an investing method that help your maximize returns and minimize risk. This involves diversifying your investments."
+                                data={[
+                                    {
+                                        title : 'Annual Returns',
+                                        value : '15.63%'
+                                    },
+                                    {
+                                        title : 'Annual Risk',
+                                        value : '16.36%'
+                                    },
+                                    {
+                                        title : 'Sharpe Ratio',
+                                        value : '0.83'
+                                    }
+                                ]}
+                            /> 
                         </div>
-                        <div className="col-5 GlobalScrollBar" style={{ maxHeight: 400, marginTop: -20 }}>
-                            <this.CrSecRow head={<this.CrIcon icon={Chess} text="Strategy" textInline />} text={<span style={{ color: '#00a0e3', fontWeight: 'bold' }}>Nifty 50 Minimum Variance Strategy</span>} />
-                            <this.CrSecRow head={<this.CrIcon icon={BalanceBall} text="Rebalancing" textInline />} text="Monthly, Automatic" />
-                            <this.CrSecRow head={<this.CrIcon icon={Objective} text="Objective" textInline />}
-                                text="A minimum Variance portfolio is an investing method that help your maximize returns and minimize risk. This involves diversifying your investments." />
-                            <this.CrSecRow head={<this.CrIcon icon={SettingsGears} text="Methodolody" textInline />}
-                                text="A minimum Variance portfolio is an investing method that help your maximize returns and minimize risk. This involves diversifying your investments. A minimum Variance portfolio is an investing method that help your maximize returns and minimize risk. This involves diversifying your investments." />
-                            <this.CrSecRow
-                                head={
-                                    <div className="row">
-                                        <div className='col-9'>
-                                            <this.CrIcon icon={Analysis} text="Back Test Results(Past 5 Years)" textInline />
-                                        </div>
-                                        <div className="col" style={{ padding: 0, fontWeight: 600, fontSize: 12 }}>
-                                            Nifty 50 <img src={ChevronDown} alt="ChevronDown" width={20} />
-                                        </div>
-                                    </div>
-                                }
-                            />
-
-
+                        <div className="smallcase__strategy__details">
+                            <div className="strategy__details__box">
+                                <div className="details__header">
+                                    <img src={Chess} alt="" />
+                                    <span>Strategy</span>
+                                </div>
+                                <div className="details__content strategy__name">
+                                    <p>Nifty 50 Minimum Variance Strategy</p>
+                                </div>
+                            </div>
+                            <div className="strategy__details__box">
+                                <div className="details__header">
+                                    <img src={BalanceBall} alt="" />
+                                    <span>Rebalancing</span>
+                                </div>
+                                <div className="details__content">
+                                    <p>Monthly, Automatic</p>
+                                </div>
+                            </div>
+                            <div className="strategy__details__box">
+                                <div className="details__header">
+                                    <img src={Objective} alt="" />
+                                    <span>Objective</span>
+                                </div>
+                                <div className="details__content">
+                                    <p>A minimum variance portfolio is an investing method that help your maximize returns and minimize risk. This involves diversifying your investments.</p>
+                                </div>
+                            </div>
+                            <div className="strategy__details__box">
+                                <div className="details__header">
+                                    <img src={SettingsGears} alt="" />
+                                    <span>Methodolody</span>
+                                </div>
+                                <div className="details__content">
+                                    <p>To build a minimum variance portfolio, we stick with low-volatility investments or a combination of volatile investments with low
+                                    correlation to each other, such as technlogy and apparel.The latter portfolio is a common scenario for building a minimum variance portfolio.
+                                    Investments that have low correlation are those that perform differently compared to the prevalling market and economics environment.
+                                    The strategy is a great example of diversification.</p>
+                                </div>
+                            </div>
+                            <div className="strategy__details__box">
+                                <div className="details__header">
+                                    <img src={Analysis} alt="" />
+                                    <span>Back Test Results(Past 3 Years)</span>
+                                </div>
+                                <div className="details__content">
+                                    
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
+                
 
             </>
         )

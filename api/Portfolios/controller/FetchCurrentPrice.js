@@ -1,5 +1,5 @@
 const {conn} = require('../../../server/connection');
-const {convertDate, increaseDate} = require('./conversionOfDate');
+const {convertDate, increaseDate} = require('../../Common/conversionOfDate');
 
 
 async function sendValue(req, res, next){

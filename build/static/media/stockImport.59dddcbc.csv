@@ -1,0 +1,4 @@
+STOCKCODE,WEIGHT%,,Instructions,1. Stock code is NSE code or BSE code (like 500180 for BSE or RELAINCE for NSE)
+CASH,100%,,,2. Sum of all weights need to be equal to 100%
+,,,,3. CASH weight of atleast 0.5% is necessary
+,,,,4. Number of stock cannot be more than 100

@@ -13,6 +13,7 @@ const { StockChartData } = require('./StockChartData/');
 const { StocksToWatch } = require('./StocksToWatch/');
 const { Financial } = require('./BusinessNews/Financial');
 const { Portfolios } = require('./Portfolios');
+const { SmallCase } = require('./SmallCase');
 const { Common } = require('./Common/');
 
 
@@ -28,6 +29,7 @@ app.use(StockChartData);
 app.use(StocksToWatch);
 app.use(Financial);
 app.use(Portfolios);
+app.use(SmallCase);
 app.use(Common);
 
 

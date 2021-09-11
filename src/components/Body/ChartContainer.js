@@ -11,6 +11,7 @@ import StockSearchPopup from './AppPopups/StockSearchPopup/StockSearchPopup';
 import StockWatchPopup from './AppPopups/StockWatchPopup/StockWatchPopup';
 import CompareSettingPopup from './AppPopups/CompareSettingPopup/CompareSettingPopup';
 import IndicatorSettingPopup from './AppPopups/IndicatorSettingPopup/IndicatorSettingPopup';
+import StockOrderPopup from './AppPopups/StockOrderPopup/StockOrderPopup';
 import StockWatchHero from './AppPopups/StockWatchPopup/StockWatchHero';
 import { Alert } from './CustomChartComponents/CustomAlert/CustomAlert';
 import Zoom from '../../assets/icons/zoom.svg';
@@ -70,6 +71,9 @@ export class ChartContainer extends React.PureComponent {
         this.saveIndicatorSettings = this.saveIndicatorSettings.bind(this);
         this.toggleIndicatorSettings = this.toggleIndicatorSettings.bind(this);
         this.closeIndicatorSettings = this.closeIndicatorSettings.bind(this);
+        this.OpenOrderPopup = this.OpenOrderPopup.bind(this);
+        this.CloseOprderPopup = this.CloseOprderPopup.bind(this);
+
         this.state = {
             isLoaded : false,
             dataLoaded : false,
@@ -103,8 +107,8 @@ export class ChartContainer extends React.PureComponent {
             chartTypeIcon : Line,
             interactiveType : '',
             trendLineType : '',
-            interFlag : false
-            
+            interFlag : false,
+            orderaction : false,
         }
     }
 
@@ -1187,6 +1191,27 @@ export class ChartContainer extends React.PureComponent {
         }
     }
 
+    OpenOrderPopup(action)
+    {
+        this.setState({
+            orderaction : action
+        },()=>{
+            
+            $('.app__back__blur').addClass('active');
+        })
+        
+    }
+
+    CloseOprderPopup()
+    {
+        this.setState({
+            orderaction : false
+        },()=>{
+           
+            $('.app__back__blur').removeClass('active');
+        })
+    }
+
     changeInteractiveType(Itype,Stype)
     {
         this.setState({
@@ -1387,9 +1412,10 @@ export class ChartContainer extends React.PureComponent {
         // console.log('Rendering chart...');
         // console.log(this.props.data);
 
+
         const {StockSettingsOpen,StockCompareSettings} = this.props;
 
-        const {IndicatorSettingOpen} = this.state;
+        const {IndicatorSettingOpen,orderaction} = this.state;
 
         let stockData = this.props.stockData;
 
@@ -1451,6 +1477,16 @@ export class ChartContainer extends React.PureComponent {
                     CloseStockWatchPopup={this.CloseStockWatchPopup}
                     selectedStock={this.props.selectedStock}
                 />
+
+                {orderaction && 
+                    
+                    <StockOrderPopup 
+                        action={this.state.orderaction} 
+                        CloseOprderPopup={this.CloseOprderPopup}
+                        stockDetails={this.props.stockDetails}
+                    />
+                
+                }
 
                 {StockSettingsOpen && 
                     
@@ -1642,8 +1678,8 @@ export class ChartContainer extends React.PureComponent {
                         </div>
                         }
                         <div className="stock__purchase">
-                            <div className="buy__stock"><img src={PlusIcon} alt=""/></div>
-                            <div className="sell__stock"><img src={MinusIcon} alt=""/></div>
+                            <div className="buy__stock" onClick={()=>{this.OpenOrderPopup('BUY')}}><img src={PlusIcon} alt=""/></div>
+                            <div className="sell__stock" onClick={()=>{this.OpenOrderPopup('SELL')}}><img src={MinusIcon} alt=""/></div>
                         </div>
                         {/* {this.state.dataLoaded && this.state.comparedataLoaded?  */}
                         {this.state.bigdataLoaded && this.state.bigcomparedataLoaded ? 

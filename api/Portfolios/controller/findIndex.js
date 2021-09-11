@@ -1,7 +1,7 @@
 const findClosingPrice = require('./findClosingPrice');
 const getOrderBook = require('./getOrderBook');
-const {convertDate, increaseDate} = require('./conversionOfDate');
-const findLatestClose = require('./findLatestClose');
+const {convertDate, increaseDate} = require('../../Common/conversionOfDate');
+const findLatestClose = require('../../Common/findLatestClose');
 
 //function to deep copy array of objects
 const deepCopy = (objectToBeCloned) => {

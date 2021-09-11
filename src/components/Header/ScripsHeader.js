@@ -31,7 +31,6 @@ class HighLightText extends React.PureComponent{
     }
 }
 
-
 class StockSuggestion extends React.PureComponent{
 
 

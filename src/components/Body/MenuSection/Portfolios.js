@@ -3,7 +3,7 @@ import Axios from 'axios';
 import Coin from '../../../assets/icons/coins.svg';
 import BriefCase from '../../../assets/icons/suitcase.svg';
 import ChevronDown from '../../../assets/icons/ChevronDown.svg';
-import "../../../css/Portfolio.css";
+import "../../../css/MenuSection/Portfolio.css";
 import AnimatedDigit from '../AnimatedDigit';
 import TableRow from './PortfolioComponents/TableRow';
 import { ReCalculateWeight } from '../../../exports/ReCalculateWeight';

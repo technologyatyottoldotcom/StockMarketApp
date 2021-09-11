@@ -37,11 +37,12 @@ input[type=number] {
     width: 100%;
     height: 100%;
     display: flex;
+    justify-content: space-between;
 }
 
 .custom-numberbox-container .numberbox-input
 {
-    width: 85%;
+    width: 90%;
     height: 100%;
 }
 
@@ -51,19 +52,31 @@ input[type=number] {
     height: 100%;
     border: none;
     outline: none;
-    padding: 0 5px;
+    padding: 0 10px;
     font-size: 14px;
     font-weight: 600;
 }
 
 .custom-numberbox-container .numberbox-arrows
 {
-    width: 15%;
+    width: 10%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    /* background-color: blueviolet; */
+}
+
+.custom-numberbox-container .numberbox-calculator
+{
+    width: 10%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     /* background-color: blueviolet; */
 }
 
@@ -87,4 +100,60 @@ input[type=number] {
 {
     width: 14px;
     height: 14px;
+}
+
+.numberbox-calculator .numberbox-calculator-wrapper
+{
+    padding: 3px;
+    border-radius: 3px;
+    transition: 0.3s;
+}
+
+.numberbox-calculator .numberbox-calculator-wrapper:hover
+{
+    background-color: #f3f3f3;
+}
+
+.numberbox-calculator .number-box-calculator-options
+{
+    position: absolute;
+    top: 105%;
+    right: 0%;
+    z-index: 1000;
+    display: flex;
+    background-color: #ffffff;
+    box-shadow: 0 0 2px rgba(0,0,0,0.15);
+    border-radius: 3px;
+}
+
+.numberbox-calculator .number-box-calculator-options .calculator-option
+{
+    min-width: 52px;
+    border-right: 1px solid #e8e8e8;
+}
+
+.numberbox-calculator .number-box-calculator-options .calculator-option>div
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 6px 0;
+    transition: 0.3s;
+}
+
+.numberbox-calculator .number-box-calculator-options .calculator-option>div:hover{
+    background-color: #f3f3f3;
+}
+
+.numberbox-calculator .number-box-calculator-options .calculator-option>div>span
+{
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.numberbox-calculator .number-box-calculator-options .calculator-option>div>span.signs
+{
+    font-size: 16px;
 }

@@ -207,6 +207,8 @@ export class InteractiveSettingPopup extends Component {
 
         const {isSelected} = this.props;
         const {selectedInteractive} = this.state;
+
+        // console.log(isSelected,selectedInteractive)
 		if(isSelected)
         {
             return (

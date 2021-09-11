@@ -11,7 +11,7 @@ class CustomSelect extends React.PureComponent {
         super(props);
         this.state = {
             isListOpen : false,
-            title : this.props.options[this.props.defaultIndex],
+            title : this.props.options[this.props.defaultIndex] || this.props.title,
             selectedIndex : this.props.defaultIndex
         }
         this.toggleSelect = this.toggleSelect.bind(this);
@@ -19,7 +19,15 @@ class CustomSelect extends React.PureComponent {
         this.selectOption = this.selectOption.bind(this);
     }
 
-    componentDidUpdate(){
+    componentDidUpdate(prevProps){
+
+        if(this.props.defaultIndex !== prevProps.defaultIndex)
+        {
+            this.setState({
+                title : this.props.options[this.props.defaultIndex] || this.props.title
+            });
+        }
+
         const { isListOpen } = this.state;
       
         setTimeout(() => {

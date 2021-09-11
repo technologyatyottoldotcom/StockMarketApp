@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 export class ScripsMenu extends React.PureComponent {
 
     render() {
-        const menuItems = ['Portfolios','Orders','smallCase','Research','Exit'];
+        const menuItems = ['Portfolios','Orders','SmallCase','Research','Exit'];
         return (
             <div className="app__menu">
                 {menuItems.map((item,i)=>{

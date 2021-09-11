@@ -19,7 +19,7 @@ import {readMarketData,readMarketStatus,setChange} from '../../exports/FormatDat
 import { setStockColor,getStockColor } from '../../exports/ChartColors';
 import Logout from '../../assets/icons/logout.svg';
 import '../../css/BusinessNews.css';
-import '../../css/MenuSection.css';
+import '../../css/MenuSection/MenuSection.css';
 import '../../css/CustomChartComponents.css';
 import 'rsuite/dist/styles/rsuite-default.css';
 

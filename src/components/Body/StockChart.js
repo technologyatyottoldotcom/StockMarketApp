@@ -766,12 +766,12 @@ export class StockChart extends React.PureComponent {
             if(zoom)
             {
                 h = 0.2;
-                l = 0.1
+                l = 0.5;
             }
             else
             {
                 h = 0.15;
-                l = 0.1;
+                l = 0.5;
             }
             if(high && low)
             {

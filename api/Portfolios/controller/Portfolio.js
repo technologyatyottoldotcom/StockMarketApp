@@ -1,5 +1,5 @@
 const {conn} = require('../../../server/connection');
-const findLatestClose = require("./findLatestClose");
+const findLatestClose = require("../../Common/findLatestClose");
 const getOrderBook = require("./getOrderBook");
 
 //function to return response to the client

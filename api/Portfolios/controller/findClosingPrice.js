@@ -1,4 +1,4 @@
-const {convertDate, increaseDate} = require('./conversionOfDate');
+const {convertDate, increaseDate} = require('../../Common/conversionOfDate');
 
 module.exports = async function findClosingPrice(stockCode, startDate, diffDays, conn){
     var str1 = "" 

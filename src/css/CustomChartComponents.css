@@ -71,3 +71,77 @@
 }
 
 
+/* react-confirm-alert*/
+.react-confirm-alert-overlay
+{
+  z-index: 1000!important;
+}
+
+.react-confirm-alert-body
+{
+  font-family: 'Open Sans', sans-serif;
+}
+
+.react-confirm-alert-body h1
+{
+  font-size: 26px!important;
+  color: #00a0e3!important;
+}
+
+.react-confirm-alert-button-group > button
+{
+  background-color: #404040!important;
+  border-radius: 3px!important;
+}
+
+/*checkmark */
+
+.checkmark__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #19E683;
+  fill: none;
+  animation: stroke 0.9s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+  margin: 10% auto;
+  margin-bottom: 2%;
+  box-shadow: inset 0px 0px 0px #19E683;
+  animation: fill .6s ease-in-out .9s forwards, scale .6s ease-in-out 1s both
+}
+
+.checkmark__check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes scale {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+@keyframes fill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px #19E683;
+  }
+}
