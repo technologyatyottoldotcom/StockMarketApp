@@ -6,23 +6,28 @@ const getCompare = require('./controller/Compare');
 
 
 //Portfolio details
-Portfolios.get('/portfolio', getPortfolio);
+Portfolios.get('/api/portfolio', async(req,res,next)=>{
+    getPortfolio(res,'All');
+});
 
+Portfolios.post('/api/portfolio', async(req,res,next)=>{
+    getPortfolio(res,req.body.portfolioName);
+});
 
 //Sector details
-Portfolios.get('/sector', getSector);
+Portfolios.get('/api/sector', getSector);
 
 
 //Latest price details
-Portfolios.get('/stock_price/:type/:code', getCurrentPrice);
+Portfolios.get('/api/stock_price/:type/:code', getCurrentPrice);
 
 
-Portfolios.post('/compare/:index', async(req, res, next) => {
+Portfolios.post('/api/compare/:index', async(req, res, next) => {
     var compareTo = req.params.index;
     getCompare(req, res, next, compareTo);
 });
 
-Portfolios.get('/compare', async(req, res, next) => {
+Portfolios.get('/api/compare', async(req, res, next) => {
     var compareTo = '';
     getCompare(req, res, next, compareTo);
 });

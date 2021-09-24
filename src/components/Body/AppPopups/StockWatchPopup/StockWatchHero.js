@@ -176,18 +176,9 @@ export class StockWatchHero extends React.PureComponent {
                         </div>
                     </div>
                     <div className="Stock__watch__price">
-                        <div className={priceClass+' Stock__watch__hero__change'} style={{display : 'flex'}}>
-                                {stockData.change_percentage &&
-                                    stockData.change_percentage.split('').map((n,i) => {
-                                        return <AnimatedDigit 
-                                            digit={n} 
-                                            size={16} 
-                                            key={i}
-                                            digitMargin={0}
-                                        />
-                                })}
-                            </div>
-                    </div>
+                        <div className={priceClass+' Stock__watch__hero__change'}>
+                            <AnimatedDigit number={stockData.change_percentage} size={16}  digitMargin={0}/>                           </div>
+                        </div>
                 </div>
             )
         }

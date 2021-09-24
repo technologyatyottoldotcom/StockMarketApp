@@ -14,8 +14,9 @@ const { StocksToWatch } = require('./StocksToWatch/');
 const { Financial } = require('./BusinessNews/Financial');
 const { Portfolios } = require('./Portfolios');
 const { SmallCase } = require('./SmallCase');
+const { WatchList } = require('./WatchList');
+const { Research } = require('./Research');
 const { Common } = require('./Common/');
-
 
 //middlewares & apis
 
@@ -30,6 +31,8 @@ app.use(StocksToWatch);
 app.use(Financial);
 app.use(Portfolios);
 app.use(SmallCase);
+app.use(WatchList);
+app.use(Research);
 app.use(Common);
 
 
@@ -49,7 +52,7 @@ conn.connect((err)=>{
 
 
 //search filter suggestion
-app.get('/stock/:query',(req,res)=>{
+app.get('/api/stock/:query',(req,res)=>{
     let query = req.params.query;
     AutoComplete(query)
     .then((response)=>{

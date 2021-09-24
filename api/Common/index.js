@@ -182,14 +182,14 @@ function SaveUserIndices(req,res)
     
 }
 
-Common.get('/StockFromISIN/:isin',getStockFromISIN);
+Common.get('/api/StockFromISIN/:isin',getStockFromISIN);
 
-Common.get('/StockFromSymbol/:symbol',getStockFromSymbol);
+Common.get('/api/StockFromSymbol/:symbol',getStockFromSymbol);
 
-Common.get('/LatestPriceIndex/:symbol',LatestPriceIndex);
+Common.get('/api/LatestPriceIndex/:symbol',LatestPriceIndex);
 
-Common.get('/IndicesList/:pan',IndicesList);
+Common.get('/api/IndicesList/:pan',IndicesList);
 
-Common.post('/SaveUserIndices/:pan',SaveUserIndices);
+Common.post('/api/SaveUserIndices/:pan',SaveUserIndices);
 
 exports.Common = Common;

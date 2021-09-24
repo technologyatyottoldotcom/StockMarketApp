@@ -360,40 +360,21 @@ class StockOrderPopup extends React.PureComponent {
                             <div className={actiontype === 'BUY' ? "stock__order__buy__wrapper active" : "stock__order__buy__wrapper"} 
                                 onClick={()=>{this.actionTypeChange('BUY')}}>
                                 <p className="stock__order__title">BUY</p>
-                                <p className="stock__order__ask" style={{display : 'flex'}}>
-                                    {bestask &&
-                                        bestask.split('').map((n,i) => {
-                                            return <AnimatedDigit 
-                                                digit={n} 
-                                                key={i}
-                                                size={28}
-                                            />
-                                        })}
-                                    </p>
+                                <p className="stock__order__ask">
+                                        <AnimatedDigit number={bestask} size={28}/>
+                                </p>
                             </div>
                             <div className={actiontype === 'SELL' ? "stock__order__sell__wrapper active" : "stock__order__sell__wrapper"}
                                 onClick={()=>{this.actionTypeChange('SELL')}}>
                                 <p className="stock__order__title">SELL</p>
-                                <p className="stock__order__bid" style={{display : 'flex'}}>
-                                    {bestbid &&
-                                        bestbid.split('').map((n,i) => {
-                                            return <AnimatedDigit 
-                                                digit={n} 
-                                                key={i}
-                                                size={28}
-                                            />
-                                        })}
+                                <p className="stock__order__bid">
+                                    <AnimatedDigit number={bestbid} size={28}/>
                                 </p>
                             </div>
                             <div className="stock__order__difference__wrapper">
-                                <span style={{display : 'flex'}}>{bestdiff &&
-                                        bestdiff.split('').map((n,i) => {
-                                            return <AnimatedDigit 
-                                                digit={n} 
-                                                key={i}
-                                                size={12}
-                                            />
-                                        })}</span>
+                                <span style={{display : 'flex'}}>
+                                    <AnimatedDigit number={bestdiff} size={28}/>
+                                </span>
                             </div>
                         </div>
                         <div className="stock__order__config__wrapper">

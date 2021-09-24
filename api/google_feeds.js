@@ -21,7 +21,7 @@ function ReadMetaData($,property){
    return res
 }
 
-google_feeds.get("/feeds/:symbol",(req,res)=>{
+google_feeds.get("/api/feeds/:symbol",(req,res)=>{
     let sy = req.params.symbol
     if(sy){
         Axios(`https://news.google.com/rss/search?q=${sy}&hl=en-IN&gl=IN&ceid=IN%3Aen`).then(d => {
@@ -34,7 +34,7 @@ google_feeds.get("/feeds/:symbol",(req,res)=>{
     }else res.send({error:'Symbol not found',data:null})
 })
 
-google_feeds.get("/getmetadata/",(req,res)=>{
+google_feeds.get("/api/getmetadata/",(req,res)=>{
     let url =  req.query.url , t = req.query.types
     if(url){
         Axios(url).then(d=>cheerio.load(d.data)).then($=>{

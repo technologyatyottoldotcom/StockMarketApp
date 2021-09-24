@@ -1,5 +1,5 @@
 const {conn} = require('../../../server/connection');
-let { FindStockName } = require('./FindStockName');
+let { FindStockName } = require('../../Common/FindStockName');
 
 async function ValidateImport(req, res, next){
 

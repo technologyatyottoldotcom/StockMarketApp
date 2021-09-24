@@ -48,8 +48,8 @@
 
 .custom-select .custom-select-container
 {
-    padding: 0px 3px;
-    min-width: 110%;
+    /* padding: 0px 3px; */
+    min-width: 100%;
     position: absolute;
     top: 108%;
     left: 0%;
@@ -64,8 +64,8 @@
     display: block;
     font-size: 13px;
     font-weight: 600;
-    padding: 5px 10px;
-    margin: 3px 0;
+    padding: 8px 12px;
+    margin: 0px 0;
     border-radius: 3px;
 }
 
@@ -74,7 +74,7 @@
     font-size: 13px;
     font-weight: 600;
     padding: 5px 10px;
-    margin: 3px 0;
+    margin: 1px 0;
     border-radius: 3px;
     min-height: 30px;
     display: flex;
@@ -92,7 +92,7 @@
 .custom-select .custom-select-container .custom-select-option.option-selected,
 .custom-select .custom-select-container .custom-width-select-option.option-selected
 {
-    background-color: #404040ef;
+    background-color: #00a0e3;
     color: #ffffff;
 }
 
@@ -104,8 +104,9 @@
 .custom-select .custom-select-container .custom-select-option.option-selected:hover,
 .custom-select .custom-select-container .custom-width-select-option.option-selected:hover
 {
-    background-color: #404040;
+    background-color: #00a0e3;
     color: #ffffff;
+    
 }
 
 .custom-select .custom-select-container .custom-width-select-option.option-selected:hover>p
@@ -115,13 +116,13 @@
 
 .custom-select .custom-select-container .custom-select-option:hover
 {
-    background-color: #f7f7f7;
+    background-color: #fdfdfd;
     color: #00a0e3;
 }
 
 .custom-select .custom-select-container .custom-width-select-option:hover
 {
-    background-color: #f7f7f7;
+    background-color: #fdfdfd;
 }
 
 

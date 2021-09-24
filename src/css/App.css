@@ -4,8 +4,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
- /* font-family: 'Quicksand', sans-serif;
-  */
+ /* font-family: 'Quicksand', sans-serif; */
 }
 
 :root 
@@ -1716,6 +1715,11 @@
 {
   height: 0;
   display: none;
+}
+
+.app__footer>div
+{
+  cursor: pointer;
 }
 
 .app__footer span 

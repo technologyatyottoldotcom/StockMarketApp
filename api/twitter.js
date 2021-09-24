@@ -105,7 +105,7 @@ return new Promise((resolve,reject)=>{
     const GET = (type='mixed')=>{
         const TYPES = ['popular','recent'];
         const request = type =>new Promise((res,rej)=>{
-          TwitterConfig.get('search/tweets', {
+          TwitterConfig.get('/api/search/tweets', {
             q: '#'+symbol,
             count: length,
             result_type:type// "latest" 
@@ -152,7 +152,7 @@ return new Promise((resolve,reject)=>{
 }
 
 // get twitter hash tags
-Twitter.get("/twitter/:hastag/?:ResultType/?:length", (req, res) => {
+Twitter.get("/api/twitter/:hastag/?:ResultType/?:length", (req, res) => {
   let p = req.params  
   let hastag = p.hastag
     if(hastag){
@@ -166,7 +166,7 @@ Twitter.get("/twitter/:hastag/?:ResultType/?:length", (req, res) => {
 function TwitterUserFetch(userScreenName='') {
     return new Promise((resolve,rej)=>{
           if(userScreenName){
-            TwitterConfig.get('users/show', {
+            TwitterConfig.get('/api/users/show', {
               screen_name: "@"+userScreenName,
           }).then(d=>resolve(d.data)).catch(rej)
         }else rej('userScreenName not found')
@@ -174,7 +174,7 @@ function TwitterUserFetch(userScreenName='') {
   }
   
 // get twitter user data
-Twitter.get("/twitterUser/:screenName", (req, res) => {
+Twitter.get("/api/twitterUser/:screenName", (req, res) => {
     let screenName = String(req.params.screenName)
     if(screenName){
         TwitterUserFetch(screenName).then(d=>{

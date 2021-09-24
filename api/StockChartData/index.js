@@ -115,6 +115,6 @@ function getData(options)
 
 
 
-StockChartData.get('/stockdata',getStockData);
+StockChartData.get('/api/stockdata',getStockData);
 
 exports.StockChartData = StockChartData;

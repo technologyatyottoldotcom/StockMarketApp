@@ -211,16 +211,8 @@ export class CreateSection extends React.PureComponent {
                         <div className="StocksToWatch__stock__fullname">{fullName}</div>
                     </div>
                     <div className="StocksToWatch__stock__favourite">
-                        <span className={priceClass+' StocksToWatch__change__per'} style={{display : 'flex'}}>
-                        {stockData.change_percentage &&
-                            stockData.change_percentage.split('').map((n,i) => {
-                                return <AnimatedDigit 
-                                digit={n} 
-                                size={16} 
-                                key={i}
-                                digitMargin={0}
-                            />
-                        })}
+                        <span className={priceClass+' StocksToWatch__change__per'}>
+                            <AnimatedDigit number={stockData.change_percentage} size={16} digitMargin={0}/>
                         </span>
                         <span className="StocksToWatch__stock__star">
                             {<SVGIMG1.Star isFav={this.props.isFavorite} />}

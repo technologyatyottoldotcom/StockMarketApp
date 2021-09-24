@@ -1,7 +1,7 @@
 const {conn} = require('../../../server/connection');
 const { convertDate } = require("../../Common/conversionOfDate");
 const findLatestClose = require("../../Common/findLatestClose");
-const {FindStockName} = require("./FindStockName");
+const {FindStockName} = require("../../Common/FindStockName");
 
 
 async function FetchPortfolio(req, res, next){

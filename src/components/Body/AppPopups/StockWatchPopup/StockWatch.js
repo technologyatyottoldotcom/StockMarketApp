@@ -175,16 +175,8 @@ export class StockWatch extends React.PureComponent {
                     </div>
                     
                     <div className="Stock__watch__exchange__section">
-                            <span className={priceClass+' Stock__watch__change__per'} style={{display : 'flex'}}>
-                                {stockData.change_percentage &&
-                                    stockData.change_percentage.split('').map((n,i) => {
-                                        return <AnimatedDigit 
-                                            digit={n} 
-                                            size={16} 
-                                            key={i}
-                                            digitMargin={0}
-                                        />
-                                })}
+                            <span className={priceClass+' Stock__watch__change__per'}>
+                                <AnimatedDigit number={stockData.change_percentage} size={16} digitMargin={0}/>
                             </span>
                             <p className="Stock__watch__exchange">{exchange.exchange}</p>
                     </div>

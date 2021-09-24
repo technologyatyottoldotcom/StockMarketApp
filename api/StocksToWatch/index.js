@@ -69,6 +69,6 @@ function getStocks(req,res)
     // })
 }
 
-StocksToWatch.get('/stockstowatch/:industry/:isin/:quantity',getStocks);
+StocksToWatch.get('/api/stockstowatch/:industry/:isin/:quantity',getStocks);
 
 exports.StocksToWatch = StocksToWatch;

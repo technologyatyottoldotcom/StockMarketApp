@@ -3,19 +3,30 @@ const findLatestClose = require("../../Common/findLatestClose");
 const getOrderBook = require("./getOrderBook");
 
 //function to return response to the client
-async function sendValue(req, res, next){
+async function sendValue(res, portfolioName){
         
-        var {data, isin, date, stockNameMap} = await getOrderBook(conn);
-        data = removeZeroTrxn(data);
-        const {newISIN, totalQuantity, totalCost, averageCost} = findTotalQuantity(isin, data);
+    var {data, isin, date, stockNameMap} = await getOrderBook(conn, portfolioName);
 
-        const {close, stockCode} = await findLatestClose(newISIN, conn);
-        //make portfolioData
-        const {portfolioData, sum} = await makePortfolio(stockNameMap, newISIN, close, stockCode, totalQuantity, totalCost, averageCost); 
-        portfolioData.sort(compare);    //sort according to increasing portfolio weight
+    if(data.length<=0){
+        const sum = {
+            costValueSum: 0,
+            currentValueSum: 0,
+            totalReturnSum: 0,
+        }
+        res.send({portfolioData:[], sum: sum});
+        return;
+    }
 
-        res.send({portfolioData, sum});
-        //res.render('portfolio', {data: portfolioData, sum: sum});
+    data = removeZeroTrxn(data);
+    const {newISIN, totalQuantity, totalCost, averageCost} = findTotalQuantity(isin, data);
+
+    const {close, stockCode} = await findLatestClose(newISIN, conn);
+    //make portfolioData
+    const {portfolioData, sum} = await makePortfolio(stockNameMap, newISIN, close, stockCode, totalQuantity, totalCost, averageCost); 
+    portfolioData.sort(compare);    //sort according to increasing portfolio weight
+
+    res.send({portfolioData, sum});
+    //res.render('portfolio', {data: portfolioData, sum: sum});
 }
 
 //function to make portfolio

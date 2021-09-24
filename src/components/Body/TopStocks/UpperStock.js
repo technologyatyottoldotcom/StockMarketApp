@@ -364,27 +364,13 @@ export class UpperStock extends React.PureComponent {
                 <div className="upper__stock__info">
                     <p className="upper__stock__name">{name}</p>
                     <div className="upper__stock__value">
-                        <div className={priceClass+' stock__performance__amount'} style={{display : 'flex'}}>
-                            {TradePrice &&
-                                TradePrice.split('').map((n,i) => {
-                                return <AnimatedDigit 
-                                    digit={n} 
-                                    size={12} 
-                                    key={i}
-                                />
-                            })}
+                        <div className={priceClass+' stock__performance__amount'}>
+                            <AnimatedDigit number={TradePrice} size={12} />
                         </div>
                     </div>
                     <div className="upper__stock__change" style={{display : 'flex'}}>
-                        <div className={priceClass+' stock__performance__amount'} style={{display : 'flex'}}>
-                            {stockData.change_percentage &&
-                                stockData.change_percentage.split('').map((n,i) => {
-                                return <AnimatedDigit 
-                                        digit={n} 
-                                        size={12} 
-                                        key={i}
-                                    />
-                            })}
+                        <div className={priceClass+' stock__performance__amount'}>
+                            <AnimatedDigit number={stockData.change_percentage} size={12} />
                         </div>
                     </div>
                 </div>

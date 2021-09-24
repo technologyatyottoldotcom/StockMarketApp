@@ -153,27 +153,12 @@ class Portfolios extends React.PureComponent {
             <>
                     <p className="portfolio__curr__price">{curr(heading)}</p>
                     <div className="portfolio__change">
-                        {changeAmount && <span className="portfolio__change__value" style={{display : 'flex' , color : positive ? '#19E683' : '#e51a4b'}}>
-                            {changeAmount &&
-                                changeAmount.split('').map((n,i) => {
-                                    return <AnimatedDigit 
-                                        digit={n} 
-                                        size={16} 
-                                        key={i}
-                                        digitMargin={0}
-                                    />
-                            })}
+                        {changeAmount && <span className="portfolio__change__value" style={{ color : positive ? '#19E683' : '#e51a4b'}}>                 
+                            <AnimatedDigit number={changeAmount} size={16} digitMargin={0}/>     
+                            
                         </span> }
-                        {changePer && <span className="portfolio__change__per" style={{display : 'flex' , color : positive ? '#19E683' : '#e51a4b'}}>
-                           ({changePer &&
-                                changePer.split('').map((n,i) => {
-                                    return <AnimatedDigit 
-                                        digit={n} 
-                                        size={16} 
-                                        key={i}
-                                        digitMargin={0}
-                                    />
-                            })})
+                        {changePer && <span className="portfolio__change__per" style={{ color : positive ? '#19E683' : '#e51a4b'}}>
+                            <AnimatedDigit number={changePer} size={16} digitMargin={0}/>     
                         </span>
                         }
                     </div>
@@ -405,16 +390,8 @@ class Portfolios extends React.PureComponent {
                                             <div style={{ fontWeight: 'bold' }}>{curr(sum.costValueSum)}</div>,
                                             <div style={{ fontWeight: 'bold' }}>{curr(sum.currentValueSum)}</div>,
                                             <span style={{ fontWeight: 'bold', color: "#19E683" }}>{sum.totalReturnSum}%</span>,
-                                            <span style={{ fontWeight: 'bold', color: "#19E683" , display : 'flex' }}>
-                                                {totalReturnToday &&
-                                                    totalReturnToday.split('').map((n,i) => {
-                                                        return <AnimatedDigit 
-                                                            digit={n} 
-                                                            size={16} 
-                                                            key={i}
-                                                            digitMargin={0}
-                                                        />
-                                                })}
+                                            <span style={{ fontWeight: 'bold', color: "#19E683" }}>
+                                                <AnimatedDigit number={totalReturnToday} size={16} digitMargin={0}/>    
                                             </span>,
                                             <div style={{ fontWeight: 'bold' }}>100%</div>,
                                             ""

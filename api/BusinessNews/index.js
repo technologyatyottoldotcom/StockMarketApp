@@ -120,10 +120,10 @@ function Technicals(req,res){
     })
 }
 
-BusinessNews.get("/detailed_view/overview/:ric_code", Overview);
+BusinessNews.get("/api/detailed_view/overview/:ric_code", Overview);
 
-BusinessNews.get("/detailed_view/snapshot/:ric_code/:nse_code/:bse_code/:exchange", SnapShot);
+BusinessNews.get("/api/detailed_view/snapshot/:ric_code/:nse_code/:bse_code/:exchange", SnapShot);
 
-BusinessNews.get("/detailed_view/technical/:exchange/:code",Technicals);
+BusinessNews.get("/api/detailed_view/technical/:exchange/:code",Technicals);
 
 exports.BusinessNews = BusinessNews

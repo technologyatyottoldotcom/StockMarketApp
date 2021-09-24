@@ -19,6 +19,6 @@ function getIndexData(req,res){
     })    
 }
 
-IndexChartData.get('/indexdata/:symbol',getIndexData);
+IndexChartData.get('/api/indexdata/:symbol',getIndexData);
 
 exports.IndexChartData = IndexChartData;

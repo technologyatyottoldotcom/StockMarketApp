@@ -1438,7 +1438,7 @@ const Ratio=(stockCode,type='reuters')=>{ //bank
 
 
 // only quarterly data will work
-Financial.get('/createtable/:type/:field/:stockcode', (req, res) => {
+Financial.get('/api/createtable/:type/:field/:stockcode', (req, res) => {
 
     // console.log(req.params);
     let p = req.params , fT = String(p.field).toLowerCase() , fromType = GetCodeType(p.stockcode).type
@@ -1518,7 +1518,7 @@ Financial.get('/createtable/:type/:field/:stockcode', (req, res) => {
 });
 
 
-Financial.get('/createcharts/:field/:type/:stockcode',(req,res)=>{
+Financial.get('/api/createcharts/:field/:type/:stockcode',(req,res)=>{
 
     let type = req.params.type;
     let field = req.params.field;
@@ -1615,7 +1615,7 @@ Financial.get('/createcharts/:field/:type/:stockcode',(req,res)=>{
 
 });
 
-Financial.get('/createvalues/:stockcode',(req,res)=>{
+Financial.get('/api/createvalues/:stockcode',(req,res)=>{
 
     let datavalues = {};
     let stockcode = req.params.stockcode;
@@ -1683,7 +1683,7 @@ Financial.get('/createvalues/:stockcode',(req,res)=>{
 
 })
 
-Financial.get('/creditrating/:stockcode',(req,res)=>{
+Financial.get('/api/creditrating/:stockcode',(req,res)=>{
     let stockcode = req.params.stockcode;
 
     // console.log(stockcode);

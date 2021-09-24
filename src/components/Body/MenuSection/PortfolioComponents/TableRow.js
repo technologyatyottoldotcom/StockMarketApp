@@ -214,16 +214,8 @@ class TableRow extends React.PureComponent {
                 curr(data.CostValue),
                 curr(data.CurrentValue),
                 <span style={{ fontWeight: 'bold', color: "#19E683" }}>{data.TotalReturn}%</span>,
-                <span style={{ fontWeight: 'bold', color: priceClass ? "#19E683" : "#e51a4b" , display : 'flex'}}>
-                    {stockData.change_percentage &&
-                        stockData.change_percentage.split('').map((n,i) => {
-                            return <AnimatedDigit 
-                                digit={n} 
-                                size={16} 
-                                key={i}
-                                digitMargin={0}
-                            />
-                    })}
+                <span style={{ fontWeight: 'bold', color: priceClass ? "#19E683" : "#e51a4b"}}>
+                    <AnimatedDigit number={stockData.change_percentage} size={16} digitMargin={0}/>
                 </span>,
                 data.PortfolioWeight+'%'+((newWeight!=0)?('('+newWeight+'%)'):''),
                 curr(orderArr[index]*data.CurrentPrice),

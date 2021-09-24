@@ -1,8 +1,8 @@
 import React from 'react';
 import '../../css/AnimatedDigit.css';
 
-class AnimatedDigit extends React.PureComponent {
-
+class Digit extends React.PureComponent
+{
     render() {
 
         let digits = [9,8,7,6,5,4,3,2,1,0];
@@ -42,6 +42,32 @@ class AnimatedDigit extends React.PureComponent {
 
             </div>
         )
+    }
+}
+
+class AnimatedDigit extends React.PureComponent {
+
+    render() {
+
+        const {number,size,digitMargin} = this.props;
+
+        if(number && typeof number === 'string')
+        {
+            return(
+                <div style={{display : 'flex'}}>
+                    {
+                        number.split('').map((n,i) => {
+                            return <Digit digit={n} key={i} size={size} digitMargin={digitMargin}/>
+                        })
+                    }
+                </div>
+            )
+        }
+        else
+        {
+            return null;
+        }
+        
     }
 }
 

@@ -1,6 +1,6 @@
 const {conn} = require('../../../server/connection');
 const { convertDate } = require("../../Common/conversionOfDate");
-const { FindStockName } = require("./FindStockName");
+const { FindStockName } = require("../../Common/FindStockName");
 
 async function sendValue(req, res, next){
 
